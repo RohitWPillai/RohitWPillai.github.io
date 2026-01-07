@@ -1,0 +1,58 @@
+---
+title: "CV"
+---
+
+## Rohit Pillai
+
+Senior Lecturer in Mechanical Engineering
+University of Edinburgh
+
+---
+
+## Education
+
+**PhD, Chemical and Biomolecular Engineering**
+University of Melbourne, 2017
+
+---
+
+## Academic Positions
+
+**Senior Lecturer**
+School of Engineering, University of Edinburgh
+2018 - Present
+
+---
+
+## Research Interests
+
+- Molecular dynamics simulations
+- Multiscale modelling
+- Interfacial phenomena
+- Droplet dynamics
+- Phase change processes
+
+---
+
+## Selected Publications
+
+See [Publications page](publications.qmd) for full list.
+
+---
+
+## Funding
+
+- Research funding from internal and external sources
+
+---
+
+## Media Coverage
+
+- BBC
+- Times
+- Metro
+- BBC Newsnight Scotland (radio interview)
+
+---
+
+*Download PDF version: [CV.pdf](files/cv.pdf)* (coming soon)

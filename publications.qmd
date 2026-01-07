@@ -1,0 +1,123 @@
+---
+title: "Publications"
+---
+
+*Full list available on [Google Scholar](https://scholar.google.com/citations?user=eE9rDfkAAAAJ)*
+
+## Journal Articles
+
+### 2025
+
+[20] **Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law**
+<u>Pillai R</u>, Neilan D, Handel C, Datta S
+*Nano Lett.* 25, 4284–4290 (2025) | [DOI](https://doi.org/10.1021/acs.nanolett.4c05973)
+
+[19] **Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus**
+El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, <u>Pillai R</u>, Isaiev M
+*Phys. Chem. Chem. Phys.* 27, 10185–10197 (2025) | [DOI](https://doi.org/10.1039/D4CP04768K)
+
+[18] **Nanoscale surface effects on heterogeneous vapor bubble nucleation**
+Sullivan P, Dockar D, <u>Pillai R</u>
+*J. Chem. Phys.* 162, 184501 (2025) | [DOI](https://doi.org/10.1063/5.0259208)
+
+[17] **Nanoscale insights into vibration-induced heterogeneous ice nucleation**
+Chen P, <u>Pillai R</u>, Datta S
+*Nanoscale* 17, 14172 (2025) | [DOI](https://doi.org/10.1039/D5NR00326A)
+
+### 2024
+
+[16] **Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface**
+El-Rifai A, Perumanath S, Borg MK, <u>Pillai R</u>
+*J. Phys. Chem. C* 128, 8408–8417 (2024) | [DOI](https://doi.org/10.1021/acs.jpcc.4c00536)
+
+### 2023
+
+[15] **The role of surface wettability on the growth of vapour bubbles**
+Sullivan P, Dockar D, Enright R, Borg MK, <u>Pillai R</u>
+*Int. J. Heat Mass Transf.* 217, 124657 (2023) | [DOI](https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657)
+
+[14] **Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach**
+Perumanath S, Chubynsky MV, <u>Pillai R</u>, Borg MK, Sprittles JE
+*Phys. Rev. Lett.* 131, 164001 (2023) | [DOI](https://doi.org/10.1103/PhysRevLett.131.164001)
+
+[13] **Contaminant Removal from Nature's Self-Cleaning Surfaces**
+Perumanath S, <u>Pillai R</u>, Borg MK
+*Nano Lett.* 23, 4234–4241 (2023) | [DOI](https://doi.org/10.1021/acs.nanolett.3c00257)
+
+### 2022
+
+[12] **Inertio-thermal vapour bubble growth**
+Sullivan P, Enright R, Borg MK, <u>Pillai R</u>
+*J. Fluid Mech.* 948, A55 (2022) | [DOI](https://doi.org/10.1017/jfm.2022.734)
+
+### 2021
+
+[11] **Acoustothermal Nucleation of Surface Nanobubbles**
+Datta S, <u>Pillai R</u>, Borg MK
+*Nano Lett.* 21, 1267–1273 (2021) | [DOI](https://doi.org/10.1021/acs.nanolett.0c03895)
+
+[10] **Untangling the physics of water transport in boron nitride nanotubes**
+Mistry S, <u>Pillai R</u>, Mattia D, Borg MK
+*Nanoscale* 13, 18096–18102 (2021) | [DOI](https://doi.org/10.1039/D1NR04794A)
+
+[9] **Impact of surface nanostructure and wettability on interfacial ice physics**
+Nikiforidis V-M, Datta S, Borg MK, <u>Pillai R</u>
+*J. Chem. Phys.* 155, 234307 (2021) | [DOI](https://doi.org/10.1063/5.0069896)
+
+### 2020
+
+[8] **Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library**
+Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
+*Comput. Fluids* 213, 104726 (2020) | [DOI](https://doi.org/10.1016/j.compfluid.2020.104726)
+
+### 2018
+
+[7] **Dynamics of Nanodroplets on Vibrating Surfaces**
+<u>Pillai R</u>, Borg MK, Reese JM
+*Langmuir* 34, 11898–11904 (2018) | [DOI](https://doi.org/10.1021/acs.langmuir.8b02066)
+
+[6] **Acoustothermal Atomization of Water Nanofilms**
+<u>Pillai R</u>, Borg MK, Reese JM
+*Phys. Rev. Lett.* 121, 104502 (2018) | [DOI](https://doi.org/10.1103/PhysRevLett.121.104502)
+
+### 2017
+
+[5] **Electrophoretically mediated partial coalescence of a charged microdrop**
+<u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
+*Chem. Eng. Sci.* 169, 28–45 (2017) | [DOI](https://doi.org/10.1016/j.ces.2016.07.048)
+
+### 2016
+
+[4] **Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs**
+<u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
+*Int. J. Comput. Methods Exp. Meas.* 4, 33–41 (2016) | [DOI](https://doi.org/10.2495/CMEM-V4-N1-33-41)
+
+[3] **Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces**
+Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
+*Appl. Math. Model.* 40, 1989–2001 (2016) | [DOI](https://doi.org/10.1016/j.apm.2015.09.021)
+
+[2] **Electrokinetics of isolated electrified drops**
+<u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
+*Soft Matter* 12, 3310–3325 (2016) | [DOI](https://doi.org/10.1039/C6SM00047A)
+
+### 2015
+
+[1] **Electrolytic drops in an electric field: A numerical study of drop deformation and breakup**
+<u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
+*Phys. Rev. E* 92, 013007 (2015) | [DOI](https://doi.org/10.1103/PhysRevE.92.013007)
+
+---
+
+## Book Chapters
+
+**On the Development of Icephobic Surfaces: Bridging Experiments and Simulations**
+Tagliaro I, Cerpelloni A, Nikiforidis VM, <u>Pillai R</u>, Antonini C
+In: Marengo M, De Coninck J (eds) *The Surface Wettability Effect on Phase Change*, Springer, Cham, pp. 235–272 (2022) | [DOI](https://doi.org/10.1007/978-3-030-82992-6_8)
+
+---
+
+## Thesis
+
+**Stretching, bursting, splashing and bouncing: Electrohydrodynamics of microfluidic drops**
+<u>Pillai R</u>
+PhD Thesis, University of Melbourne (2017)

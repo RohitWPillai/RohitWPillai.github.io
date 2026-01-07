@@ -1,0 +1,44 @@
+---
+title: "Rohit Pillai"
+image: images/profile.jpg
+about:
+  template: trestles
+  image-shape: round
+  image-width: 15em
+  links:
+    - icon: envelope
+      text: Email
+      href: mailto:R.Pillai@ed.ac.uk
+    - icon: github
+      text: GitHub
+      href: https://github.com/RohitWPillai
+    - icon: mortarboard-fill
+      text: Google Scholar
+      href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
+---
+
+## About Me
+
+I am a Senior Lecturer in Mechanical Engineering at the University of Edinburgh, with a background and publication record in continuum fluid dynamics, molecular dynamics, and multiphysics modelling.
+
+My research has featured in prominent journals (Physical Review Letters, Nano Letters), the press (BBC, Times, Metro), and led to a radio interview on BBC Newsnight Scotland.
+
+## Research Interests
+
+- Molecular dynamics simulations
+- Multiscale modelling
+- Interfacial phenomena
+- Droplet dynamics
+- Phase change processes
+
+## Education
+
+**PhD, Chemical and Biomolecular Engineering** | University of Melbourne | 2017
+
+## Contact
+
+School of Engineering
+University of Edinburgh
+Edinburgh, UK
+
+Email: R.Pillai AT ed.ac.uk

@@ -1,0 +1,12 @@
+---
+title: "Welcome to my website"
+author: "Rohit Pillai"
+date: "2025-01-07"
+categories: [news]
+---
+
+Welcome to my personal website! This site is built with [Quarto](https://quarto.org/) and hosted on GitHub Pages.
+
+Here you'll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.
+
+Stay tuned for more updates!

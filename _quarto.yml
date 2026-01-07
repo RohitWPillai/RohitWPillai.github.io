@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Rohit Pillai"
+  description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh"
+  site-url: https://rohitpillai.github.io
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: publications.qmd
+        text: Publications
+      - href: projects.qmd
+        text: Projects
+      - href: cv.qmd
+        text: CV
+      - href: blog.qmd
+        text: Blog
+    right:
+      - icon: github
+        href: https://github.com/RohitWPillai
+        aria-label: GitHub
+      - icon: mortarboard-fill
+        href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
+        aria-label: Google Scholar
+      - text: RG
+        href: https://www.researchgate.net/profile/Rohit-Pillai-2
+        aria-label: ResearchGate
+
+format:
+  html:
+    theme:
+      light: flatly
+      dark: darkly
+    css: styles.css
+    toc: true
+    page-layout: full

@@ -1,0 +1,29 @@
+---
+title: "Projects"
+---
+
+## Current Research Projects
+
+### Multiscale Modelling of Flows
+
+Research into flows spanning from the nano- to macro-scale, using molecular dynamics, kinetic theory, and continuum methods.
+
+[Learn more at mfX Group Website](https://multiscaleflowx.github.io/)
+
+### Interfacial Phenomena
+
+Study of the physics at the boundary between two phases, including droplet dynamics and heat transfer.
+
+### Nucleation and Phase Change
+
+Investigation of ice formation, boiling, and cavitation at the nanoscale.
+
+---
+
+## Software & Code
+
+- [GitHub Profile](https://github.com/RohitWPillai)
+
+---
+
+*More projects coming soon.*

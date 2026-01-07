@@ -1,0 +1,233 @@
+[
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
+    "section": "",
+    "text": "Full list available on Google Scholar"
+  },
+  {
+    "objectID": "publications.html#selected-publications",
+    "href": "publications.html#selected-publications",
+    "title": "Publications",
+    "section": "",
+    "text": "Full list available on Google Scholar\n\n\n\nRolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach Perumanath S, Chubynsky MV, Pillai R, Borg MK, Sprittles JE Phys. Rev. Lett. 131, 164001 (2023) DOI\nContaminant Removal from Nature’s Self-Cleaning Surfaces Perumanath S, Pillai R, Borg MK Nano Lett. 23, 4234-4241 (2023) DOI\n\n\n\n\n\n\nThis page can be auto-generated from a BibTeX file in future updates."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Research into flows spanning from the nano- to macro-scale, using molecular dynamics, kinetic theory, and continuum methods.\nLearn more at mfX Group Website\n\n\n\nStudy of the physics at the boundary between two phases, including droplet dynamics and heat transfer.\n\n\n\nInvestigation of ice formation, boiling, and cavitation at the nanoscale."
+  },
+  {
+    "objectID": "projects.html#current-research-projects",
+    "href": "projects.html#current-research-projects",
+    "title": "Projects",
+    "section": "",
+    "text": "Research into flows spanning from the nano- to macro-scale, using molecular dynamics, kinetic theory, and continuum methods.\nLearn more at mfX Group Website\n\n\n\nStudy of the physics at the boundary between two phases, including droplet dynamics and heat transfer.\n\n\n\nInvestigation of ice formation, boiling, and cavitation at the nanoscale."
+  },
+  {
+    "objectID": "projects.html#software-code",
+    "href": "projects.html#software-code",
+    "title": "Projects",
+    "section": "Software & Code",
+    "text": "Software & Code\n\nGitHub Profile\n\n\nMore projects coming soon."
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome to my website",
+    "section": "",
+    "text": "Welcome to my personal website! This site is built with Quarto and hosted on GitHub Pages.\nHere you’ll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.\nStay tuned for more updates!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rohit Pillai",
+    "section": "",
+    "text": "I am a Senior Lecturer in Mechanical Engineering at the University of Edinburgh, with a background and publication record in continuum fluid dynamics, molecular dynamics, and multiphysics modelling.\nMy research has featured in prominent journals (Physical Review Letters, Nano Letters), the press (BBC, Times, Metro), and led to a radio interview on BBC Newsnight Scotland."
+  },
+  {
+    "objectID": "index.html#about-me",
+    "href": "index.html#about-me",
+    "title": "Rohit Pillai",
+    "section": "",
+    "text": "I am a Senior Lecturer in Mechanical Engineering at the University of Edinburgh, with a background and publication record in continuum fluid dynamics, molecular dynamics, and multiphysics modelling.\nMy research has featured in prominent journals (Physical Review Letters, Nano Letters), the press (BBC, Times, Metro), and led to a radio interview on BBC Newsnight Scotland."
+  },
+  {
+    "objectID": "index.html#research-interests",
+    "href": "index.html#research-interests",
+    "title": "Rohit Pillai",
+    "section": "Research Interests",
+    "text": "Research Interests\n\nMolecular dynamics simulations\nMultiscale modelling\nInterfacial phenomena\nDroplet dynamics\nPhase change processes"
+  },
+  {
+    "objectID": "index.html#education",
+    "href": "index.html#education",
+    "title": "Rohit Pillai",
+    "section": "Education",
+    "text": "Education\nPhD, Chemical and Biomolecular Engineering | University of Melbourne | 2017"
+  },
+  {
+    "objectID": "index.html#contact",
+    "href": "index.html#contact",
+    "title": "Rohit Pillai",
+    "section": "Contact",
+    "text": "Contact\nSchool of Engineering University of Edinburgh Edinburgh, UK\nEmail: R.Pillai AT ed.ac.uk"
+  },
+  {
+    "objectID": "cv.html",
+    "href": "cv.html",
+    "title": "CV",
+    "section": "",
+    "text": "Senior Lecturer in Mechanical Engineering University of Edinburgh"
+  },
+  {
+    "objectID": "cv.html#rohit-pillai",
+    "href": "cv.html#rohit-pillai",
+    "title": "CV",
+    "section": "",
+    "text": "Senior Lecturer in Mechanical Engineering University of Edinburgh"
+  },
+  {
+    "objectID": "cv.html#education",
+    "href": "cv.html#education",
+    "title": "CV",
+    "section": "Education",
+    "text": "Education\nPhD, Chemical and Biomolecular Engineering University of Melbourne, 2017"
+  },
+  {
+    "objectID": "cv.html#academic-positions",
+    "href": "cv.html#academic-positions",
+    "title": "CV",
+    "section": "Academic Positions",
+    "text": "Academic Positions\nSenior Lecturer School of Engineering, University of Edinburgh 2018 - Present"
+  },
+  {
+    "objectID": "cv.html#research-interests",
+    "href": "cv.html#research-interests",
+    "title": "CV",
+    "section": "Research Interests",
+    "text": "Research Interests\n\nMolecular dynamics simulations\nMultiscale modelling\nInterfacial phenomena\nDroplet dynamics\nPhase change processes"
+  },
+  {
+    "objectID": "cv.html#selected-publications",
+    "href": "cv.html#selected-publications",
+    "title": "CV",
+    "section": "Selected Publications",
+    "text": "Selected Publications\nSee Publications page for full list."
+  },
+  {
+    "objectID": "cv.html#funding",
+    "href": "cv.html#funding",
+    "title": "CV",
+    "section": "Funding",
+    "text": "Funding\n\nResearch funding from internal and external sources"
+  },
+  {
+    "objectID": "cv.html#media-coverage",
+    "href": "cv.html#media-coverage",
+    "title": "CV",
+    "section": "Media Coverage",
+    "text": "Media Coverage\n\nBBC\nTimes\nMetro\nBBC Newsnight Scotland (radio interview)\n\n\nDownload PDF version: CV.pdf (coming soon)"
+  },
+  {
+    "objectID": "publications.html#section",
+    "href": "publications.html#section",
+    "title": "Publications",
+    "section": "2025",
+    "text": "2025\n\nNanoscale insights into vibration-induced heterogeneous ice nucleation Chen P, Pillai R, Datta S Nanoscale 17, 14172 (2025) | DOI\nNanoscale surface effects on heterogeneous vapor bubble nucleation Sullivan P, Dockar D, Pillai R J. Chem. Phys. 162, 184501 (2025) | DOI\nSpectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, Pillai R, Isaiev M Phys. Chem. Chem. Phys. 27, 10185–10197 (2025) | DOI\nContaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law Pillai R, Neilan D, Handel C, Datta S Nano Lett. 25, 4284–4290 (2025) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-1",
+    "href": "publications.html#section-1",
+    "title": "Publications",
+    "section": "2024",
+    "text": "2024\n\nUnraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface El-Rifai A, Perumanath S, Borg MK, Pillai R J. Phys. Chem. C 128, 8408–8417 (2024) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-2",
+    "href": "publications.html#section-2",
+    "title": "Publications",
+    "section": "2023",
+    "text": "2023\n\nThe role of surface wettability on the growth of vapour bubbles Sullivan P, Dockar D, Enright R, Borg MK, Pillai R Int. J. Heat Mass Transf. 217, 124657 (2023) | DOI\nRolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach Perumanath S, Chubynsky MV, Pillai R, Borg MK, Sprittles JE Phys. Rev. Lett. 131, 164001 (2023) | DOI\nContaminant Removal from Nature’s Self-Cleaning Surfaces Perumanath S, Pillai R, Borg MK Nano Lett. 23, 4234–4241 (2023) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-3",
+    "href": "publications.html#section-3",
+    "title": "Publications",
+    "section": "2022",
+    "text": "2022\n\nInertio-thermal vapour bubble growth Sullivan P, Enright R, Borg MK, Pillai R J. Fluid Mech. 948, A55 (2022) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-4",
+    "href": "publications.html#section-4",
+    "title": "Publications",
+    "section": "2021",
+    "text": "2021\n\nImpact of surface nanostructure and wettability on interfacial ice physics Nikiforidis V-M, Datta S, Borg MK, Pillai R J. Chem. Phys. 155, 234307 (2021) | DOI\nUntangling the physics of water transport in boron nitride nanotubes Mistry S, Pillai R, Mattia D, Borg MK Nanoscale 13, 18096–18102 (2021) | DOI\nAcoustothermal Nucleation of Surface Nanobubbles Datta S, Pillai R, Borg MK Nano Lett. 21, 1267–1273 (2021) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-5",
+    "href": "publications.html#section-5",
+    "title": "Publications",
+    "section": "2020",
+    "text": "2020\n\nCoupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library Longshaw SL, Emerson DR, Pillai R, Gibelli L, Lockerby DA Comput. Fluids 213, 104726 (2020) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-6",
+    "href": "publications.html#section-6",
+    "title": "Publications",
+    "section": "2018",
+    "text": "2018\n\nAcoustothermal Atomization of Water Nanofilms Pillai R, Borg MK, Reese JM Phys. Rev. Lett. 121, 104502 (2018) | DOI\nDynamics of Nanodroplets on Vibrating Surfaces Pillai R, Borg MK, Reese JM Langmuir 34, 11898–11904 (2018) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-7",
+    "href": "publications.html#section-7",
+    "title": "Publications",
+    "section": "2017",
+    "text": "2017\n\nElectrophoretically mediated partial coalescence of a charged microdrop Pillai R, Berry JD, Harvie DJE, Davidson MR Chem. Eng. Sci. 169, 28–45 (2017) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-8",
+    "href": "publications.html#section-8",
+    "title": "Publications",
+    "section": "2016",
+    "text": "2016\n\nElectrokinetics of isolated electrified drops Pillai R, Berry JD, Harvie DJE, Davidson MR Soft Matter 12, 3310–3325 (2016) | DOI\nNumerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces Davidson MR, Berry JD, Pillai R, Harvie DJE Appl. Math. Model. 40, 1989–2001 (2016) | DOI\nElectrohydrodynamic Deformation and Interaction of Microscale Drop Pairs Pillai R, Berry JD, Harvie DJE, Davidson MR Int. J. Comput. Methods Exp. Meas. 4, 33–41 (2016) | DOI"
+  },
+  {
+    "objectID": "publications.html#section-9",
+    "href": "publications.html#section-9",
+    "title": "Publications",
+    "section": "2015",
+    "text": "2015\n\nElectrolytic drops in an electric field: A numerical study of drop deformation and breakup Pillai R, Berry JD, Harvie DJE, Davidson MR Phys. Rev. E 92, 013007 (2015) | DOI"
+  },
+  {
+    "objectID": "publications.html#journal-articles",
+    "href": "publications.html#journal-articles",
+    "title": "Publications",
+    "section": "Journal Articles",
+    "text": "Journal Articles\n\n2025\n[20] Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law Pillai R, Neilan D, Handel C, Datta S Nano Lett. 25, 4284–4290 (2025) | DOI\n[19] Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, Pillai R, Isaiev M Phys. Chem. Chem. Phys. 27, 10185–10197 (2025) | DOI\n[18] Nanoscale surface effects on heterogeneous vapor bubble nucleation Sullivan P, Dockar D, Pillai R J. Chem. Phys. 162, 184501 (2025) | DOI\n[17] Nanoscale insights into vibration-induced heterogeneous ice nucleation Chen P, Pillai R, Datta S Nanoscale 17, 14172 (2025) | DOI\n\n\n2024\n[16] Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface El-Rifai A, Perumanath S, Borg MK, Pillai R J. Phys. Chem. C 128, 8408–8417 (2024) | DOI\n\n\n2023\n[15] The role of surface wettability on the growth of vapour bubbles Sullivan P, Dockar D, Enright R, Borg MK, Pillai R Int. J. Heat Mass Transf. 217, 124657 (2023) | DOI\n[14] Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach Perumanath S, Chubynsky MV, Pillai R, Borg MK, Sprittles JE Phys. Rev. Lett. 131, 164001 (2023) | DOI\n[13] Contaminant Removal from Nature’s Self-Cleaning Surfaces Perumanath S, Pillai R, Borg MK Nano Lett. 23, 4234–4241 (2023) | DOI\n\n\n2022\n[12] Inertio-thermal vapour bubble growth Sullivan P, Enright R, Borg MK, Pillai R J. Fluid Mech. 948, A55 (2022) | DOI\n\n\n2021\n[11] Acoustothermal Nucleation of Surface Nanobubbles Datta S, Pillai R, Borg MK Nano Lett. 21, 1267–1273 (2021) | DOI\n[10] Untangling the physics of water transport in boron nitride nanotubes Mistry S, Pillai R, Mattia D, Borg MK Nanoscale 13, 18096–18102 (2021) | DOI\n[9] Impact of surface nanostructure and wettability on interfacial ice physics Nikiforidis V-M, Datta S, Borg MK, Pillai R J. Chem. Phys. 155, 234307 (2021) | DOI\n\n\n2020\n[8] Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library Longshaw SL, Emerson DR, Pillai R, Gibelli L, Lockerby DA Comput. Fluids 213, 104726 (2020) | DOI\n\n\n2018\n[7] Dynamics of Nanodroplets on Vibrating Surfaces Pillai R, Borg MK, Reese JM Langmuir 34, 11898–11904 (2018) | DOI\n[6] Acoustothermal Atomization of Water Nanofilms Pillai R, Borg MK, Reese JM Phys. Rev. Lett. 121, 104502 (2018) | DOI\n\n\n2017\n[5] Electrophoretically mediated partial coalescence of a charged microdrop Pillai R, Berry JD, Harvie DJE, Davidson MR Chem. Eng. Sci. 169, 28–45 (2017) | DOI\n\n\n2016\n[4] Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs Pillai R, Berry JD, Harvie DJE, Davidson MR Int. J. Comput. Methods Exp. Meas. 4, 33–41 (2016) | DOI\n[3] Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces Davidson MR, Berry JD, Pillai R, Harvie DJE Appl. Math. Model. 40, 1989–2001 (2016) | DOI\n[2] Electrokinetics of isolated electrified drops Pillai R, Berry JD, Harvie DJE, Davidson MR Soft Matter 12, 3310–3325 (2016) | DOI\n\n\n2015\n[1] Electrolytic drops in an electric field: A numerical study of drop deformation and breakup Pillai R, Berry JD, Harvie DJE, Davidson MR Phys. Rev. E 92, 013007 (2015) | DOI"
+  },
+  {
+    "objectID": "publications.html#book-chapters",
+    "href": "publications.html#book-chapters",
+    "title": "Publications",
+    "section": "Book Chapters",
+    "text": "Book Chapters\nOn the Development of Icephobic Surfaces: Bridging Experiments and Simulations Tagliaro I, Cerpelloni A, Nikiforidis VM, Pillai R, Antonini C In: Marengo M, De Coninck J (eds) The Surface Wettability Effect on Phase Change, Springer, Cham, pp. 235–272 (2022) | DOI"
+  },
+  {
+    "objectID": "publications.html#thesis",
+    "href": "publications.html#thesis",
+    "title": "Publications",
+    "section": "Thesis",
+    "text": "Thesis\nStretching, bursting, splashing and bouncing: Electrohydrodynamics of microfluidic drops Pillai R PhD Thesis, University of Melbourne (2017)"
+  }
+]
