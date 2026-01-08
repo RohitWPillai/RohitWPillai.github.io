@@ -5,7 +5,7 @@ project:
 website:
   title: "Rohit Pillai"
   description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh"
-  site-url: https://rohitpillai.github.io
+  site-url: https://rohitwpillai.github.io
   navbar:
     left:
       - href: index.qmd
