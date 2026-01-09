@@ -1,0 +1,252 @@
+/* ============================================
+   Rohit Pillai - Academic Website Styles
+   Inspired by silviacanelon.com
+   Colors: Slate (#2d3047) + Amber (#d4a03a)
+   ============================================ */
+
+/* ===== CSS Variables ===== */
+:root {
+  --slate: #2d3047;
+  --slate-light: #4a4d64;
+  --amber: #d4a03a;
+  --amber-light: #e8b94d;
+  --amber-dark: #b8892f;
+  --bg-light: #fafafa;
+  --text-dark: #333333;
+}
+
+/* ===== Global Typography ===== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ===== Navbar - Editorial Style ===== */
+.navbar {
+  padding: 1.2rem 0;
+  background: transparent !important;
+  border-bottom: none;
+}
+
+.navbar-brand, .navbar-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--slate) !important;
+  letter-spacing: -0.02em;
+}
+
+.navbar-nav .nav-link {
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--amber) !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0 0.1rem;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar-nav .nav-link:hover {
+  color: var(--amber-dark) !important;
+}
+
+/* Navbar icons */
+.navbar .bi, .navbar .fa {
+  color: var(--amber);
+  font-size: 1.2rem;
+}
+
+/* ===== Headings ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  color: var(--slate);
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: 2.8rem; line-height: 1.2; }
+h2 {
+  font-size: 1.8rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 3px solid var(--amber);
+  display: inline-block;
+}
+h3 { font-size: 1.4rem; }
+
+/* ===== Links ===== */
+a {
+  color: var(--amber);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--amber-dark);
+}
+
+/* Content links with underline effect */
+.content a, main p a, main li a {
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.content a:hover, main p a:hover, main li a:hover {
+  border-bottom-color: var(--amber);
+}
+
+/* ===== Cards ===== */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Buttons ===== */
+.btn-primary, .btn-secondary {
+  border-radius: 30px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.25s ease;
+}
+
+.btn-primary {
+  background: var(--amber);
+  border-color: var(--amber);
+}
+
+.btn-primary:hover {
+  background: var(--amber-dark);
+  border-color: var(--amber-dark);
+  transform: translateY(-2px);
+}
+
+/* ===== Footer ===== */
+.nav-footer {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(45, 48, 71, 0.1);
+}
+
+.nav-footer a {
+  color: var(--amber);
+}
+
+.nav-footer a:hover {
+  color: var(--amber-light);
+}
+
+/* ===== Publications Page ===== */
+.publications h3 {
+  color: var(--slate);
+  font-size: 1.3rem;
+  margin-top: 2rem;
+}
+
+/* ===== Blog Listing ===== */
+.quarto-listing {
+  margin-top: 2rem;
+}
+
+.quarto-listing .listing-item {
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.quarto-listing .listing-item:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Dark Mode ===== */
+.quarto-dark {
+  --slate: #c9cad4;
+  --bg-dark: #1a1a2e;
+}
+
+.quarto-dark body {
+  background-color: var(--bg-dark);
+}
+
+.quarto-dark .navbar-brand,
+.quarto-dark .navbar-title {
+  color: var(--slate) !important;
+}
+
+.quarto-dark h1, .quarto-dark h2,
+.quarto-dark h3, .quarto-dark h4, .quarto-dark h5, .quarto-dark h6 {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  color: #e8e8ec;
+}
+
+.quarto-dark h2 {
+  border-bottom-color: var(--amber);
+}
+
+.quarto-dark .card {
+  background: #252538;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.quarto-dark .nav-footer {
+  border-top-color: rgba(212, 160, 58, 0.2);
+}
+
+.quarto-dark .quarto-listing .listing-item {
+  background: #252538;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+
+  .navbar-nav .nav-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 0.6rem !important;
+  }
+}
+
+/* ===== Smooth scrolling ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ===== Selection color ===== */
+::selection {
+  background: rgba(212, 160, 58, 0.3);
+}
