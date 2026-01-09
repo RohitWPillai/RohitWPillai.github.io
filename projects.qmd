@@ -1,29 +1,65 @@
 ---
-title: "Projects"
+title: "Research"
 ---
 
-## Current Research Projects
+## Overview
 
-### Multiscale Modelling of Flows
-
-Research into flows spanning from the nano- to macro-scale, using molecular dynamics, kinetic theory, and continuum methods.
-
-[Learn more at mfX Group Website](https://multiscaleflowx.github.io/)
-
-### Interfacial Phenomena
-
-Study of the physics at the boundary between two phases, including droplet dynamics and heat transfer.
-
-### Nucleation and Phase Change
-
-Investigation of ice formation, boiling, and cavitation at the nanoscale.
+My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices.
 
 ---
 
-## Software & Code
+## Current Projects
 
-- [GitHub Profile](https://github.com/RohitWPillai)
+### Nanomaterial-Enhanced Cooling
+
+High-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:
+
+- Nanoporous membranes for controlled evaporation
+- Engineered solid-liquid interfaces for improved heat transfer
+- Machine learning potentials for accurate molecular simulations
+
+### Ice Nucleation and De-Icing
+
+Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:
+
+- Heterogeneous ice nucleation on different surface chemistries
+- Effects of surface vibrations on ice formation
+- Design principles for icephobic surfaces
+
+### Nanoscale Heat Transfer
+
+Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:
+
+- Spectral mechanisms of interfacial thermal conductance
+- Effects of surface chemistry and structure
+- Role of interfacial water structure
+
+### Boiling and Bubble Dynamics
+
+Phase change at surfaces is central to many cooling technologies. Our work explores:
+
+- Heterogeneous vapour bubble nucleation
+- Effects of surface wettability on bubble growth
+- Acoustically-driven nanobubble dynamics
 
 ---
 
-*More projects coming soon.*
+## Methods
+
+### Molecular Dynamics
+
+We use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.
+
+### Multiscale Modelling
+
+Our group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.
+
+### High-Performance Computing
+
+Simulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities.
+
+---
+
+## Group Website
+
+For more details on our research activities, visit the [mfX Group Website](https://multiscaleflowx.github.io/).

@@ -6,15 +6,15 @@
       version="2.0">
 <channel>
 <title>Rohit Pillai</title>
-<link>https://rohitpillai.github.io/blog.html</link>
-<atom:link href="https://rohitpillai.github.io/blog.xml" rel="self" type="application/rss+xml"/>
+<link>https://rohitwpillai.github.io/blog.html</link>
+<atom:link href="https://rohitwpillai.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description>Senior Lecturer in Mechanical Engineering, University of Edinburgh</description>
 <generator>quarto-1.8.26</generator>
 <lastBuildDate>Tue, 07 Jan 2025 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Welcome to my website</title>
   <dc:creator>Rohit Pillai</dc:creator>
-  <link>https://rohitpillai.github.io/posts/welcome/</link>
+  <link>https://rohitwpillai.github.io/posts/welcome/</link>
   <description><![CDATA[ 
 
 
@@ -29,7 +29,7 @@
 
  ]]></description>
   <category>news</category>
-  <guid>https://rohitpillai.github.io/posts/welcome/</guid>
+  <guid>https://rohitwpillai.github.io/posts/welcome/</guid>
   <pubDate>Tue, 07 Jan 2025 00:00:00 GMT</pubDate>
 </item>
 </channel>

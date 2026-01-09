@@ -1,6 +1,8 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - assets/press/*
 
 website:
   title: "Rohit Pillai"
@@ -10,14 +12,14 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - href: publications.qmd
-        text: Publications
-      - href: projects.qmd
-        text: Projects
       - href: cv.qmd
         text: CV
-      - href: blog.qmd
-        text: Blog
+      - href: team.qmd
+        text: Team
+      - href: projects.qmd
+        text: Research
+      - href: publications.qmd
+        text: Publications
     right:
       - icon: github
         href: https://github.com/RohitWPillai
@@ -32,8 +34,18 @@ website:
 format:
   html:
     theme:
-      light: flatly
-      dark: darkly
+      light:
+        - cosmo
+        - assets/theme-light.scss
+      dark:
+        - cosmo
+        - assets/theme-dark.scss
     css: styles.css
     toc: true
     page-layout: full
+    mainfont: Inter
+    include-in-header:
+      - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">

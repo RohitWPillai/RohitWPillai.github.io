@@ -1,0 +1,64 @@
+---
+title: "Research Group"
+---
+
+## Current Members
+
+### Postdoctoral Researchers
+
+**Dr Thejas Chakrapani** (2024-)
+Spectral heat flows at solid-liquid interfaces
+
+### PhD Students
+
+**Zhaolun Li** (2025-)
+Machine learning potentials for solid-liquid interfaces
+
+**Pengxu Chen** (2022-)
+Using nanoscale vibrations to reduce surface icing
+
+---
+
+## Past Supervision
+
+### Postdoctoral Researchers
+
+**Dr Saikat Datta** (2018-2024)
+Acoustothermal nanobubbles
+*Left for: Senior Lecturer, Swansea University*
+
+**Dr Sree Hari Perumanath** (2020-2021)
+Multiscale fluid dynamics
+*Left for: Assistant Professor, IIT Madras*
+
+### PhD Students
+
+**Abdullah El-Rifai** (2020-2024)
+Thermal resistance at liquid-solid interfaces
+*Left for: Renewables Consultant, Wood PLC*
+
+
+**Patrick Sullivan** (2019-2023)
+Formation and growth of vapour bubbles
+*Left for: PDRA, Durham University*
+
+**Vasileios-Martin Nikiforidis** (2017-2021)
+Ice growth on surfaces
+*Left for: Postdoc, University of Cyprus*
+
+**Sritay Mistry** (2018-2022)
+Flows through nanomaterials
+*Left for: PDRA, Brunel University*
+
+**Sree Hari Perumanath** (2016-2019)
+Merging and jumping nanodroplets
+*Left for: PDRA, University of Edinburgh*
+
+
+---
+
+## Join Us
+
+I am always looking for motivated PhD students and postdocs interested in molecular simulations, multiscale modelling, and interfacial physics.
+
+Contact me at [R.Pillai AT ed.ac.uk](mailto:R.Pillai@ed.ac.uk) to discuss opportunities.

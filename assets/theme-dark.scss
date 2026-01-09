@@ -1,0 +1,97 @@
+/*-- scss:defaults --*/
+
+// Color palette - Dark mode
+$primary: #c9cad4 !default;
+$secondary: #d4a03a !default;
+$success: #198754 !default;
+$info: #0dcaf0 !default;
+$warning: #ffc107 !default;
+$danger: #dc3545 !default;
+$light: #1a1a2e !default;
+$dark: #f8f9fa !default;
+
+// Links
+$link-color: $secondary !default;
+$link-hover-color: #e8b94d !default;
+
+// Typography - Inter for body, Libre Baskerville for headings (same as light mode)
+$font-family-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !default;
+$headings-font-family: "Fraunces", serif !default;
+$headings-font-weight: 400 !default;
+$font-size-base: 1.05rem !default;
+
+// Navbar
+$navbar-dark-color: $secondary !default;
+$navbar-dark-hover-color: $primary !default;
+$navbar-dark-active-color: $primary !default;
+$navbar-dark-brand-color: $primary !default;
+
+// Body - dark background
+$body-bg: #1a1a2e !default;
+$body-color: #e0e0e0 !default;
+
+/*-- scss:rules --*/
+
+// Navbar styling - matches light mode structure
+.navbar {
+  background-color: transparent !important;
+}
+
+.navbar-nav .nav-link {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: $secondary !important;
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    color: $primary !important;
+  }
+}
+
+.navbar-brand {
+  font-family: "Fraunces", serif;
+  font-weight: 700;
+  color: $primary !important;
+}
+
+// Headings - elegant serif (same as light mode)
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Fraunces", serif;
+  color: $primary;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 3rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 1.8rem;
+}
+
+// Links in content
+a {
+  color: $secondary;
+  text-decoration: none;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $link-hover-color;
+  }
+}
+
+// Cards - dark mode
+.card {
+  border: none;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  background-color: #252538;
+}
+
+// About page styling - solana template (same as light mode)
+.quarto-about-solana .about-entity {
+  border: none;
+}

@@ -1,10 +1,17 @@
 ---
+pagetitle: "Rohit Pillai"
 title: "Rohit Pillai"
+subtitle: "Senior Lecturer in Mechanical Engineering"
 image: images/profile.jpg
+image-alt: "Rohit Pillai"
+toc: false
+anchor-sections: false
+
 about:
-  template: trestles
+  template: solana
+  id: hero-heading
+  image-width: 22em
   image-shape: round
-  image-width: 15em
   links:
     - icon: envelope
       text: Email
@@ -13,32 +20,29 @@ about:
       text: GitHub
       href: https://github.com/RohitWPillai
     - icon: mortarboard-fill
-      text: Google Scholar
+      text: Scholar
       href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
+    - text: ResearchGate
+      href: https://www.researchgate.net/profile/Rohit-Pillai-2
+
+page-layout: full
+
+resources:
+  - assets/index.css
+
+header-includes: |
+  <link rel="stylesheet" href="assets/index.css">
 ---
 
-## About Me
+I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation.
 
-I am a Senior Lecturer in Mechanical Engineering at the University of Edinburgh, with a background and publication record in continuum fluid dynamics, molecular dynamics, and multiphysics modelling.
+My research combines **molecular dynamics** with **continuum mechanics** to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:
 
-My research has featured in prominent journals (Physical Review Letters, Nano Letters), the press (BBC, Times, Metro), and led to a radio interview on BBC Newsnight Scotland.
+- **Boiling & evaporation** at nanoscale surfaces
+- **Ice nucleation** and icephobic surface design
+- **Nanoscale heat transfer** at solid-liquid interfaces
+- **Machine learning potentials** for molecular simulations
 
-## Research Interests
+I lead a research group primarily funded by an **ERC Starting Grant** (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.
 
-- Molecular dynamics simulations
-- Multiscale modelling
-- Interfacial phenomena
-- Droplet dynamics
-- Phase change processes
-
-## Education
-
-**PhD, Chemical and Biomolecular Engineering** | University of Melbourne | 2017
-
-## Contact
-
-School of Engineering
-University of Edinburgh
-Edinburgh, UK
-
-Email: R.Pillai AT ed.ac.uk
+Published in **Physical Review Letters**, **Nano Letters**, and **Journal of Fluid Mechanics**. Research featured in **BBC**, **The Times**, **Metro**, and **The Conversation**.

@@ -1,0 +1,45 @@
+---
+title: "Teaching"
+---
+
+## Courses
+
+### Thermofluids 3 (Course Organiser, 2020-2024)
+
+Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:
+
+- MOOC-style lecture videos with integrated worked examples
+- Learning modules with curated real-world applications and research links
+- Design-focused laboratory exercises using real experimental data
+- Physical demonstrations (Stirling engines, radiometers, heat pipes)
+- Structured feedback system for consistent, actionable assessment
+
+### Engineering Mathematics 2A (2018-2023)
+
+Second-year course covering mathematical methods for engineers, including differential equations and linear algebra.
+
+### Engineering 1 (2018-2019)
+
+First-year introductory engineering course providing foundation in core engineering principles.
+
+---
+
+## Student Supervision
+
+### BEng/MEng Projects
+
+I supervise 2-3 final-year BEng/MEng projects annually on topics including:
+
+- Molecular dynamics of phase change
+- Heat transfer at nanoscale interfaces
+- Surface acoustic wave effects on droplets and particles
+
+### Industrial Placements
+
+Supervised 8 students on industrial placement programmes (2019-2021).
+
+---
+
+## Personal Tutoring
+
+Personal tutor to undergraduate students across all years of the MEng programme, providing academic guidance and pastoral support.
