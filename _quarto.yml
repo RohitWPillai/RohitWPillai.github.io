@@ -3,6 +3,9 @@ project:
   resources:
     - assets/press/*
 
+execute:
+  freeze: auto
+
 website:
   title: "Rohit Pillai"
   description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh"
