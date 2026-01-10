@@ -35,11 +35,102 @@
     "text": "Group Website\nFor more details on our research activities, visit the mfX Group Website."
   },
   {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "Blog",
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
     "section": "",
-    "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
+    "text": "Full list available on Google Scholar"
+  },
+  {
+    "objectID": "publications.html#journal-articles",
+    "href": "publications.html#journal-articles",
+    "title": "Publications",
+    "section": "Journal Articles",
+    "text": "Journal Articles\n\n2025\n[20] Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law Pillai R, Neilan D, Handel C, Datta S Nano Lett. 25, 4284–4290 (2025) | DOI | Data\n[19] Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, Pillai R, Isaiev M Phys. Chem. Chem. Phys. 27, 10185–10197 (2025) | DOI\n[18] Nanoscale surface effects on heterogeneous vapor bubble nucleation Sullivan P, Dockar D, Pillai R J. Chem. Phys. 162, 184501 (2025) | DOI | Data\n[17] Nanoscale insights into vibration-induced heterogeneous ice nucleation Chen P, Pillai R, Datta S Nanoscale 17, 14172 (2025) | DOI | Data\n\n\n2024\n[16] Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface El-Rifai A, Perumanath S, Borg MK, Pillai R J. Phys. Chem. C 128, 8408–8417 (2024) | DOI | Data\n\n\n2023\n[15] The role of surface wettability on the growth of vapour bubbles Sullivan P, Dockar D, Enright R, Borg MK, Pillai R Int. J. Heat Mass Transf. 217, 124657 (2023) | DOI | Data\n[14] Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach Perumanath S, Chubynsky MV, Pillai R, Borg MK, Sprittles JE Phys. Rev. Lett. 131, 164001 (2023) | DOI | Data\n[13] Contaminant Removal from Nature’s Self-Cleaning Surfaces Perumanath S, Pillai R, Borg MK Nano Lett. 23, 4234–4241 (2023) | DOI | Data\n\n\n2022\n[12] Inertio-thermal vapour bubble growth Sullivan P, Enright R, Borg MK, Pillai R J. Fluid Mech. 948, A55 (2022) | DOI | Data\n\n\n2021\n[11] Acoustothermal Nucleation of Surface Nanobubbles Datta S, Pillai R, Borg MK Nano Lett. 21, 1267–1273 (2021) | DOI\n[10] Untangling the physics of water transport in boron nitride nanotubes Mistry S, Pillai R, Mattia D, Borg MK Nanoscale 13, 18096–18102 (2021) | DOI | Data\n[9] Impact of surface nanostructure and wettability on interfacial ice physics Nikiforidis V-M, Datta S, Borg MK, Pillai R J. Chem. Phys. 155, 234307 (2021) | DOI | Data\n\n\n2020\n[8] Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library Longshaw SL, Emerson DR, Pillai R, Gibelli L, Lockerby DA Comput. Fluids 213, 104726 (2020) | DOI\n\n\n2018\n[7] Dynamics of Nanodroplets on Vibrating Surfaces Pillai R, Borg MK, Reese JM Langmuir 34, 11898–11904 (2018) | DOI | Data\n[6] Acoustothermal Atomization of Water Nanofilms Pillai R, Borg MK, Reese JM Phys. Rev. Lett. 121, 104502 (2018) | DOI | Data\n\n\n2017\n[5] Electrophoretically mediated partial coalescence of a charged microdrop Pillai R, Berry JD, Harvie DJE, Davidson MR Chem. Eng. Sci. 169, 28–45 (2017) | DOI\n\n\n2016\n[4] Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs Pillai R, Berry JD, Harvie DJE, Davidson MR Int. J. Comput. Methods Exp. Meas. 4, 33–41 (2016) | DOI\n[3] Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces Davidson MR, Berry JD, Pillai R, Harvie DJE Appl. Math. Model. 40, 1989–2001 (2016) | DOI\n[2] Electrokinetics of isolated electrified drops Pillai R, Berry JD, Harvie DJE, Davidson MR Soft Matter 12, 3310–3325 (2016) | DOI\n\n\n2015\n[1] Electrolytic drops in an electric field: A numerical study of drop deformation and breakup Pillai R, Berry JD, Harvie DJE, Davidson MR Phys. Rev. E 92, 013007 (2015) | DOI"
+  },
+  {
+    "objectID": "publications.html#book-chapters",
+    "href": "publications.html#book-chapters",
+    "title": "Publications",
+    "section": "Book Chapters",
+    "text": "Book Chapters\nOn the Development of Icephobic Surfaces: Bridging Experiments and Simulations Tagliaro I, Cerpelloni A, Nikiforidis VM, Pillai R, Antonini C In: Marengo M, De Coninck J (eds) The Surface Wettability Effect on Phase Change, Springer, Cham, pp. 235–272 (2022) | DOI"
+  },
+  {
+    "objectID": "publications.html#thesis",
+    "href": "publications.html#thesis",
+    "title": "Publications",
+    "section": "Thesis",
+    "text": "Thesis\nStretching, bursting, splashing and bouncing: Electrohydrodynamics of microfluidic drops Pillai R PhD Thesis, University of Melbourne (2017)"
+  },
+  {
+    "objectID": "team.html",
+    "href": "team.html",
+    "title": "Research Group",
+    "section": "",
+    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+  },
+  {
+    "objectID": "team.html#current-members",
+    "href": "team.html#current-members",
+    "title": "Research Group",
+    "section": "",
+    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+  },
+  {
+    "objectID": "team.html#past-supervision",
+    "href": "team.html#past-supervision",
+    "title": "Research Group",
+    "section": "Past Supervision",
+    "text": "Past Supervision\n\nPostdoctoral Researchers\nDr Saikat Datta (2018-2024) Acoustothermal nanobubbles Left for: Senior Lecturer, Swansea University\nDr Sree Hari Perumanath (2020-2021) Multiscale fluid dynamics Left for: Assistant Professor, IIT Madras\n\n\nPhD Students\nAbdullah El-Rifai (2020-2024) Thermal resistance at liquid-solid interfaces Left for: Renewables Consultant, Wood PLC\nPatrick Sullivan (2019-2023) Formation and growth of vapour bubbles Left for: PDRA, Durham University\nVasileios-Martin Nikiforidis (2017-2021) Ice growth on surfaces Left for: Postdoc, University of Cyprus\nSritay Mistry (2018-2022) Flows through nanomaterials Left for: PDRA, Brunel University\nSree Hari Perumanath (2016-2019) Merging and jumping nanodroplets Left for: PDRA, University of Edinburgh"
+  },
+  {
+    "objectID": "team.html#join-us",
+    "href": "team.html#join-us",
+    "title": "Research Group",
+    "section": "Join Us",
+    "text": "Join Us\nI am always looking for motivated PhD students and postdocs interested in molecular simulations, multiscale modelling, and interfacial physics.\nContact me at R.Pillai AT ed.ac.uk to discuss opportunities."
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome to my website",
+    "section": "",
+    "text": "Welcome to my personal website! This site is built with Quarto and hosted on GitHub Pages.\nHere you’ll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.\nStay tuned for more updates!"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rohit Pillai",
+    "section": "",
+    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation.\nMy research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:\n\nBoiling & evaporation at nanoscale surfaces\nIce nucleation and icephobic surface design\nNanoscale heat transfer at solid-liquid interfaces\nMachine learning potentials for molecular simulations\n\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.\nPublished in Physical Review Letters, Nano Letters, and Journal of Fluid Mechanics. Research featured in BBC, The Times, Metro, and The Conversation."
+  },
+  {
+    "objectID": "teaching.html",
+    "href": "teaching.html",
+    "title": "Teaching",
+    "section": "",
+    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+  },
+  {
+    "objectID": "teaching.html#courses",
+    "href": "teaching.html#courses",
+    "title": "Teaching",
+    "section": "",
+    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+  },
+  {
+    "objectID": "teaching.html#student-supervision",
+    "href": "teaching.html#student-supervision",
+    "title": "Teaching",
+    "section": "Student Supervision",
+    "text": "Student Supervision\n\nBEng/MEng Projects\nI supervise 2-3 final-year BEng/MEng projects annually on topics including:\n\nMolecular dynamics of phase change\nHeat transfer at nanoscale interfaces\nSurface acoustic wave effects on droplets and particles\n\n\n\nIndustrial Placements\nSupervised 8 students on industrial placement programmes (2019-2021)."
+  },
+  {
+    "objectID": "teaching.html#personal-tutoring",
+    "href": "teaching.html#personal-tutoring",
+    "title": "Teaching",
+    "section": "Personal Tutoring",
+    "text": "Personal Tutoring\nPersonal tutor to undergraduate students across all years of the MEng programme, providing academic guidance and pastoral support."
   },
   {
     "objectID": "cv.html",
@@ -105,101 +196,59 @@
     "text": "Publications\nSee Publications page for full list (20 journal articles, 1 book chapter)."
   },
   {
-    "objectID": "teaching.html",
-    "href": "teaching.html",
-    "title": "Teaching",
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
     "section": "",
-    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+    "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "teaching.html#courses",
-    "href": "teaching.html#courses",
-    "title": "Teaching",
+    "objectID": "CLAUDE.html",
+    "href": "CLAUDE.html",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+    "text": "Personal academic website for Rohit Pillai.\n\n\n\nFramework: Quarto\nStyling: Custom SCSS + Quarto themes\nHosting: GitHub Pages (via GitHub Actions)\n\n\n\n\n# Preview site\nquarto preview\n\n# Build site (outputs to _site/)\nquarto render\n\n\n\n_quarto.yml      # Site configuration (navbar, theme, metadata)\nindex.qmd        # Homepage\ncv.qmd           # CV page\nteam.qmd         # Team/group page\nresearch.qmd     # Research interests\npublications.qmd # Publications list\nstyles.css       # Custom styles\n\n\n\nGitHub Actions workflow (.github/workflows/publish.yml) automatically: 1. Builds the site with quarto render 2. Deploys to gh-pages branch 3. Serves via GitHub Pages\n\n\n\n\nHeadings: Fraunces (serif)\nBody: Default Quarto fonts\n\n\n\n\nTeaching and Blog tabs are currently hidden (commented out in _quarto.yml)."
   },
   {
-    "objectID": "teaching.html#student-supervision",
-    "href": "teaching.html#student-supervision",
-    "title": "Teaching",
-    "section": "Student Supervision",
-    "text": "Student Supervision\n\nBEng/MEng Projects\nI supervise 2-3 final-year BEng/MEng projects annually on topics including:\n\nMolecular dynamics of phase change\nHeat transfer at nanoscale interfaces\nSurface acoustic wave effects on droplets and particles\n\n\n\nIndustrial Placements\nSupervised 8 students on industrial placement programmes (2019-2021)."
-  },
-  {
-    "objectID": "teaching.html#personal-tutoring",
-    "href": "teaching.html#personal-tutoring",
-    "title": "Teaching",
-    "section": "Personal Tutoring",
-    "text": "Personal Tutoring\nPersonal tutor to undergraduate students across all years of the MEng programme, providing academic guidance and pastoral support."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Rohit Pillai",
+    "objectID": "CLAUDE.html#tech-stack",
+    "href": "CLAUDE.html#tech-stack",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation.\nMy research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:\n\nBoiling & evaporation at nanoscale surfaces\nIce nucleation and icephobic surface design\nNanoscale heat transfer at solid-liquid interfaces\nMachine learning potentials for molecular simulations\n\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.\nPublished in Physical Review Letters, Nano Letters, and Journal of Fluid Mechanics. Research featured in BBC, The Times, Metro, and The Conversation."
+    "text": "Framework: Quarto\nStyling: Custom SCSS + Quarto themes\nHosting: GitHub Pages (via GitHub Actions)"
   },
   {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome to my website",
+    "objectID": "CLAUDE.html#local-development",
+    "href": "CLAUDE.html#local-development",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "Welcome to my personal website! This site is built with Quarto and hosted on GitHub Pages.\nHere you’ll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.\nStay tuned for more updates!"
+    "text": "# Preview site\nquarto preview\n\n# Build site (outputs to _site/)\nquarto render"
   },
   {
-    "objectID": "team.html",
-    "href": "team.html",
-    "title": "Research Group",
+    "objectID": "CLAUDE.html#project-structure",
+    "href": "CLAUDE.html#project-structure",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+    "text": "_quarto.yml      # Site configuration (navbar, theme, metadata)\nindex.qmd        # Homepage\ncv.qmd           # CV page\nteam.qmd         # Team/group page\nresearch.qmd     # Research interests\npublications.qmd # Publications list\nstyles.css       # Custom styles"
   },
   {
-    "objectID": "team.html#current-members",
-    "href": "team.html#current-members",
-    "title": "Research Group",
+    "objectID": "CLAUDE.html#deployment",
+    "href": "CLAUDE.html#deployment",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+    "text": "GitHub Actions workflow (.github/workflows/publish.yml) automatically: 1. Builds the site with quarto render 2. Deploys to gh-pages branch 3. Serves via GitHub Pages"
   },
   {
-    "objectID": "team.html#past-supervision",
-    "href": "team.html#past-supervision",
-    "title": "Research Group",
-    "section": "Past Supervision",
-    "text": "Past Supervision\n\nPostdoctoral Researchers\nDr Saikat Datta (2018-2024) Acoustothermal nanobubbles Left for: Senior Lecturer, Swansea University\nDr Sree Hari Perumanath (2020-2021) Multiscale fluid dynamics Left for: Assistant Professor, IIT Madras\n\n\nPhD Students\nAbdullah El-Rifai (2020-2024) Thermal resistance at liquid-solid interfaces Left for: Renewables Consultant, Wood PLC\nPatrick Sullivan (2019-2023) Formation and growth of vapour bubbles Left for: PDRA, Durham University\nVasileios-Martin Nikiforidis (2017-2021) Ice growth on surfaces Left for: Postdoc, University of Cyprus\nSritay Mistry (2018-2022) Flows through nanomaterials Left for: PDRA, Brunel University\nSree Hari Perumanath (2016-2019) Merging and jumping nanodroplets Left for: PDRA, University of Edinburgh"
-  },
-  {
-    "objectID": "team.html#join-us",
-    "href": "team.html#join-us",
-    "title": "Research Group",
-    "section": "Join Us",
-    "text": "Join Us\nI am always looking for motivated PhD students and postdocs interested in molecular simulations, multiscale modelling, and interfacial physics.\nContact me at R.Pillai AT ed.ac.uk to discuss opportunities."
-  },
-  {
-    "objectID": "publications.html",
-    "href": "publications.html",
-    "title": "Publications",
+    "objectID": "CLAUDE.html#fonts",
+    "href": "CLAUDE.html#fonts",
+    "title": "rohitwpillai.github.io",
     "section": "",
-    "text": "Full list available on Google Scholar"
+    "text": "Headings: Fraunces (serif)\nBody: Default Quarto fonts"
   },
   {
-    "objectID": "publications.html#journal-articles",
-    "href": "publications.html#journal-articles",
-    "title": "Publications",
-    "section": "Journal Articles",
-    "text": "Journal Articles\n\n2025\n[20] Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law Pillai R, Neilan D, Handel C, Datta S Nano Lett. 25, 4284–4290 (2025) | DOI | Data\n[19] Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, Pillai R, Isaiev M Phys. Chem. Chem. Phys. 27, 10185–10197 (2025) | DOI\n[18] Nanoscale surface effects on heterogeneous vapor bubble nucleation Sullivan P, Dockar D, Pillai R J. Chem. Phys. 162, 184501 (2025) | DOI | Data\n[17] Nanoscale insights into vibration-induced heterogeneous ice nucleation Chen P, Pillai R, Datta S Nanoscale 17, 14172 (2025) | DOI | Data\n\n\n2024\n[16] Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface El-Rifai A, Perumanath S, Borg MK, Pillai R J. Phys. Chem. C 128, 8408–8417 (2024) | DOI | Data\n\n\n2023\n[15] The role of surface wettability on the growth of vapour bubbles Sullivan P, Dockar D, Enright R, Borg MK, Pillai R Int. J. Heat Mass Transf. 217, 124657 (2023) | DOI | Data\n[14] Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach Perumanath S, Chubynsky MV, Pillai R, Borg MK, Sprittles JE Phys. Rev. Lett. 131, 164001 (2023) | DOI | Data\n[13] Contaminant Removal from Nature’s Self-Cleaning Surfaces Perumanath S, Pillai R, Borg MK Nano Lett. 23, 4234–4241 (2023) | DOI | Data\n\n\n2022\n[12] Inertio-thermal vapour bubble growth Sullivan P, Enright R, Borg MK, Pillai R J. Fluid Mech. 948, A55 (2022) | DOI | Data\n\n\n2021\n[11] Acoustothermal Nucleation of Surface Nanobubbles Datta S, Pillai R, Borg MK Nano Lett. 21, 1267–1273 (2021) | DOI\n[10] Untangling the physics of water transport in boron nitride nanotubes Mistry S, Pillai R, Mattia D, Borg MK Nanoscale 13, 18096–18102 (2021) | DOI | Data\n[9] Impact of surface nanostructure and wettability on interfacial ice physics Nikiforidis V-M, Datta S, Borg MK, Pillai R J. Chem. Phys. 155, 234307 (2021) | DOI | Data\n\n\n2020\n[8] Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library Longshaw SL, Emerson DR, Pillai R, Gibelli L, Lockerby DA Comput. Fluids 213, 104726 (2020) | DOI\n\n\n2018\n[7] Dynamics of Nanodroplets on Vibrating Surfaces Pillai R, Borg MK, Reese JM Langmuir 34, 11898–11904 (2018) | DOI | Data\n[6] Acoustothermal Atomization of Water Nanofilms Pillai R, Borg MK, Reese JM Phys. Rev. Lett. 121, 104502 (2018) | DOI | Data\n\n\n2017\n[5] Electrophoretically mediated partial coalescence of a charged microdrop Pillai R, Berry JD, Harvie DJE, Davidson MR Chem. Eng. Sci. 169, 28–45 (2017) | DOI\n\n\n2016\n[4] Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs Pillai R, Berry JD, Harvie DJE, Davidson MR Int. J. Comput. Methods Exp. Meas. 4, 33–41 (2016) | DOI\n[3] Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces Davidson MR, Berry JD, Pillai R, Harvie DJE Appl. Math. Model. 40, 1989–2001 (2016) | DOI\n[2] Electrokinetics of isolated electrified drops Pillai R, Berry JD, Harvie DJE, Davidson MR Soft Matter 12, 3310–3325 (2016) | DOI\n\n\n2015\n[1] Electrolytic drops in an electric field: A numerical study of drop deformation and breakup Pillai R, Berry JD, Harvie DJE, Davidson MR Phys. Rev. E 92, 013007 (2015) | DOI"
-  },
-  {
-    "objectID": "publications.html#book-chapters",
-    "href": "publications.html#book-chapters",
-    "title": "Publications",
-    "section": "Book Chapters",
-    "text": "Book Chapters\nOn the Development of Icephobic Surfaces: Bridging Experiments and Simulations Tagliaro I, Cerpelloni A, Nikiforidis VM, Pillai R, Antonini C In: Marengo M, De Coninck J (eds) The Surface Wettability Effect on Phase Change, Springer, Cham, pp. 235–272 (2022) | DOI"
-  },
-  {
-    "objectID": "publications.html#thesis",
-    "href": "publications.html#thesis",
-    "title": "Publications",
-    "section": "Thesis",
-    "text": "Thesis\nStretching, bursting, splashing and bouncing: Electrohydrodynamics of microfluidic drops Pillai R PhD Thesis, University of Melbourne (2017)"
+    "objectID": "CLAUDE.html#hidden-pages",
+    "href": "CLAUDE.html#hidden-pages",
+    "title": "rohitwpillai.github.io",
+    "section": "",
+    "text": "Teaching and Blog tabs are currently hidden (commented out in _quarto.yml)."
   }
 ]
