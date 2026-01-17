@@ -10,6 +10,7 @@ website:
   title: "Rohit Pillai"
   description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh"
   site-url: https://rohitwpillai.github.io
+  favicon: images/favicon.png
   navbar:
     left:
       - href: index.qmd
