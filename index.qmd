@@ -24,6 +24,9 @@ about:
       href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
     - text: ResearchGate
       href: https://www.researchgate.net/profile/Rohit-Pillai-2
+    - icon: people-fill
+      text: Group Website
+      href: https://multiscaleflowx.github.io
 
 page-layout: full
 
