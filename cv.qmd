@@ -52,6 +52,7 @@ University of Edinburgh, 2017-2018
 
 ### Selected Keynote Presentations
 
+- **2027**: Gordon Research Conference on Micro and Nanoscale Phase Change Phenomena, Tuscany, Italy
 - **2025**: NEMD Conference, Osaka, Japan
 - **2022**: China University of Petroleum Summer School - Modelling Multiscale Heat and Flow Systems
 - **2020**: Sino-Japan-UK Frontiers in Phase Change Heat Transfer
