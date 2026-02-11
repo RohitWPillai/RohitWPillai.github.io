@@ -13,17 +13,18 @@ about:
   image-width: 22em
   image-shape: round
   links:
-    - icon: envelope
-      text: Email
-      href: mailto:R.Pillai@ed.ac.uk
     - icon: github
       text: GitHub
       href: https://github.com/RohitWPillai
     - icon: mortarboard-fill
       text: Scholar
       href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
-    - text: ResearchGate
+    - icon: r-circle
+      text: esearchGate
       href: https://www.researchgate.net/profile/Rohit-Pillai-2
+    - icon: building
+      text: Edinburgh
+      href: https://eng.ed.ac.uk/about/people/dr-rohit-pillai
     - icon: people-fill
       text: Group Website
       href: https://multiscaleflowx.github.io
@@ -32,6 +33,10 @@ page-layout: full
 
 resources:
   - assets/index.css
+  - assets/halo.html
+
+include-after-body:
+  - assets/halo.html
 
 header-includes: |
   <link rel="stylesheet" href="assets/index.css">
