@@ -1,85 +1,110 @@
 /* ============================================
    Homepage Styles - 50:50 Split Layout
-   With Abstract Visual Element
-   ============================================ */
+   ============================================
+   Specificity note: Quarto's Solana template uses selectors like
+   `div.quarto-about-solana .about-entity` (0,2,1). All selectors
+   here use `div.quarto-about-solana` prefix to match or exceed. */
 
-/* ===== Hero Container - Full viewport ===== */
-#hero-heading {
+/* ===== Hero Container ===== */
+div.quarto-about-solana {
   min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
-  padding: 2rem;
+  padding: 2rem !important;
   position: relative;
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
-/* ===== Abstract Visual Element ===== */
-#hero-heading::before {
+/* ===== Subtle background decoration ===== */
+div.quarto-about-solana::before {
   content: "";
   position: absolute;
   top: -20%;
   right: -10%;
-  width: 60%;
-  height: 140%;
+  width: 50%;
+  height: 120%;
   background:
-    /* Main amber blob */
-    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.15) 0%, transparent 70%),
-    /* Secondary slate blob */
-    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(45, 48, 71, 0.08) 0%, transparent 60%),
-    /* Small accent circles - like molecules/droplets */
-    radial-gradient(circle at 70% 30%, rgba(212, 160, 58, 0.2) 0%, transparent 8%),
-    radial-gradient(circle at 55% 60%, rgba(212, 160, 58, 0.15) 0%, transparent 6%),
-    radial-gradient(circle at 80% 70%, rgba(45, 48, 71, 0.12) 0%, transparent 10%),
-    radial-gradient(circle at 45% 40%, rgba(212, 160, 58, 0.1) 0%, transparent 5%),
-    radial-gradient(circle at 65% 80%, rgba(45, 48, 71, 0.08) 0%, transparent 7%);
+    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(45, 48, 71, 0.04) 0%, transparent 60%);
   z-index: 0;
   pointer-events: none;
 }
 
-/* ===== Solana Template - 50:50 Grid ===== */
-.quarto-about-solana .about-entity {
+/* ===== Grid Layout ===== */
+div.quarto-about-solana div.about-entity {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 4rem;
-  align-items: center;
+  gap: 4rem !important;
+  align-items: center !important;
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
 }
 
-/* ===== Left Side - Image ===== */
-.quarto-about-solana .about-image-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.quarto-about-solana .about-image {
+/* ===== Photo ===== */
+div.quarto-about-solana .about-entity img.about-image {
   width: 100% !important;
+  height: auto !important;
   max-width: 400px !important;
-  border-radius: 50%;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: cover;
+  border-radius: 50% !important;
   box-shadow:
     0 30px 60px -15px rgba(45, 48, 71, 0.2),
     0 0 0 6px rgba(212, 160, 58, 0.1);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-.quarto-about-solana .about-image:hover {
-  transform: scale(1.03);
+div.quarto-about-solana .about-entity img.about-image:hover {
+  transform: scale(1.02);
   box-shadow:
     0 35px 70px -15px rgba(45, 48, 71, 0.25),
     0 0 0 8px rgba(212, 160, 58, 0.15);
 }
 
-/* ===== Right Side - Content ===== */
-.quarto-about-solana .about-contents {
-  padding-right: 2rem;
+/* Email link wrapping the photo (injected by JS) */
+div.quarto-about-solana .about-entity a[href^="mailto"] {
+  display: block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+/* ===== Halo wrapper - injected by JS around the image ===== */
+.halo-img-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Constrain to image size so 140% SVG is relative to photo, not column */
+  width: fit-content;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.halo-img-wrapper .profile-halo {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.halo-img-wrapper .profile-halo a {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ===== Content ===== */
+div.quarto-about-solana .about-contents {
+  padding-right: 2rem !important;
 }
 
 /* Title */
-#hero-heading h2.title,
-#hero-heading .about-heading {
+div.quarto-about-solana h1.title {
   font-family: "Fraunces", serif !important;
   font-size: 3.5rem !important;
   font-weight: 400 !important;
@@ -90,176 +115,195 @@
 }
 
 /* Subtitle */
-#hero-heading .subtitle,
-#hero-heading .about-subtitle {
+div.quarto-about-solana .subtitle {
   font-family: "Inter", sans-serif !important;
   font-size: 1.1rem !important;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: #d4a03a !important;
-  margin-bottom: 2rem;
-}
-
-/* Bio text */
-#hero-heading .about-contents p,
-#hero-heading .about-contents .content p {
-  font-size: 1.15rem;
-  line-height: 1.85;
-  color: #444;
   margin-bottom: 1.25rem;
 }
 
-#hero-heading .about-contents strong {
+/* Bio text */
+div.quarto-about-solana .about-contents p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #444;
+  margin-bottom: 0.75rem;
+}
+
+div.quarto-about-solana .about-contents li {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #444;
+  margin-bottom: 0.15rem;
+}
+
+div.quarto-about-solana .about-contents strong {
   color: #2d3047;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* ===== Social Links - Pill Buttons ===== */
-#hero-heading .about-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 2.5rem;
+/* ===== Social Links - pill buttons (default + mobile fallback) ===== */
+div.quarto-about-solana .about-entity .about-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.6rem !important;
+  margin-top: 2rem;
 }
 
-#hero-heading .about-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.7rem 1.5rem;
-  background: transparent;
-  border: 2px solid #d4a03a;
-  border-radius: 50px;
-  color: #d4a03a;
-  font-family: "Inter", sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  text-decoration: none;
+/* When halo is active on desktop, hide the pill buttons */
+div.quarto-about-solana .about-links.halo-active {
+  display: none !important;
+}
+
+div.quarto-about-solana .about-entity .about-link {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.35rem !important;
+  padding: 0.45rem 0.9rem !important;
+  background: rgba(248, 246, 241, 0.92) !important;
+  border: 2px solid #d4a03a !important;
+  border-radius: 50px !important;
+  color: #d4a03a !important;
+  font-family: "Inter", sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 0.7rem !important;
+  text-decoration: none !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: all 0.3s ease;
+  white-space: nowrap;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-#hero-heading .about-link:hover {
-  background: #d4a03a;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(212, 160, 58, 0.35);
+div.quarto-about-solana .about-entity .about-link:hover {
+  background: #d4a03a !important;
+  color: white !important;
+  box-shadow: 0 6px 16px rgba(212, 160, 58, 0.35);
 }
 
-#hero-heading .about-link i,
-#hero-heading .about-link .bi {
-  font-size: 1.1rem;
+div.quarto-about-solana .about-entity .about-link i,
+div.quarto-about-solana .about-entity .about-link .bi {
+  font-size: 0.95rem;
 }
 
 /* ===== Dark Mode ===== */
-.quarto-dark #hero-heading::before {
+.quarto-dark div.quarto-about-solana::before {
   background:
-    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(200, 200, 220, 0.06) 0%, transparent 60%),
-    radial-gradient(circle at 70% 30%, rgba(212, 160, 58, 0.15) 0%, transparent 8%),
-    radial-gradient(circle at 55% 60%, rgba(212, 160, 58, 0.1) 0%, transparent 6%),
-    radial-gradient(circle at 80% 70%, rgba(200, 200, 220, 0.08) 0%, transparent 10%);
+    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(200, 200, 220, 0.03) 0%, transparent 60%);
 }
 
-.quarto-dark #hero-heading h2.title,
-.quarto-dark #hero-heading .about-heading {
+.quarto-dark div.quarto-about-solana h1.title {
   color: #e8e8ec !important;
 }
 
-/* Subtitle - same styling as light mode, just color adjusted */
-.quarto-dark #hero-heading .subtitle,
-.quarto-dark #hero-heading .about-subtitle {
-  font-family: "Inter", sans-serif !important;
-  font-size: 1.1rem !important;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+.quarto-dark div.quarto-about-solana .subtitle {
   color: #d4a03a !important;
-  margin-bottom: 2rem;
 }
 
-.quarto-dark #hero-heading .about-contents p {
+.quarto-dark div.quarto-about-solana .about-contents p,
+.quarto-dark div.quarto-about-solana .about-contents li {
   color: #c0c0c8;
+  margin-bottom: inherit;
 }
 
-.quarto-dark #hero-heading .about-contents strong {
+.quarto-dark div.quarto-about-solana .about-contents strong {
   color: #e8e8ec;
+  font-weight: 500;
 }
 
-/* Social links in dark mode */
-.quarto-dark #hero-heading .about-link {
-  border-color: #d4a03a;
-  color: #d4a03a;
+.quarto-dark div.quarto-about-solana .about-entity .about-link {
+  border-color: #d4a03a !important;
+  color: #d4a03a !important;
+  background: rgba(26, 26, 46, 0.92) !important;
 }
 
-.quarto-dark #hero-heading .about-link:hover {
-  background: #d4a03a;
-  color: #1a1a2e;
+.quarto-dark div.quarto-about-solana .about-entity .about-link:hover {
+  background: #d4a03a !important;
+  color: #1a1a2e !important;
 }
 
-.quarto-dark .quarto-about-solana .about-image {
+.quarto-dark div.quarto-about-solana .about-entity img.about-image {
   box-shadow:
     0 30px 60px -15px rgba(0, 0, 0, 0.4),
     0 0 0 6px rgba(212, 160, 58, 0.15);
 }
 
-/* ===== Responsive - Stack on mobile ===== */
-@media (max-width: 992px) {
-  #hero-heading {
+/* Halo dark mode */
+.quarto-dark .halo-seg path.halo-bg {
+  stroke: rgba(212, 160, 58, 0.1) !important;
+}
+.quarto-dark .halo-seg:hover path.halo-bg {
+  stroke: rgba(212, 160, 58, 0.25) !important;
+}
+.quarto-dark .halo-seg text {
+  fill: #d4a03a;
+}
+.quarto-dark .halo-seg:hover text {
+  fill: #e8e8ec;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 991.98px) {
+  div.quarto-about-solana {
     min-height: auto;
     padding: 3rem 1.5rem;
   }
 
-  #hero-heading::before {
+  div.quarto-about-solana::before {
     width: 100%;
     right: 0;
-    opacity: 0.7;
+    opacity: 0.5;
   }
 
-  .quarto-about-solana .about-entity {
+  div.quarto-about-solana div.about-entity {
     grid-template-columns: 1fr !important;
-    gap: 2.5rem;
+    gap: 2.5rem !important;
     text-align: center;
   }
 
-  .quarto-about-solana .about-contents {
-    padding-right: 0;
+  div.quarto-about-solana .about-contents {
+    padding-right: 0 !important;
     order: 2;
   }
 
-  .quarto-about-solana .about-image-container {
-    order: 1;
-  }
-
-  .quarto-about-solana .about-image {
+  div.quarto-about-solana .about-entity img.about-image {
     max-width: 280px !important;
   }
 
-  #hero-heading h2.title,
-  #hero-heading .about-heading {
+  div.quarto-about-solana h1.title {
     font-size: 2.5rem !important;
   }
 
-  #hero-heading .about-links {
+  /* On mobile: always show pill buttons as horizontal wrap, halo JS doesn't run */
+  div.quarto-about-solana .about-entity .about-links {
     justify-content: center;
+    flex-direction: row !important;
+    width: auto !important;
+  }
+
+  div.quarto-about-solana .about-links.halo-active {
+    display: flex !important;
+  }
+
+  .halo-img-wrapper .profile-halo {
+    display: none;
   }
 }
 
 @media (max-width: 576px) {
-  #hero-heading h2.title,
-  #hero-heading .about-heading {
+  div.quarto-about-solana h1.title {
     font-size: 2rem !important;
   }
 
-  #hero-heading .subtitle,
-  #hero-heading .about-subtitle {
+  div.quarto-about-solana .subtitle {
     font-size: 0.9rem !important;
   }
 
-  #hero-heading .about-link {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
+  div.quarto-about-solana .about-entity .about-link {
+    padding: 0.5rem 1rem !important;
+    font-size: 0.75rem !important;
   }
 }
