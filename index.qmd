@@ -52,4 +52,4 @@ My research combines **molecular dynamics** with **continuum mechanics** to unde
 
 I lead a research group primarily funded by an **ERC Starting Grant** (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.
 
-Published in **Physical Review Letters**, **Nano Letters**, and **Journal of Fluid Mechanics**. Research featured in **BBC**, **The Times**, **Metro**, and **The Conversation**.
+I have published in **Physical Review Letters**, **Nano Letters**, and **Journal of Fluid Mechanics**. My research has featured in **BBC**, **The Times**, **Metro**, and **The Conversation**.

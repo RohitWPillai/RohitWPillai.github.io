@@ -3,3 +3,5 @@
 /*.html
 .DS_Store
 **/*.quarto_ipynb
+CLAUDE.md
+.claude-agents/
