@@ -18,8 +18,8 @@
 /* ===== Global Typography ===== */
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: 0.95rem;
+  line-height: 1.65;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -76,6 +76,32 @@ body {
   font-size: 1.2rem;
 }
 
+/* Dark mode toggle - circular button (matches group website style) */
+.quarto-color-scheme-toggle {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(212, 160, 58, 0.4);
+  border-radius: 50%;
+  padding: 0 !important;
+  transition: all 0.2s ease;
+}
+.quarto-color-scheme-toggle:hover {
+  border-color: var(--amber);
+  background-color: rgba(212, 160, 58, 0.1);
+}
+.quarto-color-scheme-toggle .bi::before {
+  width: 1.1rem;
+  height: 1.1rem;
+  background-size: 1.1rem 1.1rem;
+}
+.quarto-navbar-tools {
+  display: flex !important;
+  align-items: center;
+}
+
 /* ===== Headings ===== */
 h1, h2, h3, h4, h5, h6 {
   font-family: "Fraunces", serif;
@@ -84,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: 2.8rem; line-height: 1.2; }
+h1 { font-size: 3rem; line-height: 1.2; }
 h2 {
   font-size: 1.8rem;
   margin-top: 3rem;
@@ -191,12 +217,9 @@ a:hover {
 }
 
 /* ===== Dark Mode ===== */
-.quarto-dark {
+body.quarto-dark {
   --slate: #c9cad4;
   --bg-dark: #1a1a2e;
-}
-
-.quarto-dark body {
   background-color: var(--bg-dark);
 }
 
