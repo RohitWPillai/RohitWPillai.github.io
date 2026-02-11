@@ -51,6 +51,7 @@ div.quarto-about-solana .about-entity img.about-image {
   aspect-ratio: 1 / 1 !important;
   object-fit: cover;
   border-radius: 50% !important;
+  margin: 0 !important;  /* Kill Quarto's margin-bottom that misaligns halo */
   box-shadow:
     0 30px 60px -15px rgba(45, 48, 71, 0.2),
     0 0 0 6px rgba(212, 160, 58, 0.1);
@@ -69,6 +70,12 @@ div.quarto-about-solana .about-entity a[href^="mailto"] {
   display: block;
   line-height: 0;
   text-decoration: none;
+  border-radius: 50%;
+}
+
+div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
+  outline: 3px solid #d4a03a;
+  outline-offset: 4px;
 }
 
 /* ===== Halo wrapper - injected by JS around the image ===== */
@@ -98,9 +105,20 @@ div.quarto-about-solana .about-entity a[href^="mailto"] {
   cursor: pointer;
 }
 
+/* Keyboard focus styles for halo links */
+.halo-seg:focus-visible path.halo-bg {
+  stroke: rgba(212, 160, 58, 0.5);
+}
+.halo-seg:focus-visible text {
+  fill: #2d3047;
+}
+.quarto-dark .halo-seg:focus-visible text {
+  fill: #e8e8ec !important;
+}
+
 /* ===== Content ===== */
-div.quarto-about-solana .about-contents {
-  padding-right: 2rem !important;
+div.quarto-about-solana .about-entity .entity-contents {
+  padding-right: 2rem;
 }
 
 /* Title */
@@ -244,7 +262,13 @@ div.quarto-about-solana .about-entity .about-link .bi {
   fill: #d4a03a;
 }
 .quarto-dark .halo-seg:hover text {
-  fill: #e8e8ec;
+  fill: #e8e8ec !important;
+}
+
+.quarto-dark div.quarto-about-solana .about-entity img.about-image:hover {
+  box-shadow:
+    0 35px 70px -15px rgba(0, 0, 0, 0.5),
+    0 0 0 8px rgba(212, 160, 58, 0.2);
 }
 
 /* ===== Responsive ===== */
@@ -262,36 +286,55 @@ div.quarto-about-solana .about-entity .about-link .bi {
 
   div.quarto-about-solana div.about-entity {
     grid-template-columns: 1fr !important;
-    gap: 2.5rem !important;
+    gap: 1.5rem !important;
+  }
+
+  div.quarto-about-solana .about-entity .entity-contents {
+    padding-right: 0;
+    text-align: left;
+  }
+
+  /* Center only the title and subtitle on mobile */
+  div.quarto-about-solana h1.title,
+  div.quarto-about-solana .subtitle {
     text-align: center;
   }
 
-  div.quarto-about-solana .about-contents {
-    padding-right: 0 !important;
+  /* Image on top, text below on mobile */
+  div.quarto-about-solana div.about-entity > .entity-contents {
     order: 2;
   }
+  div.quarto-about-solana div.about-entity > img.about-image,
+  div.quarto-about-solana div.about-entity > a[href^="mailto"],
+  div.quarto-about-solana div.about-entity > .halo-img-wrapper {
+    order: 1;
+    justify-self: center;
+  }
 
+  /* Smaller photo on mobile to fit halo */
   div.quarto-about-solana .about-entity img.about-image {
-    max-width: 280px !important;
+    max-width: 200px !important;
+    margin-bottom: 0 !important;  /* Kill Quarto's 1.5em margin that shifts halo center */
   }
 
   div.quarto-about-solana h1.title {
     font-size: 2.5rem !important;
   }
 
-  /* On mobile: always show pill buttons as horizontal wrap, halo JS doesn't run */
-  div.quarto-about-solana .about-entity .about-links {
-    justify-content: center;
-    flex-direction: row !important;
-    width: auto !important;
+  div.quarto-about-solana .subtitle {
+    margin-bottom: 1rem;
   }
 
-  div.quarto-about-solana .about-links.halo-active {
-    display: flex !important;
+  /* Bullet points: tighter indentation on mobile */
+  div.quarto-about-solana .about-contents ul {
+    padding-left: 1.25rem;
   }
 
-  .halo-img-wrapper .profile-halo {
-    display: none;
+  /* Halo wrapper: explicit size on mobile, bottom margin for SVG overflow */
+  .halo-img-wrapper {
+    width: 200px;
+    max-width: 200px;
+    margin: 0 auto 2rem auto;
   }
 }
 
@@ -302,10 +345,5 @@ div.quarto-about-solana .about-entity .about-link .bi {
 
   div.quarto-about-solana .subtitle {
     font-size: 0.9rem !important;
-  }
-
-  div.quarto-about-solana .about-entity .about-link {
-    padding: 0.5rem 1rem !important;
-    font-size: 0.75rem !important;
   }
 }

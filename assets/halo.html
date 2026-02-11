@@ -12,9 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
   aboutImage.parentNode.insertBefore(emailLink, aboutImage);
   emailLink.appendChild(aboutImage);
 
-  // Halo only on desktop
-  if (window.innerWidth < 992) return;
-
   var aboutLinks = document.querySelector('.quarto-about-solana .about-links');
   if (!aboutLinks) return;
 
@@ -127,9 +124,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var text = document.createElementNS(ns, 'text');
     text.setAttribute('fill', '#d4a03a');
     text.setAttribute('font-family', 'Inter, sans-serif');
-    text.setAttribute('font-size', '12.5');
+    text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');
-    text.setAttribute('letter-spacing', '3');
+    text.setAttribute('letter-spacing', '2.5');
 
     var tp = document.createElementNS(ns, 'textPath');
     tp.setAttribute('href', '#' + tpId);
@@ -140,10 +137,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (links[i].icon) {
       var iconSpan = document.createElementNS(ns, 'tspan');
       iconSpan.setAttribute('font-family', 'bootstrap-icons');
-      iconSpan.setAttribute('font-size', '14');
+      iconSpan.setAttribute('font-size', '16.5');
       iconSpan.setAttribute('letter-spacing', '0');
       iconSpan.setAttribute('dy', '0.5');
-      iconSpan.textContent = links[i].icon + '  ';
+      iconSpan.textContent = links[i].icon + ' ';
       tp.appendChild(iconSpan);
     }
     var labelSpan = document.createElementNS(ns, 'tspan');
