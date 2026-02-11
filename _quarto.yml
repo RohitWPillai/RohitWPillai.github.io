@@ -30,7 +30,7 @@ website:
       - icon: mortarboard-fill
         href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
         aria-label: Google Scholar
-      - text: RG
+      - icon: r-circle
         href: https://www.researchgate.net/profile/Rohit-Pillai-2
         aria-label: ResearchGate
 
