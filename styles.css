@@ -176,46 +176,6 @@ a:hover {
   transform: translateY(-2px);
 }
 
-/* ===== Footer ===== */
-.nav-footer {
-  margin-top: 4rem;
-  padding: 2rem 0;
-  border-top: 1px solid rgba(45, 48, 71, 0.1);
-}
-
-.nav-footer a {
-  color: var(--amber);
-}
-
-.nav-footer a:hover {
-  color: var(--amber-light);
-}
-
-/* ===== Publications Page ===== */
-.publications h3 {
-  color: var(--slate);
-  font-size: 1.3rem;
-  margin-top: 2rem;
-}
-
-/* ===== Blog Listing ===== */
-.quarto-listing {
-  margin-top: 2rem;
-}
-
-.quarto-listing .listing-item {
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  background: white;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
-}
-
-.quarto-listing .listing-item:hover {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
 /* ===== Dark Mode ===== */
 body.quarto-dark {
   --slate: #c9cad4;
@@ -242,14 +202,6 @@ body.quarto-dark {
 .quarto-dark .card {
   background: #252538;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.quarto-dark .nav-footer {
-  border-top-color: rgba(212, 160, 58, 0.2);
-}
-
-.quarto-dark .quarto-listing .listing-item {
-  background: #252538;
 }
 
 /* ===== Responsive ===== */
