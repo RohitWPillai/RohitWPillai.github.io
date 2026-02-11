@@ -203,10 +203,12 @@ div.quarto-about-solana .about-entity .about-link .bi {
   color: #d4a03a !important;
 }
 
-.quarto-dark div.quarto-about-solana .about-contents p,
+.quarto-dark div.quarto-about-solana .about-contents p {
+  color: #c0c0c8;
+}
+
 .quarto-dark div.quarto-about-solana .about-contents li {
   color: #c0c0c8;
-  margin-bottom: inherit;
 }
 
 .quarto-dark div.quarto-about-solana .about-contents strong {
