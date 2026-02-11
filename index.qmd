@@ -33,7 +33,6 @@ page-layout: full
 
 resources:
   - assets/index.css
-  - assets/halo.html
 
 include-after-body:
   - assets/halo.html

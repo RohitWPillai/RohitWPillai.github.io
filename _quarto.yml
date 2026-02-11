@@ -23,16 +23,7 @@ website:
         text: Research
       - href: publications.qmd
         text: Publications
-    right:
-      - icon: github
-        href: https://github.com/RohitWPillai
-        aria-label: GitHub
-      - icon: mortarboard-fill
-        href: https://scholar.google.com/citations?user=eE9rDfkAAAAJ
-        aria-label: Google Scholar
-      - icon: r-circle
-        href: https://www.researchgate.net/profile/Rohit-Pillai-2
-        aria-label: ResearchGate
+    right: []
 
 format:
   html:
