@@ -127,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');
     text.setAttribute('letter-spacing', '2.5');
+    text.setAttribute('dominant-baseline', 'central');
 
     var tp = document.createElementNS(ns, 'textPath');
     tp.setAttribute('href', '#' + tpId);
@@ -139,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
       iconSpan.setAttribute('font-family', 'bootstrap-icons');
       iconSpan.setAttribute('font-size', '16.5');
       iconSpan.setAttribute('letter-spacing', '0');
-      iconSpan.setAttribute('dy', '0.5');
       iconSpan.textContent = links[i].icon + ' ';
       tp.appendChild(iconSpan);
     }
