@@ -100,3 +100,22 @@ a {
 .quarto-about-solana .about-entity {
   border: none;
 }
+
+// Dark/light toggle icon - make visible against dark background
+.quarto-color-scheme-toggle .bi {
+  filter: invert(0.85) sepia(0.2) saturate(2) hue-rotate(5deg) !important;
+}
+
+.quarto-color-scheme-toggle {
+  border-color: rgba(212, 160, 58, 0.7) !important;
+}
+
+// Search icon - amber to match navbar
+#quarto-search svg {
+  color: $secondary !important;
+  fill: $secondary !important;
+}
+
+.aa-DetachedSearchButton {
+  color: $secondary !important;
+}
