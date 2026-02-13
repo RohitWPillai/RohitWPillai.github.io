@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');
     text.setAttribute('letter-spacing', '2.5');
-    text.setAttribute('dominant-baseline', 'central');
+    text.setAttribute('dy', '0.35em');
 
     var tp = document.createElementNS(ns, 'textPath');
     tp.setAttribute('href', '#' + tpId);
