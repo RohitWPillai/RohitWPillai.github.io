@@ -2,6 +2,8 @@
 title: "CV"
 ---
 
+[Download CV (PDF)](assets/short-cv.pdf){.btn .btn-outline-primary .btn-sm}
+
 ## Education
 
 **PhD, Chemical and Biomolecular Engineering**
@@ -81,6 +83,8 @@ Leading initiatives to support postdoctoral researchers, including reformed annu
 **College Member**, EPSRC Peer Review College (2024-present)
 
 
+**External PhD Examiner**: Imperial College London (2024), Brunel University London (2026)
+
 **Conference Organiser**:
 
 - Conference Chair, Non-Equilibrium Molecular Dynamics Conference, Edinburgh, UK (2026) 
@@ -115,4 +119,4 @@ Regular reviewer for: *International Journal of Heat and Mass Transfer, Langmuir
 
 ## Publications
 
-See [Publications page](publications.qmd) for full list (20 journal articles, 1 book chapter).
+See [Publications page](publications.qmd) for full list (20 journal articles, 31 conference abstracts, 1 book chapter).
