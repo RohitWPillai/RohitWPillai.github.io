@@ -5,3 +5,7 @@
 **/*.quarto_ipynb
 CLAUDE.md
 .claude-agents/
+.claude-rules/
+handoffs/
+PROJECT_CONTEXT.md
+posts/claude-code-academic-workflows/
