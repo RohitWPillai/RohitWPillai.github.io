@@ -1,5 +1,152 @@
 [
   {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Research",
+    "section": "",
+    "text": "My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices."
+  },
+  {
+    "objectID": "projects.html#overview",
+    "href": "projects.html#overview",
+    "title": "Research",
+    "section": "",
+    "text": "My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices."
+  },
+  {
+    "objectID": "projects.html#current-projects",
+    "href": "projects.html#current-projects",
+    "title": "Research",
+    "section": "Current Projects",
+    "text": "Current Projects\n\nNanomaterial-Enhanced Cooling\nHigh-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:\n\nNanoporous membranes for controlled evaporation\nEngineered solid-liquid interfaces for improved heat transfer\nMachine learning potentials for accurate molecular simulations\n\n\n\nIce Nucleation and De-Icing\nUnderstanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:\n\nHeterogeneous ice nucleation on different surface chemistries\nEffects of surface vibrations on ice formation\nDesign principles for icephobic surfaces\n\n\n\nNanoscale Heat Transfer\nHeat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:\n\nSpectral mechanisms of interfacial thermal conductance\nEffects of surface chemistry and structure\nRole of interfacial water structure\n\n\n\nBoiling and Bubble Dynamics\nPhase change at surfaces is central to many cooling technologies. Our work explores:\n\nHeterogeneous vapour bubble nucleation\nEffects of surface wettability on bubble growth\nAcoustically-driven nanobubble dynamics"
+  },
+  {
+    "objectID": "projects.html#methods",
+    "href": "projects.html#methods",
+    "title": "Research",
+    "section": "Methods",
+    "text": "Methods\n\nMolecular Dynamics\nWe use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.\n\n\nMultiscale Modelling\nOur group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.\n\n\nHigh-Performance Computing\nSimulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities."
+  },
+  {
+    "objectID": "projects.html#group-website",
+    "href": "projects.html#group-website",
+    "title": "Research",
+    "section": "Group Website",
+    "text": "Group Website\nFor more details on our research activities, visit the mfX Group Website."
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "Blog",
+    "section": "",
+    "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "cv.html",
+    "href": "cv.html",
+    "title": "CV",
+    "section": "",
+    "text": "Download CV (PDF)"
+  },
+  {
+    "objectID": "cv.html#education",
+    "href": "cv.html#education",
+    "title": "CV",
+    "section": "Education",
+    "text": "Education\nPhD, Chemical and Biomolecular Engineering University of Melbourne, 2017 Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops\nMSc, Mechanical Engineering University of California Davis, 2012 Thesis: Transport Phenomena in a Proton Exchange Membrane Fuel Cell"
+  },
+  {
+    "objectID": "cv.html#academic-positions",
+    "href": "cv.html#academic-positions",
+    "title": "CV",
+    "section": "Academic Positions",
+    "text": "Academic Positions\nSenior Lecturer in Mechanical Engineering University of Edinburgh, 2023-present\nLecturer in Mechanical Engineering University of Edinburgh, 2018-2023\nPostdoctoral Research Associate University of Edinburgh, 2017-2018"
+  },
+  {
+    "objectID": "cv.html#research-grants",
+    "href": "cv.html#research-grants",
+    "title": "CV",
+    "section": "Research Grants",
+    "text": "Research Grants\n\nPrincipal Investigator\n\n\n\n\n\n\n\n\n\nYear\nFunder\nProject\nValue\n\n\n\n\n2024-2029\nERC Starting Grant\nNANO-COOL: Nanomaterial-enhanced liquid cooling for extreme thermal management\n£1,270,000\n\n\n2024\nEPSRC/ARCHER2\nSpectral heat transfer at metal/graphene/water interfaces\n£32,000\n\n\n2021-2022\nEPSRC/CIRRUS\nNano-engineering of surface de-icing\n£35,000\n\n\n2019\nEPSRC eCSE\nEfficient Multi-Scale Simulations\n£100,000\n\n\n\n\n\nCo-Investigator\n\n\n\n\n\n\n\n\n\nYear\nFunder\nProject\nValue\n\n\n\n\n2025-2026\nEPSRC/ARCHER2\nStabilising Bulk Nanobubbles\n£38,600\n\n\n2023-2024\nEPSRC/CIRRUS\nUltrahigh-frequency surface vibrations for freeze-desalination\n£50,000\n\n\n2019-2020\nEPSRC\nNano-Engineered Flow Technologies (internal grant)\n£100,000"
+  },
+  {
+    "objectID": "cv.html#invited-talks",
+    "href": "cv.html#invited-talks",
+    "title": "CV",
+    "section": "Invited Talks",
+    "text": "Invited Talks\n\nSelected Keynote Presentations\n\n2027: Gordon Research Conference on Micro and Nanoscale Phase Change Phenomena, Tuscany, Italy\n2025: NEMD Conference, Osaka, Japan\n2022: China University of Petroleum Summer School - Modelling Multiscale Heat and Flow Systems\n2020: Sino-Japan-UK Frontiers in Phase Change Heat Transfer\n2019: Hewitt-Reese Spring School, UK Fluids Network\n2018: Surface Wettability Effects on Phase Change Phenomena, Brighton"
+  },
+  {
+    "objectID": "cv.html#service-leadership",
+    "href": "cv.html#service-leadership",
+    "title": "CV",
+    "section": "Service & Leadership",
+    "text": "Service & Leadership\n\nSchool Roles\nPDRA Champion (2022-present) Leading initiatives to support postdoctoral researchers, including reformed annual reviews, fellowship screening processes, and career development events.\nCo-chair, Staff Development Committee (2022-2024)\nMember, People & Culture Committee (2025-present)\nAcademic Representative, Diversity & Inclusion Committee (2022-present)\n\n\nExternal Roles\nExpert Evaluator, European Research Council (2024-present)\nCollege Member, EPSRC Peer Review College (2024-present)\nExternal PhD Examiner: Imperial College London (2024), Brunel University London (2026)\nConference Organiser:\n\nConference Chair, Non-Equilibrium Molecular Dynamics Conference, Edinburgh, UK (2026)\nOrganising Committee, 9th International Conference on Micro and Nano Flows, Edinburgh (2025)\nOrganising Committee, UK Fluids Network SIG in Non-Equilibrium Molecular Dynamics, London, UK (2024)\nCo-organiser, UK Fluids Network Early Career Researcher Event, Warwick, UK (2018)\n\n\n\nJournal Reviewing\nRegular reviewer for: International Journal of Heat and Mass Transfer, Langmuir, Physics of Fluids, Physical Review E, Journal of Molecular Liquids, Applied Mathematical Modelling"
+  },
+  {
+    "objectID": "cv.html#media-coverage",
+    "href": "cv.html#media-coverage",
+    "title": "CV",
+    "section": "Media Coverage",
+    "text": "Media Coverage\n\nSelected Press\n\n2023: The Conversation, Phys.org, TechXplore - Cicadas and self-cleaning surfaces\n2021: EurekAlert, ScienceDaily, Phys.org - Nanobubbles for ultrasonic cleaning\n2018: BBC Scotland, ScienceDaily, Phys.org, The Times, Metro, Daily Express, The Sun - Acoustothermal atomization"
+  },
+  {
+    "objectID": "cv.html#professional-memberships",
+    "href": "cv.html#professional-memberships",
+    "title": "CV",
+    "section": "Professional Memberships",
+    "text": "Professional Memberships\n\nScotland Beyond Net Zero (2025-)\nRSC Interest Group in Statistical Mechanics and Thermodynamics (2022-)\nUK Fluids Network SIG on Non-Equilibrium Molecular Dynamics (2019-)\nSociety of Industrial and Applied Mathematics (2014-)"
+  },
+  {
+    "objectID": "cv.html#publications",
+    "href": "cv.html#publications",
+    "title": "CV",
+    "section": "Publications",
+    "text": "Publications\nSee Publications page for full list (20 journal articles, 31 conference abstracts, 1 book chapter)."
+  },
+  {
+    "objectID": "teaching.html",
+    "href": "teaching.html",
+    "title": "Teaching",
+    "section": "",
+    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+  },
+  {
+    "objectID": "teaching.html#courses",
+    "href": "teaching.html#courses",
+    "title": "Teaching",
+    "section": "",
+    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
+  },
+  {
+    "objectID": "teaching.html#student-supervision",
+    "href": "teaching.html#student-supervision",
+    "title": "Teaching",
+    "section": "Student Supervision",
+    "text": "Student Supervision\n\nBEng/MEng Projects\nI supervise 2-3 final-year BEng/MEng projects annually on topics including:\n\nMolecular dynamics of phase change\nHeat transfer at nanoscale interfaces\nSurface acoustic wave effects on droplets and particles\n\n\n\nIndustrial Placements\nSupervised 8 students on industrial placement programmes (2019-2021)."
+  },
+  {
+    "objectID": "teaching.html#personal-tutoring",
+    "href": "teaching.html#personal-tutoring",
+    "title": "Teaching",
+    "section": "Personal Tutoring",
+    "text": "Personal Tutoring\nPersonal tutor to undergraduate students across all years of the MEng programme, providing academic guidance and pastoral support."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rohit Pillai",
+    "section": "",
+    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation.\nMy research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:\n\nBoiling & evaporation at nanoscale surfaces\nIce nucleation and icephobic surface design\nNanoscale heat transfer at solid-liquid interfaces\nMachine learning potentials for molecular simulations\n\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.\nI have published in Physical Review Letters, Nano Letters, and Journal of Fluid Mechanics. My research has featured in BBC, The Times, Metro, and The Conversation."
+  },
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome to my website",
+    "section": "",
+    "text": "Welcome to my personal website! This site is built with Quarto and hosted on GitHub Pages.\nHere you’ll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.\nStay tuned for more updates!"
+  },
+  {
     "objectID": "team.html",
     "href": "team.html",
     "title": "Research Group",
@@ -54,152 +201,5 @@
     "title": "Publications",
     "section": "Thesis",
     "text": "Thesis\nStretching, bursting, splashing and bouncing: Electrohydrodynamics of microfluidic drops Pillai R PhD Thesis, University of Melbourne (2017)"
-  },
-  {
-    "objectID": "posts/welcome/index.html",
-    "href": "posts/welcome/index.html",
-    "title": "Welcome to my website",
-    "section": "",
-    "text": "Welcome to my personal website! This site is built with Quarto and hosted on GitHub Pages.\nHere you’ll find information about my research, publications, and occasional blog posts about topics in computational fluid dynamics and multiscale modelling.\nStay tuned for more updates!"
-  },
-  {
-    "objectID": "blog.html",
-    "href": "blog.html",
-    "title": "Blog",
-    "section": "",
-    "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Rohit Pillai",
-    "section": "",
-    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation.\nMy research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:\n\nBoiling & evaporation at nanoscale surfaces\nIce nucleation and icephobic surface design\nNanoscale heat transfer at solid-liquid interfaces\nMachine learning potentials for molecular simulations\n\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.\nI have published in Physical Review Letters, Nano Letters, and Journal of Fluid Mechanics. My research has featured in BBC, The Times, Metro, and The Conversation."
-  },
-  {
-    "objectID": "teaching.html",
-    "href": "teaching.html",
-    "title": "Teaching",
-    "section": "",
-    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
-  },
-  {
-    "objectID": "teaching.html#courses",
-    "href": "teaching.html#courses",
-    "title": "Teaching",
-    "section": "",
-    "text": "Third-year undergraduate course combining heat transfer and fluid mechanics. I redesigned this course in 2020-21, introducing:\n\nMOOC-style lecture videos with integrated worked examples\nLearning modules with curated real-world applications and research links\nDesign-focused laboratory exercises using real experimental data\nPhysical demonstrations (Stirling engines, radiometers, heat pipes)\nStructured feedback system for consistent, actionable assessment\n\n\n\n\nSecond-year course covering mathematical methods for engineers, including differential equations and linear algebra.\n\n\n\nFirst-year introductory engineering course providing foundation in core engineering principles."
-  },
-  {
-    "objectID": "teaching.html#student-supervision",
-    "href": "teaching.html#student-supervision",
-    "title": "Teaching",
-    "section": "Student Supervision",
-    "text": "Student Supervision\n\nBEng/MEng Projects\nI supervise 2-3 final-year BEng/MEng projects annually on topics including:\n\nMolecular dynamics of phase change\nHeat transfer at nanoscale interfaces\nSurface acoustic wave effects on droplets and particles\n\n\n\nIndustrial Placements\nSupervised 8 students on industrial placement programmes (2019-2021)."
-  },
-  {
-    "objectID": "teaching.html#personal-tutoring",
-    "href": "teaching.html#personal-tutoring",
-    "title": "Teaching",
-    "section": "Personal Tutoring",
-    "text": "Personal Tutoring\nPersonal tutor to undergraduate students across all years of the MEng programme, providing academic guidance and pastoral support."
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Research",
-    "section": "",
-    "text": "My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices."
-  },
-  {
-    "objectID": "projects.html#overview",
-    "href": "projects.html#overview",
-    "title": "Research",
-    "section": "",
-    "text": "My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices."
-  },
-  {
-    "objectID": "projects.html#current-projects",
-    "href": "projects.html#current-projects",
-    "title": "Research",
-    "section": "Current Projects",
-    "text": "Current Projects\n\nNanomaterial-Enhanced Cooling\nHigh-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:\n\nNanoporous membranes for controlled evaporation\nEngineered solid-liquid interfaces for improved heat transfer\nMachine learning potentials for accurate molecular simulations\n\n\n\nIce Nucleation and De-Icing\nUnderstanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:\n\nHeterogeneous ice nucleation on different surface chemistries\nEffects of surface vibrations on ice formation\nDesign principles for icephobic surfaces\n\n\n\nNanoscale Heat Transfer\nHeat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:\n\nSpectral mechanisms of interfacial thermal conductance\nEffects of surface chemistry and structure\nRole of interfacial water structure\n\n\n\nBoiling and Bubble Dynamics\nPhase change at surfaces is central to many cooling technologies. Our work explores:\n\nHeterogeneous vapour bubble nucleation\nEffects of surface wettability on bubble growth\nAcoustically-driven nanobubble dynamics"
-  },
-  {
-    "objectID": "projects.html#methods",
-    "href": "projects.html#methods",
-    "title": "Research",
-    "section": "Methods",
-    "text": "Methods\n\nMolecular Dynamics\nWe use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.\n\n\nMultiscale Modelling\nOur group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.\n\n\nHigh-Performance Computing\nSimulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities."
-  },
-  {
-    "objectID": "projects.html#group-website",
-    "href": "projects.html#group-website",
-    "title": "Research",
-    "section": "Group Website",
-    "text": "Group Website\nFor more details on our research activities, visit the mfX Group Website."
-  },
-  {
-    "objectID": "cv.html",
-    "href": "cv.html",
-    "title": "CV",
-    "section": "",
-    "text": "PhD, Chemical and Biomolecular Engineering University of Melbourne, 2017 Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops\nMSc, Mechanical Engineering University of California Davis, 2012 Thesis: Transport Phenomena in a Proton Exchange Membrane Fuel Cell"
-  },
-  {
-    "objectID": "cv.html#education",
-    "href": "cv.html#education",
-    "title": "CV",
-    "section": "",
-    "text": "PhD, Chemical and Biomolecular Engineering University of Melbourne, 2017 Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops\nMSc, Mechanical Engineering University of California Davis, 2012 Thesis: Transport Phenomena in a Proton Exchange Membrane Fuel Cell"
-  },
-  {
-    "objectID": "cv.html#academic-positions",
-    "href": "cv.html#academic-positions",
-    "title": "CV",
-    "section": "Academic Positions",
-    "text": "Academic Positions\nSenior Lecturer in Mechanical Engineering University of Edinburgh, 2023-present\nLecturer in Mechanical Engineering University of Edinburgh, 2018-2023\nPostdoctoral Research Associate University of Edinburgh, 2017-2018"
-  },
-  {
-    "objectID": "cv.html#research-grants",
-    "href": "cv.html#research-grants",
-    "title": "CV",
-    "section": "Research Grants",
-    "text": "Research Grants\n\nPrincipal Investigator\n\n\n\n\n\n\n\n\n\nYear\nFunder\nProject\nValue\n\n\n\n\n2024-2029\nERC Starting Grant\nNANO-COOL: Nanomaterial-enhanced liquid cooling for extreme thermal management\n£1,270,000\n\n\n2024\nEPSRC/ARCHER2\nSpectral heat transfer at metal/graphene/water interfaces\n£32,000\n\n\n2021-2022\nEPSRC/CIRRUS\nNano-engineering of surface de-icing\n£35,000\n\n\n2019\nEPSRC eCSE\nEfficient Multi-Scale Simulations\n£100,000\n\n\n\n\n\nCo-Investigator\n\n\n\n\n\n\n\n\n\nYear\nFunder\nProject\nValue\n\n\n\n\n2025-2026\nEPSRC/ARCHER2\nStabilising Bulk Nanobubbles\n£38,600\n\n\n2023-2024\nEPSRC/CIRRUS\nUltrahigh-frequency surface vibrations for freeze-desalination\n£50,000\n\n\n2019-2020\nEPSRC\nNano-Engineered Flow Technologies (internal grant)\n£100,000"
-  },
-  {
-    "objectID": "cv.html#invited-talks",
-    "href": "cv.html#invited-talks",
-    "title": "CV",
-    "section": "Invited Talks",
-    "text": "Invited Talks\n\nSelected Keynote Presentations\n\n2027: Gordon Research Conference on Micro and Nanoscale Phase Change Phenomena, Tuscany, Italy\n2025: NEMD Conference, Osaka, Japan\n2022: China University of Petroleum Summer School - Modelling Multiscale Heat and Flow Systems\n2020: Sino-Japan-UK Frontiers in Phase Change Heat Transfer\n2019: Hewitt-Reese Spring School, UK Fluids Network\n2018: Surface Wettability Effects on Phase Change Phenomena, Brighton"
-  },
-  {
-    "objectID": "cv.html#service-leadership",
-    "href": "cv.html#service-leadership",
-    "title": "CV",
-    "section": "Service & Leadership",
-    "text": "Service & Leadership\n\nSchool Roles\nPDRA Champion (2022-present) Leading initiatives to support postdoctoral researchers, including reformed annual reviews, fellowship screening processes, and career development events.\nCo-chair, Staff Development Committee (2022-2024)\nMember, People & Culture Committee (2025-present)\nAcademic Representative, Diversity & Inclusion Committee (2022-present)\n\n\nExternal Roles\nExpert Evaluator, European Research Council (2024-present)\nCollege Member, EPSRC Peer Review College (2024-present)\nConference Organiser:\n\nConference Chair, Non-Equilibrium Molecular Dynamics Conference, Edinburgh, UK (2026)\nOrganising Committee, 9th International Conference on Micro and Nano Flows, Edinburgh (2025)\nOrganising Committee, UK Fluids Network SIG in Non-Equilibrium Molecular Dynamics, London, UK (2024)\nCo-organiser, UK Fluids Network Early Career Researcher Event, Warwick, UK (2018)\n\n\n\nJournal Reviewing\nRegular reviewer for: International Journal of Heat and Mass Transfer, Langmuir, Physics of Fluids, Physical Review E, Journal of Molecular Liquids, Applied Mathematical Modelling"
-  },
-  {
-    "objectID": "cv.html#media-coverage",
-    "href": "cv.html#media-coverage",
-    "title": "CV",
-    "section": "Media Coverage",
-    "text": "Media Coverage\n\nSelected Press\n\n2023: The Conversation, Phys.org, TechXplore - Cicadas and self-cleaning surfaces\n2021: EurekAlert, ScienceDaily, Phys.org - Nanobubbles for ultrasonic cleaning\n2018: BBC Scotland, ScienceDaily, Phys.org, The Times, Metro, Daily Express, The Sun - Acoustothermal atomization"
-  },
-  {
-    "objectID": "cv.html#professional-memberships",
-    "href": "cv.html#professional-memberships",
-    "title": "CV",
-    "section": "Professional Memberships",
-    "text": "Professional Memberships\n\nScotland Beyond Net Zero (2025-)\nRSC Interest Group in Statistical Mechanics and Thermodynamics (2022-)\nUK Fluids Network SIG on Non-Equilibrium Molecular Dynamics (2019-)\nSociety of Industrial and Applied Mathematics (2014-)"
-  },
-  {
-    "objectID": "cv.html#publications",
-    "href": "cv.html#publications",
-    "title": "CV",
-    "section": "Publications",
-    "text": "Publications\nSee Publications page for full list (20 journal articles, 1 book chapter)."
   }
 ]
