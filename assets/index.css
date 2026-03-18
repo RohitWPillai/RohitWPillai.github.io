@@ -43,6 +43,29 @@ div.quarto-about-solana div.about-entity {
   z-index: 1;
 }
 
+/* When simulation is active: centre photo, hide text card */
+div.quarto-about-solana.md-sim-active {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+div.quarto-about-solana.md-sim-active div.about-entity {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  max-width: none;
+  width: 100%;
+}
+
+div.quarto-about-solana.md-sim-active .entity-contents {
+  display: none !important;
+}
+
+div.quarto-about-solana.md-sim-active .halo-img-wrapper {
+  margin: 0 !important;
+}
+
 /* ===== Photo ===== */
 div.quarto-about-solana .about-entity img.about-image {
   width: 100% !important;
