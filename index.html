@@ -371,7 +371,7 @@ ul.task-list li input[type="checkbox"] {
     damping: 0.88, brownian: 0.6, maxForce: 3.0, maxVel: 4.0,
 
     // --- Fluid ---
-    fluidDesktop: 1800, fluidMobile: 700, fluidR: 8,
+    fluidDensity: 0.001, fluidR: 8,  // particles per px² (constant across all viewports)
 
     // --- Liquid-vapor interface ---
     lvFrac: 0.33,              // top 1/3 of fluid region is vapor
@@ -448,6 +448,9 @@ ul.task-list li input[type="checkbox"] {
   // ===== Utilities =====
 
   function isMobile() { return window.innerWidth <= 991; }
+  function fluidTarget() {
+    return Math.max(50, Math.round(CFG.fluidDensity * W * interfaceY * gDen * scaleFactor));
+  }
   function isDark()   { return document.body.classList.contains('quarto-dark'); }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -485,7 +488,7 @@ ul.task-list li input[type="checkbox"] {
   var gTrailAlpha = CFG.trailAlpha, gTrailFade = CFG.trailFade;
   var gTrailWidth = CFG.trailWidth, gFluidAlpha = CFG.fluidAlpha;
   var gFluidR = CFG.fluidR;
-  var targetFluid, scaleFactor = 1;
+  var scaleFactor = 1;
   var ftBuf = [];
   var panelOpen = false;
   var interfaceY;
@@ -704,19 +707,35 @@ ul.task-list li input[type="checkbox"] {
     lvInterface = interfaceY * CFG.lvFrac;
     grid = new Grid(CFG.cutoffFluid, W, H);
 
-    for (var i = 0; i < fluid.length; i++) {
-      if (fluid[i].x >= W) fluid[i].x = W - 1;
-      if (fluid[i].y < 1) fluid[i].y = 1;
-      if (showInterface && fluid[i].y >= interfaceY - 2)
-        fluid[i].y = interfaceY - 3;
+    // Remove out-of-bounds particles
+    for (var i = fluid.length - 1; i >= 0; i--) {
+      var p = fluid[i];
+      if (p.x < -10 || p.x > W + 10 || p.y > interfaceY + 10) {
+        fluid.splice(i, 1); continue;
+      }
+      if (p.x >= W) p.x = W - 1;
+      if (p.y < 1) p.y = 1;
+      if (p.y >= interfaceY - 2) p.y = interfaceY - 3;
     }
-    for (var i = 0; i < nanos.length; i++) {
-      var np = nanos[i], m = np.radius + 10;
-      if (np.x < m) np.x = m; if (np.x > W - m) np.x = W - m;
-      if (np.y < m) np.y = m;
-      var nB = showInterface ? interfaceY - np.radius - 10 : H - m;
-      if (np.y > nB) np.y = nB;
+
+    // Reset performance scaler — fresh evaluation for new size
+    scaleFactor = 1;
+    ftBuf = [];
+
+    // Adjust particle count to maintain constant density
+    var target = fluidTarget();
+    while (fluid.length > target && fluid.length > 10) {
+      var worst = fluid.length - 1, worstD = Infinity;
+      for (var k = 0; k < Math.min(20, fluid.length); k++) {
+        var idx = Math.floor(Math.random() * fluid.length);
+        var p = fluid[idx];
+        var d = Math.min(p.x, W - p.x, p.y, interfaceY - p.y);
+        if (d < worstD) { worstD = d; worst = idx; }
+      }
+      fluid.splice(worst, 1);
     }
+    while (fluid.length < target) spawnFluid();
+
     initWallAtoms();
   }
 
@@ -726,11 +745,10 @@ ul.task-list li input[type="checkbox"] {
   function initParticles() {
     interfaceY = H * CFG.interfaceFrac;
     lvInterface = interfaceY * CFG.lvFrac;
-    targetFluid = isMobile() ? CFG.fluidMobile : CFG.fluidDesktop;
     fluid = [];
     initWallAtoms();
 
-    var count = Math.round(targetFluid * gDen * scaleFactor);
+    var count = fluidTarget();
     var liquidCount = Math.round(count * 0.88);
     var vaporCount = count - liquidCount;
 
@@ -1230,7 +1248,7 @@ ul.task-list li input[type="checkbox"] {
   }
 
   function adjustCount() {
-    var target = Math.round(targetFluid * gDen * scaleFactor);
+    var target = fluidTarget();
     while (fluid.length > target && fluid.length > 10) fluid.pop();
     while (fluid.length < target) spawnFluid();
   }
