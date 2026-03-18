@@ -20,28 +20,11 @@ div.quarto-about-solana.md-sim-active {
   width: 100vw;
   max-width: none !important;
   margin-left: calc(-50vw + 50%);
-  overflow: clip;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
-/* ===== Frosted glass text card =====
-   Allows the simulation to run at full opacity behind
-   while keeping text perfectly readable. Only active when
-   JS has loaded (md-sim-active class). Degrades gracefully. */
-div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
-  background: rgba(200, 195, 185, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
-  border: 1.5px solid rgba(45, 48, 71, 0.18);
-}
-
-.quarto-dark div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
-  background: rgba(26, 26, 46, 0.92);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  border: 1.5px solid rgba(212, 160, 58, 0.15);
-}
+/* Text card hidden when simulation is active (content moved below hero) */
 
 /* ===== Explore Button (in navbar) ===== */
 .md-sim-explore {
@@ -245,10 +228,7 @@ div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
 
 /* ===== Mobile ===== */
 @media (max-width: 991.98px) {
-  div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
-    padding: 1.5rem;
-    border-radius: 16px;
-  }
+  /* Text card hidden — no mobile styles needed */
   .md-sim-explore {
     font-size: 0.6rem;
     padding: 0.25rem 0.7rem;
