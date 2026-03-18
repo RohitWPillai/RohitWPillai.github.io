@@ -103,6 +103,11 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
 .halo-img-wrapper .profile-halo a {
   pointer-events: auto;
   cursor: pointer;
+  filter: drop-shadow(0 0 1px rgba(45, 48, 71, 0.25));
+}
+
+.quarto-dark .halo-img-wrapper .profile-halo a {
+  filter: drop-shadow(0 0 1px rgba(212, 160, 58, 0.2));
 }
 
 /* Keyboard focus styles for halo links */
@@ -253,10 +258,10 @@ div.quarto-about-solana .about-entity .about-link .bi {
 
 /* Halo dark mode */
 .quarto-dark .halo-seg path.halo-bg {
-  stroke: rgba(212, 160, 58, 0.1) !important;
+  stroke: rgba(26, 26, 46, 0.92) !important;
 }
 .quarto-dark .halo-seg:hover path.halo-bg {
-  stroke: rgba(212, 160, 58, 0.25) !important;
+  stroke: rgba(45, 45, 70, 0.95) !important;
 }
 .quarto-dark .halo-seg text {
   fill: #d4a03a;

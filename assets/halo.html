@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
   style.textContent =
     '.halo-seg path.halo-bg { transition: stroke 0.3s ease; }' +
     '.halo-seg text { transition: fill 0.3s ease; cursor: pointer; }' +
-    '.halo-seg:hover path.halo-bg { stroke: rgba(212, 160, 58, 0.35); }' +
+    '.halo-seg:hover path.halo-bg { stroke: rgba(240, 238, 232, 0.95); }' +
     '.halo-seg:hover text { fill: #2d3047; }';
   svg.appendChild(style);
 
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bgPath.setAttribute('d', arc(bgR, a1, a2, true));
     bgPath.setAttribute('class', 'halo-bg');
     bgPath.setAttribute('fill', 'none');
-    bgPath.setAttribute('stroke', 'rgba(212, 160, 58, 0.12)');
+    bgPath.setAttribute('stroke', 'rgba(200, 195, 185, 0.88)');
     bgPath.setAttribute('stroke-width', bgStroke);
     bgPath.setAttribute('stroke-linecap', 'round');
 
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Text element
     var text = document.createElementNS(ns, 'text');
-    text.setAttribute('fill', '#d4a03a');
+    text.setAttribute('fill', '#2d3047');
     text.setAttribute('font-family', 'Inter, sans-serif');
     text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');
