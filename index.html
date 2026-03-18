@@ -42,9 +42,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-4689c3a3cd798e812f47b92581abc2d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-6a7f0314f1c5f151bbd3437716ee25ef.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-4689c3a3cd798e812f47b92581abc2d1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-d1c5b409b8b299c1a91dc592176eb4eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ffd0155b005a515839696e9fd9277c31.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-d1c5b409b8b299c1a91dc592176eb4eb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -75,8 +75,9 @@ ul.task-list li input[type="checkbox"] {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-<script>if(localStorage.getItem("quarto-dark-default-v")!=="1"){localStorage.setItem("quarto-color-scheme","alternate");localStorage.setItem("quarto-dark-default-v","1")}</script>
+<script>if(localStorage.getItem("quarto-dark-default-v")!=="2"){localStorage.setItem("quarto-color-scheme","alternate");localStorage.setItem("quarto-dark-default-v","2")}</script>
 <link rel="stylesheet" href="assets/index.css">
+<link rel="stylesheet" href="assets/simulation.css">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -351,6 +352,1067 @@ ul.task-list li input[type="checkbox"] {
 </div>
  <!-- /main -->
 <script>
+(function() {
+  'use strict';
+
+  /* ========================================================
+     Molecular Dynamics Hero Simulation  v6
+     Dense liquid · solid-liquid interface · layered structure
+     ======================================================== */
+
+  var CFG = {
+    // --- Fluid-fluid (WCA: repulsive only — uniform dense liquid) ---
+    sigma: 22, epsilon: 3.0, cutoffFluid: 25,  // ~2^(1/6)*sigma (WCA)
+
+    // --- Wall potential (analytical 9-3: uniform layering) ---
+    wallSigma: 20, wallEps: 3.0, wallCutoff: 60,
+
+    // --- Integration (fast dynamics — time-lapse feel) ---
+    damping: 0.88, brownian: 0.6, maxForce: 3.0, maxVel: 4.0,
+
+    // --- Fluid ---
+    fluidDesktop: 1800, fluidMobile: 700, fluidR: 8,
+
+    // --- Liquid-vapor interface ---
+    lvFrac: 0.33,              // top 1/3 of fluid region is vapor
+    vaporBrownMul: 3,           // vapor gets 3x Brownian kick
+    vaporDamp: 0.96,            // vapor: low friction
+    vaporTargetFrac: 0.12,     // target 12% particles in vapor
+    vaporMinFrac: 0.08,        // force evaporation below this
+    evapKick: 2.5,             // upward velocity for evaporation
+
+    // --- Nanoparticles (disabled — disrupt liquid structure) ---
+    nanoDesktop: 0, nanoMobile: 0,
+    nanoRMin: 24, nanoRMax: 36,
+    nanoDrift: 0.003, nanoAlpha: 0.50, nanoGlowA: 0.15,
+
+    // --- Solid surface (visual + force centres) ---
+    wallLayers: 4, wallSpacing: 28, wallR: 9,
+    wallAlpha: 0.90, wallVibAmp: 0.5,
+
+    // --- Trails (shimmer in liquid, streaming in vapor) ---
+    trailAlpha: 0.35, trailFade: 0.06, trailWidth: 1.5,
+
+    // --- Visual ---
+    fluidAlpha: 0.70, bins: 12, vaporBins: 4, interfaceFrac: 0.84,
+
+    // --- Depth colour gradient (liquid: blue at solid → yellow at LV) ---
+    nearClr: [70, 135, 215],       // cool blue (near solid)
+    bulkClr: [220, 185, 50],       // warm yellow (near LV interface)
+
+    // --- Vapor colour gradient (yellow transition → red) ---
+    vaporNearClr: [225, 170, 50],   // yellow (smooth from liquid)
+    vaporFarClr:  [220, 65, 45],    // red (hot vapor)
+
+    // --- Wall colours (dark silver) ---
+    wallClrDark:  [145, 150, 168],
+    wallClrLight: [110, 115, 130],
+
+    // --- Ice nucleation (cold spots — physics-driven crystallisation) ---
+    nucleationInterval: 350,
+    nucleationChance: 0.6,
+    nucleationLifetime: 400,
+    nucleationMaxR: 45,
+    nucleationMaxActive: 2,
+    freezeDamp: 0.75,           // heavy damping inside cold spot
+    freezeKickMul: 0.05,       // almost no thermal noise in cold spot
+    freezeKE: 0.06,            // speed² below this → icy cyan
+    nucleationClr: [200, 235, 255],
+
+    // --- Bubble nucleation (energy burst — physics-driven void) ---
+    bubbleInterval: 420,
+    bubbleChance: 0.5,
+    bubbleLifetime: 300,
+    bubbleMaxR: 35,
+    bubbleMaxActive: 2,
+    bubbleKick: 3.5,            // one-time outward velocity burst
+    burstR: 35,                 // radius of energy injection
+    hotKE: 5.0,                 // speed² above this → hot red
+    bubbleClr: [230, 75, 55],
+
+    // --- Nanoparticle colours ---
+    nanoClrDark:  [212, 160, 58],
+    nanoClrLight: [80, 85, 110],
+
+    // --- Mouse ---
+    mouseR: 100, mouseHeat: 0.15,
+
+    // --- Performance ---
+    maxFrameMs: 22, minScale: 0.4,
+
+    // --- Temperature ---
+    tempDefault: 1.0
+  };
+
+
+  // ===== Utilities =====
+
+  function isMobile() { return window.innerWidth <= 991; }
+  function isDark()   { return document.body.classList.contains('quarto-dark'); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function depthToRGB(t) {
+    t = Math.max(0, Math.min(1, t));
+    return [
+      Math.round(lerp(CFG.nearClr[0], CFG.bulkClr[0], t)),
+      Math.round(lerp(CFG.nearClr[1], CFG.bulkClr[1], t)),
+      Math.round(lerp(CFG.nearClr[2], CFG.bulkClr[2], t))
+    ];
+  }
+
+  function vaporToRGB(t) {
+    t = Math.max(0, Math.min(1, t));
+    return [
+      Math.round(lerp(CFG.vaporNearClr[0], CFG.vaporFarClr[0], t)),
+      Math.round(lerp(CFG.vaporNearClr[1], CFG.vaporFarClr[1], t)),
+      Math.round(lerp(CFG.vaporNearClr[2], CFG.vaporFarClr[2], t))
+    ];
+  }
+
+
+  // ===== State =====
+
+  var canvas, ctx, W, H, dpr, container;
+  var tCvs, tCtx;                     // trail (shimmer) canvas
+  var fluid = [], nanos = [], wallAtoms = [];
+  var grid;
+  var mx = -9999, my = -9999, mouseActive = false;
+  var dark = true;
+  var tabHidden = false, offscreen = false;
+  var showNanos = true;
+  var showInterface = true; // always on — surface is integral to the simulation
+  var gTemp = CFG.tempDefault, gEps = 1, gDen = 1;
+  var gTrailAlpha = CFG.trailAlpha, gTrailFade = CFG.trailFade;
+  var gTrailWidth = CFG.trailWidth, gFluidAlpha = CFG.fluidAlpha;
+  var gFluidR = CFG.fluidR;
+  var targetFluid, scaleFactor = 1;
+  var ftBuf = [];
+  var panelOpen = false;
+  var interfaceY;
+  var lvInterface;  // liquid-vapor boundary y-position
+  var nucleationEvents = [];  // active ice nucleation clusters
+  var nucleationTimer = 0;
+  var bubbleEvents = [];      // active bubble nucleation events
+  var bubbleTimer = 0;
+
+
+  // ===== Caches =====
+
+  var CACHE_PX = 64;
+  var fluidCache = [];
+  var binRGB = [];
+
+  function buildSphere(c, sz) {
+    var oc = document.createElement('canvas');
+    oc.width = sz; oc.height = sz;
+    var ox = oc.getContext('2d');
+    var cx = sz / 2, cy = sz / 2, r = sz / 2 - 1;
+
+    // 1. Diffuse body — centred gradient, lighter core to dark rim
+    var lo = [Math.max(0, c[0] - 55), Math.max(0, c[1] - 55), Math.max(0, c[2] - 55)];
+    var mid = [Math.min(255, c[0] + 15), Math.min(255, c[1] + 15), Math.min(255, c[2] + 15)];
+    var g1 = ox.createRadialGradient(cx - r * 0.15, cy - r * 0.15, 0, cx, cy, r);
+    g1.addColorStop(0,   'rgb(' + mid[0] + ',' + mid[1] + ',' + mid[2] + ')');
+    g1.addColorStop(0.6, 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')');
+    g1.addColorStop(1,   'rgb(' + lo[0] + ',' + lo[1] + ',' + lo[2] + ')');
+    ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+    ox.fillStyle = g1; ox.fill();
+
+    // 2. Ambient-occlusion rim — dark ring at edge for depth
+    var g2 = ox.createRadialGradient(cx, cy, r * 0.55, cx, cy, r);
+    g2.addColorStop(0, 'rgba(0,0,0,0)');
+    g2.addColorStop(0.7, 'rgba(0,0,0,0.04)');
+    g2.addColorStop(1, 'rgba(0,0,0,0.32)');
+    ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+    ox.fillStyle = g2; ox.fill();
+
+    // 3. Specular highlight — sharp white spot, top-left
+    var hx = cx - r * 0.32, hy = cy - r * 0.34;
+    var g3 = ox.createRadialGradient(hx, hy, 0, hx, hy, r * 0.45);
+    g3.addColorStop(0,    'rgba(255,255,255,0.92)');
+    g3.addColorStop(0.12, 'rgba(255,255,255,0.55)');
+    g3.addColorStop(0.4,  'rgba(255,255,255,0.10)');
+    g3.addColorStop(1,    'rgba(255,255,255,0)');
+    ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+    ox.fillStyle = g3; ox.fill();
+
+    // 4. Rim light — faint backlight glow, bottom-right
+    var rlx = cx + r * 0.4, rly = cy + r * 0.38;
+    var g4 = ox.createRadialGradient(rlx, rly, r * 0.6, rlx, rly, r);
+    g4.addColorStop(0, 'rgba(255,255,255,0)');
+    g4.addColorStop(0.6, 'rgba(255,255,255,0.06)');
+    g4.addColorStop(1, 'rgba(255,255,255,0)');
+    ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+    ox.fillStyle = g4; ox.fill();
+
+    return oc;
+  }
+
+  function buildGlow(c) {
+    var sz = 128;
+    var oc = document.createElement('canvas');
+    oc.width = sz; oc.height = sz;
+    var ox = oc.getContext('2d');
+    var cx = sz / 2;
+    var g = ox.createRadialGradient(cx, cx, 0, cx, cx, cx);
+    g.addColorStop(0,   'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.25)');
+    g.addColorStop(0.3, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.08)');
+    g.addColorStop(1,   'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0)');
+    ox.fillStyle = g;
+    ox.fillRect(0, 0, sz, sz);
+    return oc;
+  }
+
+  var wallDkCache, wallLtCache;
+  var nanoDkSphere, nanoLtSphere, nanoDkGlow, nanoLtGlow;
+
+  function buildAllCaches() {
+    fluidCache = [];
+    binRGB = [];
+    // Liquid bins (0 to bins-1): gold near solid → blue near LV interface
+    for (var i = 0; i < CFG.bins; i++) {
+      var rgb = depthToRGB(i / (CFG.bins - 1));
+      binRGB.push(rgb);
+      fluidCache.push(buildSphere(rgb, CACHE_PX));
+    }
+    // Vapor bins (bins to bins+vaporBins-1): blue transition → bright amber
+    for (var i = 0; i < CFG.vaporBins; i++) {
+      var rgb = vaporToRGB(i / Math.max(1, CFG.vaporBins - 1));
+      binRGB.push(rgb);
+      fluidCache.push(buildSphere(rgb, CACHE_PX));
+    }
+    // Nucleation bin: icy cyan
+    binRGB.push(CFG.nucleationClr);
+    fluidCache.push(buildSphere(CFG.nucleationClr, CACHE_PX));
+    // Bubble bin: hot red
+    binRGB.push(CFG.bubbleClr);
+    fluidCache.push(buildSphere(CFG.bubbleClr, CACHE_PX));
+    wallDkCache  = buildSphere(CFG.wallClrDark, CACHE_PX);
+    wallLtCache  = buildSphere(CFG.wallClrLight, CACHE_PX);
+    nanoDkSphere = buildSphere(CFG.nanoClrDark, CACHE_PX);
+    nanoLtSphere = buildSphere(CFG.nanoClrLight, CACHE_PX);
+    nanoDkGlow   = buildGlow(CFG.nanoClrDark);
+    nanoLtGlow   = buildGlow(CFG.nanoClrLight);
+  }
+
+
+  // ===== Spatial hash grid =====
+
+  function Grid(cs, w, h) {
+    this.cs = cs;
+    this.cols = Math.max(1, Math.ceil(w / cs));
+    this.rows = Math.max(1, Math.ceil(h / cs));
+    this.data = [];
+    for (var i = 0; i < this.cols * this.rows; i++) this.data[i] = [];
+  }
+  Grid.prototype.clear = function() {
+    for (var i = 0; i < this.data.length; i++) this.data[i].length = 0;
+  };
+  Grid.prototype.insert = function(p) {
+    var c = (p.x / this.cs) | 0, r = (p.y / this.cs) | 0;
+    if (c >= 0 && c < this.cols && r >= 0 && r < this.rows)
+      this.data[r * this.cols + c].push(p);
+  };
+  Grid.prototype.forNeighbors = function(p, fn) {
+    var c0 = ((p.x / this.cs) | 0) - 1, r0 = ((p.y / this.cs) | 0) - 1;
+    for (var dr = 0; dr < 3; dr++) {
+      var r = r0 + dr; if (r < 0 || r >= this.rows) continue;
+      for (var dc = 0; dc < 3; dc++) {
+        var c = c0 + dc; if (c < 0 || c >= this.cols) continue;
+        var cell = this.data[r * this.cols + c];
+        for (var i = 0; i < cell.length; i++) fn(cell[i]);
+      }
+    }
+  };
+
+
+  // ===== Particles =====
+
+  function Particle(x, y) {
+    this.x = x; this.y = y;
+    this.vx = 0; this.vy = 0;
+    this.ax = 0; this.ay = 0;
+    this.prevX = x; this.prevY = y;
+  }
+
+  function NanoParticle(x, y) {
+    this.x = x; this.y = y;
+    this.vx = 0; this.vy = 0;
+    this.radius = CFG.nanoRMin + Math.random() * (CFG.nanoRMax - CFG.nanoRMin);
+  }
+
+
+  // ===== Wall atoms =====
+
+  function initWallAtoms() {
+    wallAtoms = [];
+    if (!showInterface || W < 1 || H < 1) return;
+    var sp = CFG.wallSpacing;
+    var rowH = sp * 0.866;
+    for (var row = 0; row < CFG.wallLayers; row++) {
+      var y = interfaceY + sp * 0.5 + row * rowH;
+      if (y > H + CFG.wallR) break;
+      var xOff = (row % 2) * sp * 0.5;
+      var x = xOff;
+      while (x < W + CFG.wallR) {
+        wallAtoms.push({ x: x, y: y, phase: Math.random() * Math.PI * 2 });
+        x += sp;
+      }
+    }
+  }
+
+
+  // ===== Canvas setup =====
+
+  function setup() {
+    container = document.querySelector('.quarto-about-solana');
+    if (!container) return false;
+
+    canvas = document.createElement('canvas');
+    canvas.className = 'md-sim-canvas';
+    canvas.setAttribute('aria-hidden', 'true');
+    container.insertBefore(canvas, container.firstChild);
+    container.classList.add('md-sim-active');
+    ctx = canvas.getContext('2d');
+
+    tCvs = document.createElement('canvas');
+    tCtx = tCvs.getContext('2d');
+
+    resize();
+    if (window.ResizeObserver) {
+      new ResizeObserver(resize).observe(container);
+    } else {
+      window.addEventListener('resize', resize);
+    }
+    return true;
+  }
+
+  function resize() {
+    var rect = container.getBoundingClientRect();
+    dpr = window.devicePixelRatio || 1;
+    W = rect.width; H = rect.height;
+    if (W < 1 || H < 1) return;
+
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    tCvs.width = W * dpr; tCvs.height = H * dpr;
+    tCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    interfaceY = H * CFG.interfaceFrac;
+    lvInterface = interfaceY * CFG.lvFrac;
+    grid = new Grid(CFG.cutoffFluid, W, H);
+
+    for (var i = 0; i < fluid.length; i++) {
+      if (fluid[i].x >= W) fluid[i].x = W - 1;
+      if (fluid[i].y < 1) fluid[i].y = 1;
+      if (showInterface && fluid[i].y >= interfaceY - 2)
+        fluid[i].y = interfaceY - 3;
+    }
+    for (var i = 0; i < nanos.length; i++) {
+      var np = nanos[i], m = np.radius + 10;
+      if (np.x < m) np.x = m; if (np.x > W - m) np.x = W - m;
+      if (np.y < m) np.y = m;
+      var nB = showInterface ? interfaceY - np.radius - 10 : H - m;
+      if (np.y > nB) np.y = nB;
+    }
+    initWallAtoms();
+  }
+
+
+  // ===== Particle initialisation =====
+
+  function initParticles() {
+    interfaceY = H * CFG.interfaceFrac;
+    lvInterface = interfaceY * CFG.lvFrac;
+    targetFluid = isMobile() ? CFG.fluidMobile : CFG.fluidDesktop;
+    fluid = [];
+    initWallAtoms();
+
+    var count = Math.round(targetFluid * gDen * scaleFactor);
+    var liquidCount = Math.round(count * 0.88);
+    var vaporCount = count - liquidCount;
+
+    // --- Dense liquid slab (lvInterface to interfaceY) ---
+    // Hex lattice — wall potential creates uniform layering automatically
+    var liqArea = W * (interfaceY - lvInterface - 8);
+    var areaPerP = liqArea / liquidCount;
+    var spacing = Math.sqrt(areaPerP / 0.866);
+    var rowH = spacing * 0.866;
+
+    for (var r = 0; ; r++) {
+      var y = lvInterface + 4 + spacing * 0.5 + r * rowH;
+      if (y >= interfaceY - 4) break;
+      var xo = (r % 2) * spacing * 0.5;
+      for (var x = spacing * 0.5 + xo; x < W; x += spacing) {
+        if (fluid.length >= liquidCount) break;
+        var px = x + (Math.random() - 0.5) * spacing * 0.45;
+        var py = y + (Math.random() - 0.5) * spacing * 0.45;
+        if (px < 0) px += W; if (px >= W) px -= W;
+        var p = new Particle(px, py);
+        var spd = 0.15 * Math.sqrt(gTemp);
+        var a = Math.random() * Math.PI * 2;
+        p.vx = Math.cos(a) * spd; p.vy = Math.sin(a) * spd;
+        fluid.push(p);
+      }
+      if (fluid.length >= liquidCount) break;
+    }
+
+    // --- 3. Sparse vapor (0 to lvInterface) ---
+    for (var i = 0; i < vaporCount; i++) {
+      var x = Math.random() * W;
+      var y = 6 + Math.random() * (lvInterface - 12);
+      var p = new Particle(x, y);
+      var spd = 1.0 + Math.random() * 1.5;
+      var a = Math.random() * Math.PI * 2;
+      p.vx = Math.cos(a) * spd; p.vy = Math.sin(a) * spd;
+      fluid.push(p);
+    }
+
+    initNanos();
+  }
+
+  function spawnFluid() {
+    var x = Math.random() * W;
+    var y = lvInterface + 4 + Math.random() * (interfaceY - lvInterface - 8);
+    var p = new Particle(x, y);
+    var spd = 0.15 * Math.sqrt(gTemp);
+    var a = Math.random() * Math.PI * 2;
+    p.vx = Math.cos(a) * spd; p.vy = Math.sin(a) * spd;
+    fluid.push(p);
+    return p;
+  }
+
+  function initNanos() {
+    nanos = [];
+    if (!showNanos) return;
+    var count = isMobile() ? CFG.nanoMobile : CFG.nanoDesktop;
+    // Place in upper half of liquid (between lvInterface and mid-liquid)
+    // Keeps them away from the solid surface layering region
+    var yMin = lvInterface + 30;
+    var yMid = lvInterface + (interfaceY - lvInterface) * 0.55;
+    for (var i = 0; i < count; i++) {
+      var m = 50;
+      nanos.push(new NanoParticle(
+        m + Math.random() * (W - 2 * m),
+        yMin + Math.random() * Math.max(10, yMid - yMin)
+      ));
+    }
+  }
+
+
+  // ===== Physics =====
+
+  function physics() {
+    var sig2 = CFG.sigma * CFG.sigma;
+    var cut2 = CFG.cutoffFluid * CFG.cutoffFluid;
+    var eps = CFG.epsilon * gEps;
+    var maxF = CFG.maxForce;
+    var n = fluid.length;
+
+    // Build grid
+    grid.clear();
+    for (var i = 0; i < n; i++) grid.insert(fluid[i]);
+    for (var i = 0; i < n; i++) { fluid[i].ax = 0; fluid[i].ay = 0; }
+
+    // Fluid-fluid WCA forces (repulsive only — keeps liquid uniform)
+    for (var i = 0; i < n; i++) {
+      var pi = fluid[i];
+      grid.forNeighbors(pi, function(pj) {
+        if (pj === pi) return;
+        var dx = pj.x - pi.x, dy = pj.y - pi.y;
+        if (dx > W * 0.5) dx -= W; else if (dx < -W * 0.5) dx += W;
+        var r2 = dx * dx + dy * dy;
+        if (r2 >= cut2 || r2 < 4) return;
+        var s2r2 = sig2 / r2, s6 = s2r2 * s2r2 * s2r2;
+        var f = 24 * eps * (2 * s6 * s6 - s6) / r2;
+        if (f > maxF) f = maxF; else if (f < -maxF) f = -maxF;
+        pi.ax -= f * dx; pi.ay -= f * dy;
+      });
+    }
+
+    // Analytical 9-3 wall potential (uniform layering, y-dependent only)
+    // U(z) = eps * [(2/15)(sig/z)^9 - (sig/z)^3]
+    // F(z) = (eps/z) * [1.2*(sig/z)^9 - 3*(sig/z)^3]  (positive = repulsive)
+    if (wallAtoms.length > 0) {
+      var wSig = CFG.wallSigma;
+      var wEps = CFG.wallEps * gEps;
+      var wCut = CFG.wallCutoff;
+      for (var i = 0; i < n; i++) {
+        var pi = fluid[i];
+        var z = interfaceY - pi.y;  // distance above wall surface
+        if (z < 2) z = 2;
+        if (z > wCut) continue;
+        var sr = wSig / z;
+        var sr3 = sr * sr * sr;
+        var sr9 = sr3 * sr3 * sr3;
+        var fz = wEps * (1.2 * sr9 - 3 * sr3) / z;
+        if (fz > maxF) fz = maxF;
+        if (fz < -maxF) fz = -maxF;
+        pi.ay -= fz;  // repulsive pushes up (decrease y), attractive pulls down
+      }
+    }
+
+    // --- Update nucleation event radii ---
+    nucleationTimer++;
+    if (nucleationTimer >= CFG.nucleationInterval) {
+      nucleationTimer = 0;
+      if (nucleationEvents.length < CFG.nucleationMaxActive && Math.random() < CFG.nucleationChance) {
+        var nx = 80 + Math.random() * (W - 160);
+        var nyMin = interfaceY - 90;
+        var nyMax = interfaceY - 35;
+        nucleationEvents.push({ x: nx, y: nyMin + Math.random() * (nyMax - nyMin), age: 0,
+          lifetime: CFG.nucleationLifetime + (Math.random() - 0.5) * 100,
+          maxR: CFG.nucleationMaxR + (Math.random() - 0.5) * 15, currentR: 0 });
+      }
+    }
+    for (var i = nucleationEvents.length - 1; i >= 0; i--) {
+      var ev = nucleationEvents[i];
+      ev.age++;
+      if (ev.age >= ev.lifetime) { nucleationEvents.splice(i, 1); continue; }
+      var t = ev.age / ev.lifetime;
+      if (t < 0.3) ev.currentR = ev.maxR * (t / 0.3);
+      else if (t < 0.7) ev.currentR = ev.maxR;
+      else ev.currentR = ev.maxR * (1 - (t - 0.7) / 0.3);
+    }
+
+    // --- Spawn bubble events (one-time energy burst at spawn) ---
+    bubbleTimer++;
+    if (bubbleTimer >= CFG.bubbleInterval) {
+      bubbleTimer = 0;
+      if (bubbleEvents.length < CFG.bubbleMaxActive && Math.random() < CFG.bubbleChance) {
+        var bx = 80 + Math.random() * (W - 160);
+        var byMin = lvInterface + 20;
+        var byMax = lvInterface + (interfaceY - lvInterface) * 0.45;
+        var by = byMin + Math.random() * (byMax - byMin);
+        bubbleEvents.push({ x: bx, y: by, age: 0,
+          lifetime: CFG.bubbleLifetime + (Math.random() - 0.5) * 80,
+          maxR: CFG.bubbleMaxR + (Math.random() - 0.5) * 12, currentR: 0 });
+        // ONE-TIME energy burst: kick particles outward from the injection point
+        var br2 = CFG.burstR * CFG.burstR;
+        for (var i = 0; i < n; i++) {
+          var p = fluid[i];
+          var dx = p.x - bx, dy = p.y - by;
+          var d2 = dx * dx + dy * dy;
+          if (d2 < br2 && d2 > 1) {
+            var dist = Math.sqrt(d2);
+            var kick = CFG.bubbleKick * (1 - dist / CFG.burstR);
+            p.vx += (dx / dist) * kick;
+            p.vy += (dy / dist) * kick;
+          }
+        }
+      }
+    }
+    for (var i = bubbleEvents.length - 1; i >= 0; i--) {
+      var ev = bubbleEvents[i];
+      ev.age++;
+      if (ev.age >= ev.lifetime) { bubbleEvents.splice(i, 1); continue; }
+      var t = ev.age / ev.lifetime;
+      if (t < 0.2) ev.currentR = ev.maxR * (t / 0.2);
+      else if (t < 0.5) ev.currentR = ev.maxR;
+      else ev.currentR = ev.maxR * (1 - (t - 0.5) / 0.5);
+    }
+
+    // --- Integrate with region-dependent thermostat + cold spot effects ---
+    var kickBase = CFG.brownian * Math.sqrt(gTemp);
+    var vaporKick = kickBase * CFG.vaporBrownMul;
+    var maxV2 = CFG.maxVel * CFG.maxVel;
+    var vaporCount = 0;
+
+    for (var i = 0; i < n; i++) {
+      var p = fluid[i];
+      p.prevX = p.x; p.prevY = p.y;
+
+      var inVapor = p.y < lvInterface;
+      var localKick = inVapor ? vaporKick : kickBase;
+      var localDamp = inVapor ? CFG.vaporDamp : CFG.damping;
+
+      if (inVapor) vaporCount++;
+
+      // Cold spot override (ice nucleation — physics-driven freezing)
+      for (var e = 0; e < nucleationEvents.length; e++) {
+        var ev = nucleationEvents[e];
+        if (!ev.currentR || ev.currentR < 3) continue;
+        var dx = p.x - ev.x, dy = p.y - ev.y;
+        if (dx * dx + dy * dy < ev.currentR * ev.currentR) {
+          localKick *= CFG.freezeKickMul;
+          localDamp = CFG.freezeDamp;
+          break;
+        }
+      }
+
+      // Brownian thermostat
+      p.ax += (Math.random() - 0.5) * localKick * 2;
+      p.ay += (Math.random() - 0.5) * localKick * 2;
+
+      // Mouse heat source
+      if (mouseActive) {
+        var mdx = p.x - mx, mdy = p.y - my;
+        var md2 = mdx * mdx + mdy * mdy, mr2 = CFG.mouseR * CFG.mouseR;
+        if (md2 < mr2) {
+          var mf = 1 - Math.sqrt(md2) / CFG.mouseR;
+          p.ax += (Math.random() - 0.5) * CFG.mouseHeat * mf * 2;
+          p.ay += (Math.random() - 0.5) * CFG.mouseHeat * mf * 2;
+        }
+      }
+
+      // Cap total acceleration
+      var aMag2 = p.ax * p.ax + p.ay * p.ay;
+      if (aMag2 > maxF * maxF) {
+        var aScale = maxF / Math.sqrt(aMag2);
+        p.ax *= aScale; p.ay *= aScale;
+      }
+
+      p.vx += p.ax; p.vy += p.ay;
+
+      // Hard velocity cap
+      var vMag2 = p.vx * p.vx + p.vy * p.vy;
+      if (vMag2 > maxV2) {
+        var vScale = CFG.maxVel / Math.sqrt(vMag2);
+        p.vx *= vScale; p.vy *= vScale;
+      }
+
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= localDamp; p.vy *= localDamp;
+
+      // Periodic x
+      if (p.x < 0) p.x += W; else if (p.x >= W) p.x -= W;
+      // Reflective top
+      if (p.y < 1) { p.y = 2 - p.y; p.vy = Math.abs(p.vy) * 0.8; }
+      // Hard wall backup
+      if (p.y > interfaceY - 2) {
+        p.y = interfaceY - 2;
+        p.vy = -Math.abs(p.vy) * 0.5;
+      }
+    }
+
+    // --- Vapor maintenance ---
+    var targetVapor = Math.round(n * CFG.vaporTargetFrac);
+    var minVapor = Math.round(n * CFG.vaporMinFrac);
+    if (vaporCount < minVapor) {
+      var deficit = targetVapor - vaporCount;
+      var evapProb = Math.min(0.05, deficit / (n * 0.03));
+      for (var i = 0; i < n; i++) {
+        var p = fluid[i];
+        if (p.y > lvInterface - 20 && p.y < lvInterface + 40) {
+          if (Math.random() < evapProb) {
+            p.vy = -(CFG.evapKick + Math.random() * 1.0);
+            p.vx += (Math.random() - 0.5) * 1.5;
+          }
+        }
+      }
+    }
+
+    // Nanoparticle drift — confined to upper liquid (away from wall layering)
+    var nanoTopBound = lvInterface + 20;
+    var nanoBotBound = lvInterface + (interfaceY - lvInterface) * 0.6;
+    for (var i = 0; i < nanos.length; i++) {
+      var np = nanos[i];
+      np.vx += (Math.random() - 0.5) * CFG.nanoDrift;
+      np.vy += (Math.random() - 0.5) * CFG.nanoDrift;
+      np.vx *= 0.995; np.vy *= 0.995;
+      np.x += np.vx; np.y += np.vy;
+      var m = np.radius + 10;
+      if (np.x < m) { np.x = m; np.vx = Math.abs(np.vx); }
+      if (np.x > W - m) { np.x = W - m; np.vx = -Math.abs(np.vx); }
+      if (np.y < nanoTopBound) { np.y = nanoTopBound; np.vy = Math.abs(np.vy); }
+      if (np.y > nanoBotBound) { np.y = nanoBotBound; np.vy = -Math.abs(np.vy); }
+    }
+  }
+
+
+  // ===== Renderer =====
+
+  var totalBins;
+  var nucleationBin;  // index of the icy cyan sprite
+  var bubbleBin;      // index of the hot red sprite
+
+  function particleBin(p) {
+    // KE-based coloring: frozen → cyan, hot → red
+    var speed2 = p.vx * p.vx + p.vy * p.vy;
+    if (speed2 < CFG.freezeKE) return nucleationBin;
+    if (speed2 > CFG.hotKE) return bubbleBin;
+    if (p.y >= lvInterface) {
+      // Liquid: bins 0 (near solid, blue) to bins-1 (near LV, yellow)
+      var dist = interfaceY - p.y;
+      var maxDist = interfaceY - lvInterface;
+      var t = Math.min(1, Math.max(0, dist / (maxDist || 1)));
+      return Math.min(CFG.bins - 1, Math.max(0, Math.round(t * (CFG.bins - 1))));
+    } else {
+      // Vapor: bins to bins+vaporBins-1 (yellow → red)
+      var dist = lvInterface - p.y;
+      var maxDist = lvInterface;
+      var t = Math.min(1, Math.max(0, dist / (maxDist || 1)));
+      return CFG.bins + Math.min(CFG.vaporBins - 1, Math.max(0, Math.round(t * (CFG.vaporBins - 1))));
+    }
+  }
+
+  function render() {
+    var effAlpha = dark ? gTrailAlpha * 0.6 : gTrailAlpha;
+
+    // --- Shimmer trail canvas ---
+    tCtx.globalCompositeOperation = 'destination-out';
+    tCtx.fillStyle = 'rgba(0,0,0,' + gTrailFade + ')';
+    tCtx.fillRect(0, 0, W, H);
+    tCtx.globalCompositeOperation = 'source-over';
+    tCtx.lineWidth = gTrailWidth;
+    tCtx.lineCap = 'round';
+
+    totalBins = CFG.bins + CFG.vaporBins + 2;  // +1 nucleation, +1 bubble
+    nucleationBin = totalBins - 2;
+    bubbleBin = totalBins - 1;
+    for (var bin = 0; bin < totalBins; bin++) {
+      var c = binRGB[bin];
+      tCtx.beginPath();
+      var has = false;
+      for (var i = 0; i < fluid.length; i++) {
+        var p = fluid[i];
+        if (particleBin(p) !== bin) continue;
+        if (Math.abs(p.x - p.prevX) > W * 0.3) continue;
+        tCtx.moveTo(p.prevX, p.prevY);
+        tCtx.lineTo(p.x, p.y);
+        has = true;
+      }
+      if (has) {
+        tCtx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + effAlpha + ')';
+        tCtx.stroke();
+      }
+    }
+
+    // --- Main canvas ---
+    ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(tCvs, 0, 0, W, H);
+
+    // --- Wall atoms (individual, with thermal vibration) ---
+    if (showInterface) {
+      var wc = dark ? wallDkCache : wallLtCache;
+      var wr = CFG.wallR;
+      var wd = wr * 2;
+      var t = performance.now();
+      ctx.globalAlpha = CFG.wallAlpha;
+      for (var i = 0; i < wallAtoms.length; i++) {
+        var wa = wallAtoms[i];
+        var vx = Math.sin(t * 0.003 + wa.phase) * CFG.wallVibAmp;
+        var vy = Math.cos(t * 0.004 + wa.phase * 1.3) * CFG.wallVibAmp;
+        ctx.drawImage(wc, wa.x + vx - wr, wa.y + vy - wr, wd, wd);
+      }
+      ctx.globalAlpha = 1;
+
+      // Interface glow line
+      var iy = interfaceY;
+      var ig = ctx.createLinearGradient(0, iy - 8, 0, iy + 8);
+      if (dark) {
+        ig.addColorStop(0,   'rgba(70,135,215,0)');
+        ig.addColorStop(0.5, 'rgba(70,135,215,0.08)');
+        ig.addColorStop(1,   'rgba(70,135,215,0)');
+      } else {
+        ig.addColorStop(0,   'rgba(45,48,71,0)');
+        ig.addColorStop(0.5, 'rgba(45,48,71,0.04)');
+        ig.addColorStop(1,   'rgba(45,48,71,0)');
+      }
+      ctx.fillStyle = ig;
+      ctx.fillRect(0, iy - 8, W, 16);
+    }
+
+    // --- Nanoparticles ---
+    if (showNanos) {
+      var glowC = dark ? nanoDkGlow : nanoLtGlow;
+      var sphC  = dark ? nanoDkSphere : nanoLtSphere;
+      for (var i = 0; i < nanos.length; i++) {
+        var np = nanos[i];
+        ctx.globalAlpha = CFG.nanoGlowA;
+        var gs = np.radius * 2.5;
+        ctx.drawImage(glowC, np.x - gs, np.y - gs, gs * 2, gs * 2);
+        ctx.globalAlpha = CFG.nanoAlpha;
+        ctx.drawImage(sphC, np.x - np.radius, np.y - np.radius,
+                      np.radius * 2, np.radius * 2);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // --- Fluid particles (depth-coloured) ---
+    ctx.globalAlpha = gFluidAlpha;
+    var d = gFluidR * 2;
+    for (var i = 0; i < fluid.length; i++) {
+      var p = fluid[i];
+      var bin = particleBin(p);
+      ctx.drawImage(fluidCache[bin], p.x - gFluidR, p.y - gFluidR, d, d);
+    }
+    ctx.globalAlpha = 1;
+
+    // --- Ice bond network: connect genuinely frozen (slow) neighbours ---
+    var bondCut2 = 30 * 30;
+    var nc = CFG.nucleationClr;
+    // Collect all frozen particles within active cold spots
+    for (var e = 0; e < nucleationEvents.length; e++) {
+      var ev = nucleationEvents[e];
+      if (!ev.currentR || ev.currentR < 5) continue;
+      var er2 = ev.currentR * ev.currentR;
+      var cluster = [];
+      for (var i = 0; i < fluid.length; i++) {
+        var p = fluid[i];
+        var dx = p.x - ev.x, dy = p.y - ev.y;
+        if (dx * dx + dy * dy < er2) {
+          var s2 = p.vx * p.vx + p.vy * p.vy;
+          if (s2 < CFG.freezeKE * 3) cluster.push(p);  // include partially frozen
+        }
+      }
+      if (cluster.length > 1) {
+        var t = ev.age / ev.lifetime;
+        var bondAlpha;
+        if (t < 0.3) bondAlpha = t / 0.3;
+        else if (t < 0.7) bondAlpha = 1;
+        else bondAlpha = 1 - (t - 0.7) / 0.3;
+        bondAlpha *= 0.55;
+        ctx.strokeStyle = 'rgba(' + nc[0] + ',' + nc[1] + ',' + nc[2] + ',' + bondAlpha + ')';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        for (var i = 0; i < cluster.length; i++) {
+          for (var j = i + 1; j < cluster.length; j++) {
+            var dx = cluster[j].x - cluster[i].x;
+            var dy = cluster[j].y - cluster[i].y;
+            if (dx * dx + dy * dy < bondCut2) {
+              ctx.moveTo(cluster[i].x, cluster[i].y);
+              ctx.lineTo(cluster[j].x, cluster[j].y);
+            }
+          }
+        }
+        ctx.stroke();
+      }
+    }
+
+    // --- Bubble glow (faint red circle at void centre) ---
+    var bc = CFG.bubbleClr;
+    for (var e = 0; e < bubbleEvents.length; e++) {
+      var ev = bubbleEvents[e];
+      if (!ev.currentR || ev.currentR < 3) continue;
+      var t = ev.age / ev.lifetime;
+      var glowAlpha;
+      if (t < 0.25) glowAlpha = t / 0.25;
+      else if (t < 0.65) glowAlpha = 1;
+      else glowAlpha = 1 - (t - 0.65) / 0.35;
+      glowAlpha *= 0.18;
+      var gr = ctx.createRadialGradient(ev.x, ev.y, 0, ev.x, ev.y, ev.currentR);
+      gr.addColorStop(0, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + glowAlpha + ')');
+      gr.addColorStop(0.6, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + (glowAlpha * 0.4) + ')');
+      gr.addColorStop(1, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',0)');
+      ctx.fillStyle = gr;
+      ctx.beginPath();
+      ctx.arc(ev.x, ev.y, ev.currentR, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+
+  // ===== Animation loop =====
+
+  function loop() {
+    if (!(tabHidden || offscreen)) {
+      var t0 = performance.now();
+      physics();
+      render();
+      var elapsed = performance.now() - t0;
+      ftBuf.push(elapsed);
+      if (ftBuf.length > 60) ftBuf.shift();
+      if (ftBuf.length >= 30) {
+        var avg = 0;
+        for (var i = 0; i < ftBuf.length; i++) avg += ftBuf[i];
+        avg /= ftBuf.length;
+        if (avg > CFG.maxFrameMs && scaleFactor > CFG.minScale) {
+          scaleFactor = Math.max(CFG.minScale, scaleFactor - 0.05);
+          adjustCount();
+        }
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+
+  function adjustCount() {
+    var target = Math.round(targetFluid * gDen * scaleFactor);
+    while (fluid.length > target && fluid.length > 10) fluid.pop();
+    while (fluid.length < target) spawnFluid();
+  }
+
+
+  // ===== Input =====
+
+  function setupMouse() {
+    container.addEventListener('mousemove', function(e) {
+      var r = container.getBoundingClientRect();
+      mx = e.clientX - r.left; my = e.clientY - r.top;
+      mouseActive = true;
+    });
+    container.addEventListener('mouseleave', function() { mouseActive = false; });
+    container.addEventListener('touchmove', function(e) {
+      var r = container.getBoundingClientRect();
+      var t = e.touches[0];
+      mx = t.clientX - r.left; my = t.clientY - r.top;
+      mouseActive = true;
+    }, { passive: true });
+    container.addEventListener('touchend', function() { mouseActive = false; });
+  }
+
+
+  // ===== Theme + visibility =====
+
+  function setupTheme() {
+    dark = isDark();
+    new MutationObserver(function() {
+      dark = isDark();
+    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  var exploreBtn, controlPanel;
+
+  function setupVisibility() {
+    document.addEventListener('visibilitychange', function() {
+      tabHidden = document.hidden;
+    });
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function(entries) {
+        offscreen = !entries[0].isIntersecting;
+        if (offscreen && panelOpen) {
+          panelOpen = false;
+          if (controlPanel) controlPanel.classList.remove('open');
+          if (exploreBtn) exploreBtn.innerHTML = atomSVG + ' Explore';
+        }
+      }, { threshold: 0.1 }).observe(container);
+    }
+  }
+
+
+  // ===== UI =====
+
+  var atomSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">'
+    + '<circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>'
+    + '<ellipse cx="12" cy="12" rx="10" ry="4"/>'
+    + '<ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>'
+    + '<ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>'
+    + '</svg>';
+
+  var closeSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'
+    + '<line x1="6" y1="6" x2="18" y2="18"/>'
+    + '<line x1="18" y1="6" x2="6" y2="18"/>'
+    + '</svg>';
+
+  function makeSlider(label, id, min, max, step, val, dec) {
+    dec = dec !== undefined ? dec : 1;
+    return '<div class="md-sim-ctrl">'
+      + '<div class="md-sim-lbl"><span>' + label + '</span>'
+      + '<span class="md-sim-val" id="md-' + id + '-v">' + val.toFixed(dec) + '</span></div>'
+      + '<input type="range" id="md-' + id + '" min="' + min + '" max="' + max
+      + '" step="' + step + '" value="' + val + '">'
+      + '</div>';
+  }
+
+  function setupUI() {
+    exploreBtn = document.createElement('button');
+    exploreBtn.className = 'md-sim-explore';
+    exploreBtn.setAttribute('aria-label', 'Explore simulation controls');
+    exploreBtn.innerHTML = atomSVG + ' Explore';
+
+    // Place in navbar, to the left of the dark/light toggle
+    var navTools = document.querySelector('.quarto-navbar-tools');
+    if (navTools) {
+      navTools.insertBefore(exploreBtn, navTools.firstChild);
+    } else {
+      container.appendChild(exploreBtn);
+    }
+
+    controlPanel = document.createElement('div');
+    controlPanel.className = 'md-sim-panel';
+    controlPanel.innerHTML =
+        '<div class="md-sim-panel-title">Simulation</div>'
+      + makeSlider('Temperature', 'temp', 0.2, 2.5, 0.1, gTemp)
+      + makeSlider('Density',     'dens', 0.3, 1.8, 0.1, gDen)
+      + makeSlider('Interaction', 'eps',  0.3, 3.0, 0.1, gEps)
+      + '<div class="md-sim-panel-title" style="margin-top:0.6rem">Animation</div>'
+      + makeSlider('Trail Opacity',    'trail-a', 0.05, 0.80, 0.05, gTrailAlpha, 2)
+      + makeSlider('Trail Fade',       'trail-f', 0.01, 0.15, 0.01, gTrailFade, 2)
+      + makeSlider('Trail Width',      'trail-w', 0.5, 4.0, 0.5, gTrailWidth)
+      + makeSlider('Particle Opacity', 'part-a',  0.10, 1.00, 0.05, gFluidAlpha, 2)
+      + makeSlider('Particle Size',    'part-r',  4, 16, 1, gFluidR, 0)
+      + '<button class="md-sim-reset" id="md-reset">Reset</button>';
+    container.appendChild(controlPanel);
+
+    exploreBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      panelOpen = !panelOpen;
+      controlPanel.classList.toggle('open', panelOpen);
+      exploreBtn.innerHTML = (panelOpen ? closeSVG : atomSVG)
+        + (panelOpen ? ' Close' : ' Explore');
+    });
+
+    bindSlider('md-temp', 'md-temp-v', function(v) { gTemp = v; });
+    bindSlider('md-dens', 'md-dens-v', function(v) { gDen = v; adjustCount(); });
+    bindSlider('md-eps',  'md-eps-v',  function(v) { gEps = v; });
+
+    bindSlider('md-trail-a', 'md-trail-a-v', function(v) { gTrailAlpha = v; }, 2);
+    bindSlider('md-trail-f', 'md-trail-f-v', function(v) { gTrailFade = v; }, 2);
+    bindSlider('md-trail-w', 'md-trail-w-v', function(v) { gTrailWidth = v; });
+    bindSlider('md-part-a',  'md-part-a-v',  function(v) { gFluidAlpha = v; }, 2);
+    bindSlider('md-part-r',  'md-part-r-v',  function(v) { gFluidR = v; }, 0);
+
+    document.getElementById('md-reset').addEventListener('click', function() {
+      gTemp = CFG.tempDefault; gEps = 1; gDen = 1;
+      scaleFactor = 1; ftBuf = [];
+      gTrailAlpha = CFG.trailAlpha; gTrailFade = CFG.trailFade;
+      gTrailWidth = CFG.trailWidth; gFluidAlpha = CFG.fluidAlpha;
+      gFluidR = CFG.fluidR;
+
+      document.getElementById('md-temp').value = CFG.tempDefault;
+      document.getElementById('md-dens').value = 1;
+      document.getElementById('md-eps').value  = 1;
+      document.getElementById('md-temp-v').textContent = CFG.tempDefault.toFixed(1);
+      document.getElementById('md-dens-v').textContent = '1.0';
+      document.getElementById('md-eps-v').textContent  = '1.0';
+      document.getElementById('md-trail-a').value = CFG.trailAlpha;
+      document.getElementById('md-trail-f').value = CFG.trailFade;
+      document.getElementById('md-trail-w').value = CFG.trailWidth;
+      document.getElementById('md-part-a').value  = CFG.fluidAlpha;
+      document.getElementById('md-part-r').value  = CFG.fluidR;
+      document.getElementById('md-trail-a-v').textContent = CFG.trailAlpha.toFixed(2);
+      document.getElementById('md-trail-f-v').textContent = CFG.trailFade.toFixed(2);
+      document.getElementById('md-trail-w-v').textContent = CFG.trailWidth.toFixed(1);
+      document.getElementById('md-part-a-v').textContent  = CFG.fluidAlpha.toFixed(2);
+      document.getElementById('md-part-r-v').textContent  = CFG.fluidR.toFixed(0);
+      tCtx.clearRect(0, 0, W, H);
+      initParticles();
+    });
+  }
+
+  function bindSlider(sliderId, valId, fn, dec) {
+    dec = dec !== undefined ? dec : 1;
+    var sl = document.getElementById(sliderId);
+    var vl = document.getElementById(valId);
+    sl.addEventListener('input', function() {
+      var v = parseFloat(this.value);
+      vl.textContent = v.toFixed(dec);
+      fn(v);
+    });
+  }
+
+
+  // ===== Boot =====
+
+  document.addEventListener('DOMContentLoaded', function() {
+    requestAnimationFrame(function() {
+      if (!setup()) return;
+      buildAllCaches();
+      setupTheme();
+      initParticles();
+      setupMouse();
+      setupVisibility();
+      setupUI();
+      requestAnimationFrame(loop);
+    });
+  });
+
+})();
+</script>
+<script>
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
 
@@ -442,7 +1504,7 @@ document.addEventListener('DOMContentLoaded', function() {
   style.textContent =
     '.halo-seg path.halo-bg { transition: stroke 0.3s ease; }' +
     '.halo-seg text { transition: fill 0.3s ease; cursor: pointer; }' +
-    '.halo-seg:hover path.halo-bg { stroke: rgba(212, 160, 58, 0.35); }' +
+    '.halo-seg:hover path.halo-bg { stroke: rgba(240, 238, 232, 0.95); }' +
     '.halo-seg:hover text { fill: #2d3047; }';
   svg.appendChild(style);
 
@@ -460,7 +1522,7 @@ document.addEventListener('DOMContentLoaded', function() {
     bgPath.setAttribute('d', arc(bgR, a1, a2, true));
     bgPath.setAttribute('class', 'halo-bg');
     bgPath.setAttribute('fill', 'none');
-    bgPath.setAttribute('stroke', 'rgba(212, 160, 58, 0.12)');
+    bgPath.setAttribute('stroke', 'rgba(200, 195, 185, 0.88)');
     bgPath.setAttribute('stroke-width', bgStroke);
     bgPath.setAttribute('stroke-linecap', 'round');
 
@@ -474,7 +1536,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Text element
     var text = document.createElementNS(ns, 'text');
-    text.setAttribute('fill', '#d4a03a');
+    text.setAttribute('fill', '#2d3047');
     text.setAttribute('font-family', 'Inter, sans-serif');
     text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');

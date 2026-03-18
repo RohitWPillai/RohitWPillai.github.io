@@ -1,0 +1,273 @@
+/* ============================================
+   MD Simulation — Canvas, Controls & Theming
+   ============================================ */
+
+/* Canvas — fills hero container, behind all content */
+.md-sim-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Suppress the ::before background decoration when simulation is active */
+div.quarto-about-solana.md-sim-active::before {
+  display: none;
+}
+
+/* Break out to full viewport width so canvas fills edge-to-edge */
+div.quarto-about-solana.md-sim-active {
+  width: 100vw;
+  max-width: none !important;
+  margin-left: calc(-50vw + 50%);
+  overflow: clip;
+}
+
+/* ===== Frosted glass text card =====
+   Allows the simulation to run at full opacity behind
+   while keeping text perfectly readable. Only active when
+   JS has loaded (md-sim-active class). Degrades gracefully. */
+div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
+  background: rgba(200, 195, 185, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid rgba(45, 48, 71, 0.18);
+}
+
+.quarto-dark div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
+  background: rgba(26, 26, 46, 0.92);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  border: 1.5px solid rgba(212, 160, 58, 0.15);
+}
+
+/* ===== Explore Button (in navbar) ===== */
+.md-sim-explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.9rem;
+  margin-right: 0.5rem;
+  background: transparent;
+  border: 1.5px solid rgba(212, 160, 58, 0.35);
+  border-radius: 50px;
+  color: #d4a03a;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s;
+  pointer-events: auto;
+  white-space: nowrap;
+}
+
+.md-sim-explore:hover {
+  background: rgba(212, 160, 58, 0.15);
+  border-color: rgba(212, 160, 58, 0.55);
+}
+
+.md-sim-explore:active { opacity: 0.8; }
+.md-sim-explore svg { width: 13px; height: 13px; }
+
+/* ===== Control Panel ===== */
+.md-sim-panel {
+  position: fixed;
+  right: -300px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  padding: 1.4rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 160, 58, 0.2);
+  border-radius: 16px;
+  z-index: 1050;
+  pointer-events: auto;
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.md-sim-panel.open { right: 1.5rem; }
+
+.md-sim-panel-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #2d3047;
+  margin: 0 0 1.1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(45, 48, 71, 0.1);
+}
+
+.md-sim-ctrl { margin-bottom: 0.9rem; }
+.md-sim-ctrl:last-of-type { margin-bottom: 0; }
+
+.md-sim-lbl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #4a4d64;
+  margin-bottom: 0.35rem;
+}
+
+.md-sim-val {
+  font-variant-numeric: tabular-nums;
+  color: #d4a03a;
+  font-weight: 600;
+}
+
+/* Range slider */
+.md-sim-panel input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(45, 48, 71, 0.12);
+  border-radius: 2px;
+  outline: none;
+}
+
+.md-sim-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  background: #d4a03a;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.md-sim-panel input[type="range"]::-moz-range-thumb {
+  width: 14px; height: 14px;
+  background: #d4a03a;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Interface toggle */
+.md-sim-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.9rem;
+}
+
+.md-sim-switch {
+  width: 36px; height: 20px;
+  background: rgba(45, 48, 71, 0.15);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.25s;
+}
+
+.md-sim-switch.on { background: rgba(212, 160, 58, 0.4); }
+
+.md-sim-switch::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.md-sim-switch.on::after { left: 18px; }
+
+/* Reset button */
+.md-sim-reset {
+  width: 100%;
+  padding: 0.42rem;
+  margin-top: 0.7rem;
+  background: transparent;
+  border: 1.5px solid rgba(45, 48, 71, 0.15);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #4a4d64;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.md-sim-reset:hover { border-color: #d4a03a; color: #d4a03a; }
+
+/* ===== Dark Mode ===== */
+.quarto-dark .md-sim-explore {
+  border-color: rgba(212, 160, 58, 0.3);
+}
+.quarto-dark .md-sim-explore:hover {
+  background: rgba(212, 160, 58, 0.12);
+  border-color: rgba(212, 160, 58, 0.5);
+}
+
+.quarto-dark .md-sim-panel {
+  background: rgba(26, 26, 46, 0.82);
+  border-color: rgba(212, 160, 58, 0.12);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.quarto-dark .md-sim-panel-title {
+  color: #e8e8ec;
+  border-bottom-color: rgba(200, 200, 220, 0.1);
+}
+.quarto-dark .md-sim-lbl { color: #b0b0b8; }
+.quarto-dark .md-sim-panel input[type="range"] {
+  background: rgba(200, 200, 220, 0.1);
+}
+.quarto-dark .md-sim-panel input[type="range"]::-webkit-slider-thumb {
+  border-color: #1a1a2e;
+}
+.quarto-dark .md-sim-panel input[type="range"]::-moz-range-thumb {
+  border-color: #1a1a2e;
+}
+.quarto-dark .md-sim-switch { background: rgba(200, 200, 220, 0.1); }
+.quarto-dark .md-sim-reset {
+  border-color: rgba(200, 200, 220, 0.12);
+  color: #b0b0b8;
+}
+.quarto-dark .md-sim-reset:hover { border-color: #d4a03a; color: #d4a03a; }
+
+/* ===== Mobile ===== */
+@media (max-width: 991.98px) {
+  div.quarto-about-solana.md-sim-active .about-entity .entity-contents {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+  .md-sim-explore {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.7rem;
+  }
+
+  .md-sim-panel {
+    right: 0;
+    left: 0;
+    top: auto;
+    bottom: -100%;
+    transform: none;
+    width: 100%;
+    border-radius: 16px 16px 0 0;
+    max-height: 50vh;
+    overflow-y: auto;
+    transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .md-sim-panel.open {
+    bottom: 0;
+    right: 0;
+  }
+}
