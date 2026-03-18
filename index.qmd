@@ -33,12 +33,15 @@ page-layout: full
 
 resources:
   - assets/index.css
+  - assets/simulation.css
 
 include-after-body:
+  - assets/simulation.html
   - assets/halo.html
 
 header-includes: |
   <link rel="stylesheet" href="assets/index.css">
+  <link rel="stylesheet" href="assets/simulation.css">
 ---
 
 I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation.
