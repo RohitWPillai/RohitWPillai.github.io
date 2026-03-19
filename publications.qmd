@@ -47,13 +47,13 @@ Perumanath S, <u>Pillai R</u>, Borg MK
 ### 2022
 
 [12] **Inertio-thermal vapour bubble growth**
-Sullivan P, Enright R, Borg MK, <u>Pillai R</u>
+Sullivan P, Dockar D, Borg MK, Enright R, <u>Pillai R</u>
 *J. Fluid Mech.* 948, A55 (2022) | [DOI](https://doi.org/10.1017/jfm.2022.734) | [Data](https://datashare.ed.ac.uk/handle/10283/4489)
 
 ### 2021
 
 [11] **Acoustothermal Nucleation of Surface Nanobubbles**
-Datta S, <u>Pillai R</u>, Borg MK
+Datta S, <u>Pillai R</u>, Borg MK, Sefiane K
 *Nano Lett.* 21, 1267–1273 (2021) | [DOI](https://doi.org/10.1021/acs.nanolett.0c03895)
 
 [10] **Untangling the physics of water transport in boron nitride nanotubes**

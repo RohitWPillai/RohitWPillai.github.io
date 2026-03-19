@@ -10,18 +10,14 @@ title: "CV"
 University of Melbourne, 2017
 *Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops*
 
-**MSc, Mechanical Engineering**
-University of California Davis, 2012
-*Thesis: Transport Phenomena in a Proton Exchange Membrane Fuel Cell*
-
 ---
 
 ## Academic Positions
 
-**Senior Lecturer in Mechanical Engineering**
+**Senior Lecturer (Associate Professor) in Mechanical Engineering**
 University of Edinburgh, 2023-present
 
-**Lecturer in Mechanical Engineering**
+**Lecturer (Assistant Professor) in Mechanical Engineering**
 University of Edinburgh, 2018-2023
 
 **Postdoctoral Research Associate**

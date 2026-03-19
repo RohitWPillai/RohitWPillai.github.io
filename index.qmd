@@ -1,7 +1,7 @@
 ---
 pagetitle: "Rohit Pillai"
 title: "Rohit Pillai"
-subtitle: "Senior Lecturer in Mechanical Engineering"
+subtitle: "Senior Lecturer (Associate Professor) in Mechanical Engineering"
 image: images/profile.jpg
 image-alt: "Rohit Pillai"
 toc: false

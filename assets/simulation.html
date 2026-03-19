@@ -870,43 +870,70 @@
       }
     }
 
-    // --- Bubble bond network: connect hot particles near bubble rims ---
-    var bbCut2 = 40 * 40;
+    // --- Bubble glow ring + bright circle outline ---
     var bc = CFG.bubbleClr;
     for (var e = 0; e < bubbleEvents.length; e++) {
       var ev = bubbleEvents[e];
       if (!ev.currentR || ev.currentR < 5) continue;
-      var er2 = ev.currentR * ev.currentR * 2.56;  // 1.6x radius for rim
-      var cluster = [];
+      var t = ev.age / ev.lifetime;
+      var alpha;
+      if (t < 0.25) alpha = t / 0.25;
+      else if (t < 0.65) alpha = 1;
+      else alpha = 1 - (t - 0.65) / 0.35;
+
+      // Soft radial glow
+      var glowA = alpha * 0.25;
+      var outerR = ev.currentR * 1.5;
+      var g = ctx.createRadialGradient(ev.x, ev.y, ev.currentR * 0.25, ev.x, ev.y, outerR);
+      g.addColorStop(0,   'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',0)');
+      g.addColorStop(0.45, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + (glowA * 0.4) + ')');
+      g.addColorStop(0.65, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + glowA + ')');
+      g.addColorStop(0.85, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + (glowA * 0.5) + ')');
+      g.addColorStop(1,   'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(ev.x, ev.y, outerR, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Dynamic contour from rim particles — connects actual molecules being pushed away
+      var rimInner2 = (ev.currentR * 0.5) * (ev.currentR * 0.5);
+      var rimOuter2 = (ev.currentR * 1.7) * (ev.currentR * 1.7);
+      var nBins = 24;
+      var binned = [];
+      for (var b = 0; b < nBins; b++) binned[b] = null;
       for (var i = 0; i < fluid.length; i++) {
         var p = fluid[i];
         var dx = p.x - ev.x, dy = p.y - ev.y;
-        if (dx * dx + dy * dy < er2) {
-          var s2 = p.vx * p.vx + p.vy * p.vy;
-          if (s2 > CFG.hotKE * 0.4) cluster.push(p);
+        var d2 = dx * dx + dy * dy;
+        if (d2 < rimInner2 || d2 > rimOuter2) continue;
+        var dist = Math.sqrt(d2);
+        var ang = Math.atan2(dy, dx);
+        var b = Math.floor(((ang + Math.PI) / (Math.PI * 2)) * nBins) % nBins;
+        var dr = Math.abs(dist - ev.currentR);
+        if (!binned[b] || dr < binned[b].dr) {
+          binned[b] = { x: p.x, y: p.y, dr: dr };
         }
       }
-      if (cluster.length > 1) {
-        var t = ev.age / ev.lifetime;
-        var bondAlpha;
-        if (t < 0.25) bondAlpha = t / 0.25;
-        else if (t < 0.65) bondAlpha = 1;
-        else bondAlpha = 1 - (t - 0.65) / 0.35;
-        bondAlpha *= 0.65;
-        ctx.strokeStyle = 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + bondAlpha + ')';
+      // Collect filled bins in order
+      var pts = [];
+      for (var b = 0; b < nBins; b++) {
+        if (binned[b]) pts.push(binned[b]);
+      }
+      if (pts.length >= 6) {
+        ctx.strokeStyle = 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + (alpha * 0.55) + ')';
         ctx.lineWidth = 2.5;
-        ctx.lineCap = 'round';
         ctx.beginPath();
-        for (var i = 0; i < cluster.length; i++) {
-          for (var j = i + 1; j < cluster.length; j++) {
-            var dx = cluster[j].x - cluster[i].x;
-            var dy = cluster[j].y - cluster[i].y;
-            if (dx * dx + dy * dy < bbCut2) {
-              ctx.moveTo(cluster[i].x, cluster[i].y);
-              ctx.lineTo(cluster[j].x, cluster[j].y);
-            }
-          }
+        var nP = pts.length;
+        var m0x = (pts[nP - 1].x + pts[0].x) / 2;
+        var m0y = (pts[nP - 1].y + pts[0].y) / 2;
+        ctx.moveTo(m0x, m0y);
+        for (var w = 0; w < nP; w++) {
+          var nx = (w + 1) % nP;
+          var mx = (pts[w].x + pts[nx].x) / 2;
+          var my = (pts[w].y + pts[nx].y) / 2;
+          ctx.quadraticCurveTo(pts[w].x, pts[w].y, mx, my);
         }
+        ctx.closePath();
         ctx.stroke();
       }
     }
@@ -1085,6 +1112,7 @@
   // ===== Boot =====
 
   document.addEventListener('DOMContentLoaded', function() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     requestAnimationFrame(function() {
       if (!setup()) return;
       buildAllCaches();
