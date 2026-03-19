@@ -209,6 +209,238 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ===== Publication Counters ===== */
+.pub-stats {
+  display: flex;
+  gap: 2.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.pub-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.pub-count {
+  font-family: "Fraunces", serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: var(--amber);
+  line-height: 1;
+  font-variation-settings: 'opsz' 144;
+}
+
+.pub-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--slate-light);
+  margin-top: 0.3rem;
+}
+
+.title .pub-scholar {
+  vertical-align: middle;
+  margin-left: 1rem;
+  font-size: 1.4rem;
+  color: var(--slate-light);
+  transition: color 0.2s ease;
+  position: relative;
+  top: -4px;
+}
+
+.title .pub-scholar:hover {
+  color: var(--amber);
+}
+
+@media (max-width: 576px) {
+  .pub-stats { gap: 1.5rem; }
+  .pub-count { font-size: 2.2rem; }
+  .pub-label { font-size: 0.7rem; }
+}
+
+/* ===== Publication Cards ===== */
+#journal-articles .level3 > p,
+#book-chapters > p,
+#thesis > p {
+  background: #252538;
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#journal-articles .level3 > p:hover,
+#book-chapters > p:hover,
+#thesis > p:hover {
+  transform: translateX(4px);
+  border-left-color: var(--amber);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Publication card with thumbnail (Option A: gap + shadow, no divider) */
+.pub-card {
+  display: flex;
+  gap: 1.5rem;
+  background: #252538;
+  border-radius: 10px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  border-left: 3px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  z-index: 11;
+}
+
+.pub-card:hover {
+  transform: translateX(4px);
+  border-left-color: var(--amber);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.pub-thumb {
+  width: 180px;
+  height: 130px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+  align-self: flex-start;
+  background: #1e1e30;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  opacity: 0.88;
+  transition: opacity 0.2s ease;
+}
+
+.pub-card:hover .pub-thumb {
+  opacity: 1;
+}
+
+.pub-card .pub-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pub-card .pub-text p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #c0c0c8;
+}
+
+.pub-card .pub-text p strong:first-of-type {
+  display: block;
+  color: #e8e8ec;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+}
+
+.pub-card .pub-text p u {
+  text-decoration: none;
+  color: var(--amber-light);
+  font-weight: 500;
+}
+
+.pub-card .pub-text p a:has(em) {
+  background: rgba(212, 160, 58, 0.15);
+  color: var(--amber);
+  padding: 0.15em 0.55em;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: none !important;
+  transition: background 0.2s ease;
+}
+
+.pub-card .pub-text p a:has(em):hover {
+  background: rgba(212, 160, 58, 0.3);
+}
+
+.pub-card .pub-text p a:has(em) em {
+  font-style: normal;
+}
+
+.pub-card .pub-text p a:not(:has(em)) {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: none;
+}
+
+@media (max-width: 576px) {
+  .pub-thumb { width: 90px; height: 70px; }
+  .pub-card { gap: 1rem; padding: 0.8rem; }
+}
+
+/* Title */
+#journal-articles .level3 > p > strong:first-of-type,
+#book-chapters > p > strong:first-of-type,
+#thesis > p > strong:first-of-type {
+  display: block;
+  color: #e8e8ec;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.4;
+}
+
+/* Journal name as pill link */
+#journal-articles .level3 > p a:has(em),
+#book-chapters > p a:has(em) {
+  background: rgba(212, 160, 58, 0.15);
+  color: var(--amber);
+  padding: 0.15em 0.55em;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: none !important;
+  transition: background 0.2s ease;
+}
+
+#journal-articles .level3 > p a:has(em):hover,
+#book-chapters > p a:has(em):hover {
+  background: rgba(212, 160, 58, 0.3);
+}
+
+#journal-articles .level3 > p a:has(em) em,
+#book-chapters > p a:has(em) em {
+  font-style: normal;
+}
+
+/* Author highlight */
+#journal-articles .level3 > p u,
+#book-chapters > p u,
+#thesis > p u {
+  text-decoration: none;
+  color: var(--amber-light);
+  font-weight: 500;
+}
+
+/* DOI/Data links */
+#journal-articles .level3 > p a:not(:has(em)),
+#book-chapters > p a:not(:has(em)) {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: none;
+}
+
+/* Year headings — lighter weight for grouping */
+#journal-articles .level3 > h3 {
+  font-size: 1.3rem;
+  color: var(--slate-light);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
 /* ===== Selection color ===== */
 ::selection {
   background: rgba(212, 160, 58, 0.3);
