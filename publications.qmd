@@ -2,109 +2,284 @@
 title: "Publications"
 ---
 
-*Full list available on [Google Scholar](https://scholar.google.com/citations?user=eE9rDfkAAAAJ)*
+<div class="pub-stats">
+<div class="pub-stat"><span class="pub-count" data-target="20">0</span><span class="pub-label">Journal Articles</span></div>
+<div class="pub-stat"><span class="pub-count" data-target="1">0</span><span class="pub-label">Book Chapter</span></div>
+</div>
+
+<a class="pub-scholar" href="https://scholar.google.com/citations?user=eE9rDfkAAAAJ" target="_blank" rel="noopener" aria-label="Google Scholar profile"><i class="bi bi-mortarboard-fill"></i></a>
+
+<script>
+(function() {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.addEventListener('DOMContentLoaded', function() {
+    // Move Scholar icon inline with title
+    var scholar = document.querySelector('.pub-scholar');
+    var title = document.querySelector('.title');
+    if (scholar && title) {
+      var p = scholar.parentNode;
+      title.appendChild(scholar);
+      if (p && p.tagName === 'P' && !p.textContent.trim()) p.remove();
+    }
+    document.querySelectorAll('.pub-count').forEach(function(el) {
+      var target = parseInt(el.dataset.target);
+      if (reduced) { el.textContent = target; return; }
+      var duration = 1600;
+      var start = null;
+      function step(ts) {
+        if (!start) start = ts;
+        var t = Math.min((ts - start) / duration, 1);
+        var ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(ease * target);
+        if (t < 1) requestAnimationFrame(step);
+      }
+      setTimeout(function() { requestAnimationFrame(step); }, 300);
+    });
+  });
+})();
+</script>
 
 ## Journal Articles
 
 ### 2025
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/20-contaminant-vibrating.jpg" alt="">
+<div class="pub-text">
+
 [20] **Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law**
 <u>Pillai R</u>, Neilan D, Handel C, Datta S
-*Nano Lett.* 25, 4284–4290 (2025) | [DOI](https://doi.org/10.1021/acs.nanolett.4c05973) | [Data](https://datashare.ed.ac.uk/handle/10283/8949)
+<a href="https://pubs.acs.org/journal/nalefd"><em>Nano Letters</em></a> 25, 4284–4290 (2025) | [DOI](https://doi.org/10.1021/acs.nanolett.4c05973) | [Data](https://datashare.ed.ac.uk/handle/10283/8949)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/19-spectral-meniscus.jpg" alt="">
+<div class="pub-text">
 
 [19] **Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus**
 El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, <u>Pillai R</u>, Isaiev M
-*Phys. Chem. Chem. Phys.* 27, 10185–10197 (2025) | [DOI](https://doi.org/10.1039/D4CP04768K)
+<a href="https://www.rsc.org/journals-books-databases/about-journals/pccp/"><em>Physical Chemistry Chemical Physics</em></a> 27, 10185–10197 (2025) | [DOI](https://doi.org/10.1039/D4CP04768K)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/18-bubble-nucleation-surface.png" alt="">
+<div class="pub-text">
 
 [18] **Nanoscale surface effects on heterogeneous vapor bubble nucleation**
 Sullivan P, Dockar D, <u>Pillai R</u>
-*J. Chem. Phys.* 162, 184501 (2025) | [DOI](https://doi.org/10.1063/5.0259208) | [Data](https://collections.durham.ac.uk/files/r1mc87pq34z)
+<a href="https://pubs.aip.org/aip/jcp"><em>The Journal of Chemical Physics</em></a> 162, 184501 (2025) | [DOI](https://doi.org/10.1063/5.0259208) | [Data](https://collections.durham.ac.uk/files/r1mc87pq34z)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/17-ice-nucleation-vibration.jpg" alt="">
+<div class="pub-text">
 
 [17] **Nanoscale insights into vibration-induced heterogeneous ice nucleation**
 Chen P, <u>Pillai R</u>, Datta S
-*Nanoscale* 17, 14172 (2025) | [DOI](https://doi.org/10.1039/D5NR00326A) | [Data](https://datashare.ed.ac.uk/handle/10283/9012)
+<a href="https://www.rsc.org/journals-books-databases/about-journals/nanoscale/"><em>Nanoscale</em></a> 17, 14172 (2025) | [DOI](https://doi.org/10.1039/D5NR00326A) | [Data](https://datashare.ed.ac.uk/handle/10283/9012)
+
+</div>
+</div>
 
 ### 2024
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/16-thermal-conductance.jpeg" alt="">
+<div class="pub-text">
+
 [16] **Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface**
 El-Rifai A, Perumanath S, Borg MK, <u>Pillai R</u>
-*J. Phys. Chem. C* 128, 8408–8417 (2024) | [DOI](https://doi.org/10.1021/acs.jpcc.4c00536) | [Data](https://datashare.ed.ac.uk/handle/10283/8772)
+<a href="https://pubs.acs.org/journal/jpccck"><em>The Journal of Physical Chemistry C</em></a> 128, 8408–8417 (2024) | [DOI](https://doi.org/10.1021/acs.jpcc.4c00536) | [Data](https://datashare.ed.ac.uk/handle/10283/8772)
+
+</div>
+</div>
 
 ### 2023
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/15-bubble-wettability.jpg" alt="">
+<div class="pub-text">
+
 [15] **The role of surface wettability on the growth of vapour bubbles**
 Sullivan P, Dockar D, Enright R, Borg MK, <u>Pillai R</u>
-*Int. J. Heat Mass Transf.* 217, 124657 (2023) | [DOI](https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657) | [Data](https://datashare.ed.ac.uk/handle/10283/8529)
+<a href="https://www.sciencedirect.com/journal/international-journal-of-heat-and-mass-transfer"><em>International Journal of Heat and Mass Transfer</em></a> 217, 124657 (2023) | [DOI](https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657) | [Data](https://datashare.ed.ac.uk/handle/10283/8529)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/14-rolling-sliding.png" alt="">
+<div class="pub-text">
 
 [14] **Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach**
 Perumanath S, Chubynsky MV, <u>Pillai R</u>, Borg MK, Sprittles JE
-*Phys. Rev. Lett.* 131, 164001 (2023) | [DOI](https://doi.org/10.1103/PhysRevLett.131.164001) | [Data](https://datashare.ed.ac.uk/handle/10283/8535)
+<a href="https://journals.aps.org/prl/"><em>Physical Review Letters</em></a> 131, 164001 (2023) | [DOI](https://doi.org/10.1103/PhysRevLett.131.164001) | [Data](https://datashare.ed.ac.uk/handle/10283/8535)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/13-self-cleaning.jpg" alt="">
+<div class="pub-text">
 
 [13] **Contaminant Removal from Nature's Self-Cleaning Surfaces**
 Perumanath S, <u>Pillai R</u>, Borg MK
-*Nano Lett.* 23, 4234–4241 (2023) | [DOI](https://doi.org/10.1021/acs.nanolett.3c00257) | [Data](https://datashare.ed.ac.uk/handle/10283/4860)
+<a href="https://pubs.acs.org/journal/nalefd"><em>Nano Letters</em></a> 23, 4234–4241 (2023) | [DOI](https://doi.org/10.1021/acs.nanolett.3c00257) | [Data](https://datashare.ed.ac.uk/handle/10283/4860)
+
+</div>
+</div>
 
 ### 2022
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/12-inertio-thermal-bubble.png" alt="">
+<div class="pub-text">
+
 [12] **Inertio-thermal vapour bubble growth**
 Sullivan P, Dockar D, Borg MK, Enright R, <u>Pillai R</u>
-*J. Fluid Mech.* 948, A55 (2022) | [DOI](https://doi.org/10.1017/jfm.2022.734) | [Data](https://datashare.ed.ac.uk/handle/10283/4489)
+<a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics"><em>Journal of Fluid Mechanics</em></a> 948, A55 (2022) | [DOI](https://doi.org/10.1017/jfm.2022.734) | [Data](https://datashare.ed.ac.uk/handle/10283/4489)
+
+</div>
+</div>
 
 ### 2021
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/11-nanobubble-acoustothermal.jpeg" alt="">
+<div class="pub-text">
+
 [11] **Acoustothermal Nucleation of Surface Nanobubbles**
 Datta S, <u>Pillai R</u>, Borg MK, Sefiane K
-*Nano Lett.* 21, 1267–1273 (2021) | [DOI](https://doi.org/10.1021/acs.nanolett.0c03895)
+<a href="https://pubs.acs.org/journal/nalefd"><em>Nano Letters</em></a> 21, 1267–1273 (2021) | [DOI](https://doi.org/10.1021/acs.nanolett.0c03895)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/10-bnnt-water.png" alt="">
+<div class="pub-text">
 
 [10] **Untangling the physics of water transport in boron nitride nanotubes**
 Mistry S, <u>Pillai R</u>, Mattia D, Borg MK
-*Nanoscale* 13, 18096–18102 (2021) | [DOI](https://doi.org/10.1039/D1NR04794A) | [Data](https://datashare.ed.ac.uk/handle/10283/4042)
+<a href="https://www.rsc.org/journals-books-databases/about-journals/nanoscale/"><em>Nanoscale</em></a> 13, 18096–18102 (2021) | [DOI](https://doi.org/10.1039/D1NR04794A) | [Data](https://datashare.ed.ac.uk/handle/10283/4042)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/09-ice-nanostructure.jpg" alt="">
+<div class="pub-text">
 
 [9] **Impact of surface nanostructure and wettability on interfacial ice physics**
 Nikiforidis V-M, Datta S, Borg MK, <u>Pillai R</u>
-*J. Chem. Phys.* 155, 234307 (2021) | [DOI](https://doi.org/10.1063/5.0069896) | [Data](https://datashare.ed.ac.uk/handle/10283/4129)
+<a href="https://pubs.aip.org/aip/jcp"><em>The Journal of Chemical Physics</em></a> 155, 234307 (2021) | [DOI](https://doi.org/10.1063/5.0069896) | [Data](https://datashare.ed.ac.uk/handle/10283/4129)
+
+</div>
+</div>
 
 ### 2020
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/08-md-dsmc-coupling.png" alt="">
+<div class="pub-text">
+
 [8] **Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library**
 Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
-*Comput. Fluids* 213, 104726 (2020) | [DOI](https://doi.org/10.1016/j.compfluid.2020.104726)
+<a href="https://www.sciencedirect.com/journal/computers-and-fluids"><em>Computers &amp; Fluids</em></a> 213, 104726 (2020) | [DOI](https://doi.org/10.1016/j.compfluid.2020.104726)
+
+</div>
+</div>
 
 ### 2018
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/07-nanodroplet-vibrating.png" alt="">
+<div class="pub-text">
+
 [7] **Dynamics of Nanodroplets on Vibrating Surfaces**
 <u>Pillai R</u>, Borg MK, Reese JM
-*Langmuir* 34, 11898–11904 (2018) | [DOI](https://doi.org/10.1021/acs.langmuir.8b02066) | [Data](https://datashare.ed.ac.uk/handle/10283/3176)
+<a href="https://pubs.acs.org/journal/langd5"><em>Langmuir</em></a> 34, 11898–11904 (2018) | [DOI](https://doi.org/10.1021/acs.langmuir.8b02066) | [Data](https://datashare.ed.ac.uk/handle/10283/3176)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/06-acoustothermal-prl.png" alt="">
+<div class="pub-text">
 
 [6] **Acoustothermal Atomization of Water Nanofilms**
 <u>Pillai R</u>, Borg MK, Reese JM
-*Phys. Rev. Lett.* 121, 104502 (2018) | [DOI](https://doi.org/10.1103/PhysRevLett.121.104502) | [Data](https://datashare.ed.ac.uk/handle/10283/3157)
+<a href="https://journals.aps.org/prl/"><em>Physical Review Letters</em></a> 121, 104502 (2018) | [DOI](https://doi.org/10.1103/PhysRevLett.121.104502) | [Data](https://datashare.ed.ac.uk/handle/10283/3157)
+
+</div>
+</div>
 
 ### 2017
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/05-chem-eng-sci-cover.jpg" alt="">
+<div class="pub-text">
+
 [5] **Electrophoretically mediated partial coalescence of a charged microdrop**
 <u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
-*Chem. Eng. Sci.* 169, 28–45 (2017) | [DOI](https://doi.org/10.1016/j.ces.2016.07.048)
+<a href="https://www.sciencedirect.com/journal/chemical-engineering-science"><em>Chemical Engineering Science</em></a> 169, 28–45 (2017) | [DOI](https://doi.org/10.1016/j.ces.2016.07.048)
+
+</div>
+</div>
 
 ### 2016
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/04-ijcmem-cover.jpg" alt="">
+<div class="pub-text">
+
 [4] **Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs**
 <u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
-*Int. J. Comput. Methods Exp. Meas.* 4, 33–41 (2016) | [DOI](https://doi.org/10.2495/CMEM-V4-N1-33-41)
+<a href="https://www.iieta.org/Journals/IJCMEM"><em>International Journal of Computational Methods and Experimental Measurements</em></a> 4, 33–41 (2016) | [DOI](https://doi.org/10.2495/CMEM-V4-N1-33-41)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/03-applied-math-modelling-cover.jpg" alt="">
+<div class="pub-text">
 
 [3] **Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces**
 Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
-*Appl. Math. Model.* 40, 1989–2001 (2016) | [DOI](https://doi.org/10.1016/j.apm.2015.09.021)
+<a href="https://www.sciencedirect.com/journal/applied-mathematical-modelling"><em>Applied Mathematical Modelling</em></a> 40, 1989–2001 (2016) | [DOI](https://doi.org/10.1016/j.apm.2015.09.021)
+
+</div>
+</div>
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/02-soft-matter-cover.jpg" alt="">
+<div class="pub-text">
 
 [2] **Electrokinetics of isolated electrified drops**
 <u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
-*Soft Matter* 12, 3310–3325 (2016) | [DOI](https://doi.org/10.1039/C6SM00047A)
+<a href="https://www.rsc.org/journals-books-databases/about-journals/soft-matter/"><em>Soft Matter</em></a> 12, 3310–3325 (2016) | [DOI](https://doi.org/10.1039/C6SM00047A)
+
+</div>
+</div>
 
 ### 2015
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/01-electrolytic-drops.jpg" alt="">
+<div class="pub-text">
+
 [1] **Electrolytic drops in an electric field: A numerical study of drop deformation and breakup**
 <u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
-*Phys. Rev. E* 92, 013007 (2015) | [DOI](https://doi.org/10.1103/PhysRevE.92.013007)
+<a href="https://journals.aps.org/pre/"><em>Physical Review E</em></a> 92, 013007 (2015) | [DOI](https://doi.org/10.1103/PhysRevE.92.013007)
+
+</div>
+</div>
 
 ---
 
