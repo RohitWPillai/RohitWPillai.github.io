@@ -184,7 +184,18 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><a href="assets/short-cv.pdf" class="btn btn-outline-primary btn-sm">Download CV (PDF)</a></p>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.querySelector('p > .btn-outline-primary');
+  var title = document.querySelector('.title');
+  if (btn && title) {
+    var p = btn.parentNode;
+    title.appendChild(btn);
+    if (p && !p.textContent.trim()) p.remove();
+  }
+});
+</script>
+<p><a href="assets/short-cv.pdf" class="btn btn-outline-primary btn-sm">Download PDF</a></p>
 <section id="education" class="level2">
 <h2 class="anchored" data-anchor-id="education">Education</h2>
 <p><strong>PhD, Chemical and Biomolecular Engineering</strong> University of Melbourne, 2017 <em>Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops</em></p>
