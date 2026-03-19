@@ -2,15 +2,20 @@ project:
   type: website
   resources:
     - assets/press/*
+  render:
+    - "*.qmd"
+    - "posts/**/*.qmd"
 
 execute:
   freeze: auto
 
 website:
   title: "Rohit Pillai"
-  description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh"
+  description: "Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research in molecular dynamics, nanoscale heat transfer, and computational engineering."
   site-url: https://rohitwpillai.github.io
   favicon: images/favicon.png
+  open-graph: true
+  twitter-card: true
   navbar:
     left:
       - href: index.qmd
@@ -23,7 +28,8 @@ website:
         text: Research
       - href: publications.qmd
         text: Publications
-    right: []
+  page-footer:
+    center: "Rohit Pillai · University of Edinburgh"
 
 format:
   html:
@@ -39,3 +45,6 @@ format:
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    include-after-body:
+      - assets/ambient-dust.html
+      - assets/scroll-reveal.html

@@ -1,0 +1,68 @@
+<style>
+/* Sections start hidden, slide up and overshoot like a damped oscillator */
+main .level2 {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+main .level2.revealed {
+  animation: dampedSettle 0.7s ease-out forwards;
+}
+
+@keyframes dampedSettle {
+  0%   { opacity: 0; transform: translateY(30px); }
+  50%  { opacity: 1; transform: translateY(-5px); }
+  70%  { transform: translateY(2px); }
+  85%  { transform: translateY(-1px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  main .level2 {
+    opacity: 1;
+    transform: none;
+  }
+  main .level2.revealed {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Skip homepage (simulation hero handles its own presentation)
+    if (document.querySelector('.md-sim-canvas')) return;
+
+    var sections = document.querySelectorAll('main .level2');
+    if (!sections.length) return;
+
+    // Sections already in viewport on load: reveal immediately (no animation)
+    // Sections below the fold: animate when scrolled into view
+    var viewH = window.innerHeight;
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          entries[i].target.classList.add('revealed');
+          observer.unobserve(entries[i].target);
+        }
+      }
+    }, { threshold: 0.08 });
+
+    for (var i = 0; i < sections.length; i++) {
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top < viewH) {
+        // Already visible — show instantly, no animation
+        sections[i].style.opacity = '1';
+        sections[i].style.transform = 'none';
+      } else {
+        observer.observe(sections[i]);
+      }
+    }
+  });
+})();
+</script>

@@ -151,6 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var anchor = document.createElementNS(ns, 'a');
     anchor.setAttribute('href', links[i].href);
+    anchor.setAttribute('target', '_blank');
+    anchor.setAttribute('rel', 'noopener');
     anchor.setAttribute('class', 'halo-seg');
     anchor.setAttribute('aria-label', links[i].text);
     anchor.appendChild(bgPath);
