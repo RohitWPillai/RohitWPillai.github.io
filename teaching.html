@@ -75,6 +75,12 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="styles.css">
+<meta property="og:title" content="Teaching – Rohit Pillai">
+<meta property="og:description" content="Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research in molecular dynamics, nanoscale heat transfer, and computational engineering.">
+<meta property="og:site_name" content="Rohit Pillai">
+<meta name="twitter:title" content="Teaching – Rohit Pillai">
+<meta name="twitter:description" content="Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research in molecular dynamics, nanoscale heat transfer, and computational engineering.">
+<meta name="twitter:card" content="summary">
 </head>
 
 <body class="nav-fixed quarto-light">
@@ -114,8 +120,6 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="./publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
-</ul>
-            <ul class="navbar-nav navbar-nav-scroll ms-auto">
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -217,6 +221,252 @@ ul.task-list li input[type="checkbox"] {
 </section>
 
 </main> <!-- /main -->
+<script>
+(function() {
+  'use strict';
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (document.querySelector('.md-sim-canvas')) return;
+
+    var CACHE_PX = 64;
+    var N = 15;
+    var R = 4;  // matches homepage CFG.fluidR
+
+    // Same Phong sphere renderer as homepage simulation
+    function buildSphere(c, sz) {
+      var oc = document.createElement('canvas');
+      oc.width = sz; oc.height = sz;
+      var ox = oc.getContext('2d');
+      var cx = sz / 2, cy = sz / 2, r = sz / 2 - 1;
+
+      var lo = [Math.max(0, c[0] - 55), Math.max(0, c[1] - 55), Math.max(0, c[2] - 55)];
+      var mid = [Math.min(255, c[0] + 15), Math.min(255, c[1] + 15), Math.min(255, c[2] + 15)];
+      var g1 = ox.createRadialGradient(cx - r * 0.15, cy - r * 0.15, 0, cx, cy, r);
+      g1.addColorStop(0,   'rgb(' + mid[0] + ',' + mid[1] + ',' + mid[2] + ')');
+      g1.addColorStop(0.6, 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')');
+      g1.addColorStop(1,   'rgb(' + lo[0] + ',' + lo[1] + ',' + lo[2] + ')');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+      ox.fillStyle = g1; ox.fill();
+
+      var g2 = ox.createRadialGradient(cx, cy, r * 0.55, cx, cy, r);
+      g2.addColorStop(0, 'rgba(0,0,0,0)');
+      g2.addColorStop(0.7, 'rgba(0,0,0,0.04)');
+      g2.addColorStop(1, 'rgba(0,0,0,0.32)');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+      ox.fillStyle = g2; ox.fill();
+
+      var hx = cx - r * 0.32, hy = cy - r * 0.34;
+      var g3 = ox.createRadialGradient(hx, hy, 0, hx, hy, r * 0.45);
+      g3.addColorStop(0,    'rgba(255,255,255,0.92)');
+      g3.addColorStop(0.12, 'rgba(255,255,255,0.55)');
+      g3.addColorStop(0.4,  'rgba(255,255,255,0.10)');
+      g3.addColorStop(1,    'rgba(255,255,255,0)');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+      ox.fillStyle = g3; ox.fill();
+
+      var rlx = cx + r * 0.4, rly = cy + r * 0.38;
+      var g4 = ox.createRadialGradient(rlx, rly, r * 0.6, rlx, rly, r);
+      g4.addColorStop(0, 'rgba(255,255,255,0)');
+      g4.addColorStop(0.6, 'rgba(255,255,255,0.06)');
+      g4.addColorStop(1, 'rgba(255,255,255,0)');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI * 2);
+      ox.fillStyle = g4; ox.fill();
+
+      return oc;
+    }
+
+    // Build a few colour variants (depth gradient like homepage)
+    var colours = [
+      [70, 135, 215],    // cool blue
+      [145, 160, 190],   // slate
+      [220, 185, 50],    // warm yellow
+      [212, 160, 58],    // amber
+      [220, 65, 45]      // red
+    ];
+    var sprites = [];
+    for (var i = 0; i < colours.length; i++) {
+      sprites.push(buildSphere(colours[i], CACHE_PX));
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:10;pointer-events:none;';
+    canvas.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(canvas);
+    var ctx = canvas.getContext('2d');
+
+    var TRAIL_LEN = 25;  // frames of trail history
+    var trailAlpha = 0.35 * 0.6;
+    var trailWidth = 1.5;
+
+    var W, H, dpr;
+    var particles = [];
+
+    function resize() {
+      dpr = window.devicePixelRatio || 1;
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function init() {
+      resize();
+      particles = [];
+      for (var i = 0; i < N; i++) {
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2,
+          trail: [],
+          sprite: sprites[Math.floor(Math.random() * sprites.length)],
+          colIdx: Math.floor(Math.random() * colours.length),
+          r: R,
+          alpha: 0.45 + Math.random() * 0.25
+        });
+      }
+    }
+
+    var running = true;
+
+    function loop() {
+      if (!running) return;
+      ctx.clearRect(0, 0, W, H);
+
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+
+        // Store position in trail buffer
+        p.trail.push({ x: p.x, y: p.y });
+        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+
+        // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
+        p.vx += (Math.random() - 0.5) * 1.2;
+        p.vy += (Math.random() - 0.5) * 1.2;
+        p.vx *= 0.88;
+        p.vy *= 0.88;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < -20) p.x = W + 20;
+        if (p.x > W + 20) p.x = -20;
+        if (p.y < -20) p.y = H + 20;
+        if (p.y > H + 20) p.y = -20;
+
+        // Draw trail segments with fading alpha
+        var c = colours[p.colIdx];
+        ctx.lineWidth = trailWidth;
+        ctx.lineCap = 'round';
+        for (var j = 1; j < p.trail.length; j++) {
+          var t0 = p.trail[j - 1], t1 = p.trail[j];
+          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+          var a = trailAlpha * (j / p.trail.length);
+          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+          ctx.beginPath();
+          ctx.moveTo(t0.x, t0.y);
+          ctx.lineTo(t1.x, t1.y);
+          ctx.stroke();
+        }
+
+        // Draw particle
+        ctx.globalAlpha = p.alpha;
+        var d = p.r * 2;
+        ctx.drawImage(p.sprite, p.x - p.r, p.y - p.r, d, d);
+      }
+      ctx.globalAlpha = 1;
+
+      requestAnimationFrame(loop);
+    }
+
+    init();
+    window.addEventListener('resize', resize);
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        running = false;
+      } else {
+        running = true;
+        requestAnimationFrame(loop);
+      }
+    });
+
+    requestAnimationFrame(loop);
+  });
+})();
+</script>
+<style>
+/* Sections start hidden, slide up and overshoot like a damped oscillator */
+main .level2 {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+main .level2.revealed {
+  animation: dampedSettle 0.7s ease-out forwards;
+}
+
+@keyframes dampedSettle {
+  0%   { opacity: 0; transform: translateY(30px); }
+  50%  { opacity: 1; transform: translateY(-5px); }
+  70%  { transform: translateY(2px); }
+  85%  { transform: translateY(-1px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  main .level2 {
+    opacity: 1;
+    transform: none;
+  }
+  main .level2.revealed {
+    animation: none;
+  }
+}
+</style>
+
+<script>
+(function() {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Skip homepage (simulation hero handles its own presentation)
+    if (document.querySelector('.md-sim-canvas')) return;
+
+    var sections = document.querySelectorAll('main .level2');
+    if (!sections.length) return;
+
+    // Sections already in viewport on load: reveal immediately (no animation)
+    // Sections below the fold: animate when scrolled into view
+    var viewH = window.innerHeight;
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          entries[i].target.classList.add('revealed');
+          observer.unobserve(entries[i].target);
+        }
+      }
+    }, { threshold: 0.08 });
+
+    for (var i = 0; i < sections.length; i++) {
+      var rect = sections[i].getBoundingClientRect();
+      if (rect.top < viewH) {
+        // Already visible — show instantly, no animation
+        sections[i].style.opacity = '1';
+        sections[i].style.transform = 'none';
+      } else {
+        observer.observe(sections[i]);
+      }
+    }
+  });
+})();
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -618,6 +868,19 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Rohit Pillai · University of Edinburgh</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
 
 
 
