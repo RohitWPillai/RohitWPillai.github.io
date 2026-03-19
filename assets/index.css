@@ -1,15 +1,13 @@
 /* ============================================
-   Homepage Styles - 50:50 Split Layout
+   Homepage Styles - Centred Photo + Simulation
    Dark mode only
-   ============================================
-   Specificity note: Quarto's Solana template uses selectors like
-   `div.quarto-about-solana .about-entity` (0,2,1). All selectors
-   here use `div.quarto-about-solana` prefix to match or exceed. */
+   ============================================ */
 
 /* ===== Hero Container ===== */
 div.quarto-about-solana {
   min-height: calc(100vh - 80px);
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 2rem !important;
   position: relative;
@@ -32,39 +30,19 @@ div.quarto-about-solana::before {
   pointer-events: none;
 }
 
-/* ===== Grid Layout ===== */
+/* ===== Layout: centre photo, hide text ===== */
 div.quarto-about-solana div.about-entity {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 4rem !important;
-  align-items: center !important;
-  max-width: 1400px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-/* When simulation is active: centre photo, hide text card */
-div.quarto-about-solana.md-sim-active {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-}
-
-div.quarto-about-solana.md-sim-active div.about-entity {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
   max-width: none;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
-div.quarto-about-solana.md-sim-active .entity-contents {
+div.quarto-about-solana .entity-contents {
   display: none !important;
-}
-
-div.quarto-about-solana.md-sim-active .halo-img-wrapper {
-  margin: 0 !important;
 }
 
 /* ===== Photo ===== */
@@ -151,96 +129,6 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   fill: #e8e8ec !important;
 }
 
-/* ===== Content ===== */
-div.quarto-about-solana .about-entity .entity-contents {
-  padding-right: 2rem;
-}
-
-/* Title */
-div.quarto-about-solana h1.title {
-  font-family: "Fraunces", serif !important;
-  font-size: 3.5rem !important;
-  font-weight: 400 !important;
-  color: #e8e8ec !important;
-  line-height: 1.15;
-  margin-bottom: 0.75rem;
-  letter-spacing: -0.02em;
-}
-
-/* Subtitle */
-div.quarto-about-solana .subtitle {
-  font-family: "Inter", sans-serif !important;
-  font-size: 1.1rem !important;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #d4a03a !important;
-  margin-bottom: 1.25rem;
-}
-
-/* Bio text */
-div.quarto-about-solana .about-contents p {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: #c0c0c8;
-  margin-bottom: 0.75rem;
-}
-
-div.quarto-about-solana .about-contents li {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: #c0c0c8;
-  margin-bottom: 0.15rem;
-}
-
-div.quarto-about-solana .about-contents strong {
-  color: #e8e8ec;
-  font-weight: 500;
-}
-
-/* ===== Social Links - pill buttons (default + mobile fallback) ===== */
-div.quarto-about-solana .about-entity .about-links {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 0.6rem !important;
-  margin-top: 2rem;
-}
-
-/* When halo is active on desktop, hide the pill buttons */
-div.quarto-about-solana .about-links.halo-active {
-  display: none !important;
-}
-
-div.quarto-about-solana .about-entity .about-link {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.35rem !important;
-  padding: 0.45rem 0.9rem !important;
-  background: rgba(26, 26, 46, 0.92) !important;
-  border: 2px solid #d4a03a !important;
-  border-radius: 50px !important;
-  color: #d4a03a !important;
-  font-family: "Inter", sans-serif !important;
-  font-weight: 600 !important;
-  font-size: 0.7rem !important;
-  text-decoration: none !important;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-}
-
-div.quarto-about-solana .about-entity .about-link:hover {
-  background: #d4a03a !important;
-  color: #1a1a2e !important;
-  box-shadow: 0 6px 16px rgba(212, 160, 58, 0.35);
-}
-
-div.quarto-about-solana .about-entity .about-link i,
-div.quarto-about-solana .about-entity .about-link .bi {
-  font-size: 0.95rem;
-}
-
 /* ===== Responsive ===== */
 @media (max-width: 991.98px) {
   div.quarto-about-solana {
@@ -254,50 +142,10 @@ div.quarto-about-solana .about-entity .about-link .bi {
     opacity: 0.5;
   }
 
-  div.quarto-about-solana div.about-entity {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-  }
-
-  div.quarto-about-solana .about-entity .entity-contents {
-    padding-right: 0;
-    text-align: left;
-  }
-
-  /* Center only the title and subtitle on mobile */
-  div.quarto-about-solana h1.title,
-  div.quarto-about-solana .subtitle {
-    text-align: center;
-  }
-
-  /* Image on top, text below on mobile */
-  div.quarto-about-solana div.about-entity > .entity-contents {
-    order: 2;
-  }
-  div.quarto-about-solana div.about-entity > img.about-image,
-  div.quarto-about-solana div.about-entity > a[href^="mailto"],
-  div.quarto-about-solana div.about-entity > .halo-img-wrapper {
-    order: 1;
-    justify-self: center;
-  }
-
   /* Smaller photo on mobile to fit halo */
   div.quarto-about-solana .about-entity img.about-image {
     max-width: 200px !important;
     margin-bottom: 0 !important;
-  }
-
-  div.quarto-about-solana h1.title {
-    font-size: 2.5rem !important;
-  }
-
-  div.quarto-about-solana .subtitle {
-    margin-bottom: 1rem;
-  }
-
-  /* Bullet points: tighter indentation on mobile */
-  div.quarto-about-solana .about-contents ul {
-    padding-left: 1.25rem;
   }
 
   /* Halo wrapper: explicit size on mobile, bottom margin for SVG overflow */
@@ -305,15 +153,5 @@ div.quarto-about-solana .about-entity .about-link .bi {
     width: 200px;
     max-width: 200px;
     margin: 0 auto 2rem auto;
-  }
-}
-
-@media (max-width: 576px) {
-  div.quarto-about-solana h1.title {
-    font-size: 2rem !important;
-  }
-
-  div.quarto-about-solana .subtitle {
-    font-size: 0.9rem !important;
   }
 }
