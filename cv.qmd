@@ -2,7 +2,19 @@
 title: "CV"
 ---
 
-[Download CV (PDF)](assets/short-cv.pdf){.btn .btn-outline-primary .btn-sm}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.querySelector('p > .btn-outline-primary');
+  var title = document.querySelector('.title');
+  if (btn && title) {
+    var p = btn.parentNode;
+    title.appendChild(btn);
+    if (p && !p.textContent.trim()) p.remove();
+  }
+});
+</script>
+
+[Download PDF](assets/short-cv.pdf){.btn .btn-outline-primary .btn-sm}
 
 ## Education
 
