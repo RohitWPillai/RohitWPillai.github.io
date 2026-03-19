@@ -89,7 +89,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: 3rem; line-height: 1.2; }
+h1 { font-size: 3rem; line-height: 1.2; font-variation-settings: 'opsz' 144; }
 h2 {
   font-size: 1.8rem;
   margin-top: 3rem;
@@ -97,8 +97,10 @@ h2 {
   padding-bottom: 0.75rem;
   border-bottom: 3px solid var(--amber);
   display: inline-block;
+  font-variation-settings: 'opsz' 72;
 }
-h3 { font-size: 1.4rem; }
+h3 { font-size: 1.4rem; font-variation-settings: 'opsz' 48; }
+h4, h5, h6 { font-variation-settings: 'opsz' 24; }
 
 /* ===== Links ===== */
 a {
@@ -154,6 +156,40 @@ a:hover {
   background: var(--amber-dark);
   border-color: var(--amber-dark);
   transform: translateY(-2px);
+}
+
+/* CV download button — positioned inline with title via JS */
+#title-block-header,
+.quarto-title-block,
+.quarto-title,
+.title:has(.btn-outline-primary) {
+  overflow: visible !important;
+}
+
+.title .btn-outline-primary {
+  vertical-align: middle;
+  margin-left: 1rem;
+  position: relative;
+  top: -2px;
+}
+
+.btn-outline-primary {
+  background: var(--amber);
+  color: var(--bg-dark);
+  border: 2px solid var(--amber);
+  border-radius: 30px;
+  padding: 0.5rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  transition: all 0.25s ease;
+}
+
+.btn-outline-primary:hover {
+  background: var(--amber-light);
+  border-color: var(--amber-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 160, 58, 0.3);
 }
 
 /* ===== Responsive ===== */
