@@ -1,7 +1,6 @@
 ---
 pagetitle: "Rohit Pillai"
 title: "Rohit Pillai"
-subtitle: "Senior Lecturer (Associate Professor) in Mechanical Engineering"
 image: images/profile.jpg
 image-alt: "Rohit Pillai"
 toc: false
@@ -43,16 +42,3 @@ header-includes: |
   <link rel="stylesheet" href="assets/index.css">
   <link rel="stylesheet" href="assets/simulation.css">
 ---
-
-I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation.
-
-My research combines **molecular dynamics** with **continuum mechanics** to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces. Current focus areas include:
-
-- **Boiling & evaporation** at nanoscale surfaces
-- **Ice nucleation** and icephobic surface design
-- **Nanoscale heat transfer** at solid-liquid interfaces
-- **Machine learning potentials** for molecular simulations
-
-I lead a research group primarily funded by an **ERC Starting Grant** (NANO-COOL, 2024-2029) investigating nanomaterial-enhanced cooling for extreme thermal management.
-
-I have published in **Physical Review Letters**, **Nano Letters**, and **Journal of Fluid Mechanics**. My research has featured in **BBC**, **The Times**, **Metro**, and **The Conversation**.

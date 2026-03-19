@@ -4,7 +4,9 @@ title: "Research"
 
 ## Overview
 
-My research uses molecular simulations to understand nanoscale phenomena at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces. I combine molecular dynamics with continuum methods to bridge scales from atoms to engineering devices.
+I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation. My research combines **molecular dynamics** with **continuum mechanics** to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.
+
+I lead a research group primarily funded by an **ERC Starting Grant** ([NANO-COOL](https://gtr.ukri.org/projects?ref=EP%2FY036107%2F1), 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management.
 
 ---
 
