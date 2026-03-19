@@ -18,7 +18,7 @@
     damping: 0.88, brownian: 0.6, maxForce: 3.0, maxVel: 4.0,
 
     // --- Fluid ---
-    fluidDensity: 0.001, fluidR: 8,  // particles per px² (constant across all viewports)
+    fluidDensity: 0.001, fluidR: 4,  // particles per px² (constant across all viewports)
 
     // --- Liquid-vapor interface ---
     lvFrac: 0.33,              // top 1/3 of fluid region is vapor
@@ -34,7 +34,7 @@
     nanoDrift: 0.003, nanoAlpha: 0.50, nanoGlowA: 0.15,
 
     // --- Solid surface (visual + force centres) ---
-    wallLayers: 4, wallSpacing: 28, wallR: 9,
+    wallLayers: 4, wallSpacing: 28, wallR: 4,
     wallAlpha: 0.90, wallVibAmp: 0.5,
 
     // --- Trails (shimmer in liquid, streaming in vapor) ---
@@ -56,8 +56,8 @@
     wallClrLight: [110, 115, 130],
 
     // --- Ice nucleation (cold spots — physics-driven crystallisation) ---
-    nucleationInterval: 350,
-    nucleationChance: 0.6,
+    nucleationInterval: 180,
+    nucleationChance: 0.85,
     nucleationLifetime: 400,
     nucleationMaxR: 45,
     nucleationMaxActive: 2,
@@ -67,14 +67,17 @@
     nucleationClr: [200, 235, 255],
 
     // --- Bubble nucleation (energy burst — physics-driven void) ---
-    bubbleInterval: 420,
-    bubbleChance: 0.5,
-    bubbleLifetime: 300,
-    bubbleMaxR: 35,
+    bubbleInterval: 220,
+    bubbleChance: 0.85,
+    bubbleLifetime: 420,
+    bubbleMaxR: 55,
     bubbleMaxActive: 2,
-    bubbleKick: 3.5,            // one-time outward velocity burst
-    burstR: 35,                 // radius of energy injection
-    hotKE: 5.0,                 // speed² above this → hot red
+    bubbleHeatMul: 14,          // sustained outward energy multiplier
+    bubbleHeatDamp: 0.998,      // almost no damping in hot spot
+    bubblePushMul: 2.0,         // radial expulsion strength (separate from heat)
+    bubbleCoreR: 0.4,           // fraction of radius that is hard void core
+    bubbleCoreForce: 6.0,       // strong force inside core to maintain void
+    hotKE: 1.2,                 // speed² above this → hot red
     bubbleClr: [230, 75, 55],
 
     // --- Nanoparticle colours ---
@@ -98,7 +101,6 @@
   function fluidTarget() {
     return Math.max(50, Math.round(CFG.fluidDensity * W * interfaceY * gDen * scaleFactor));
   }
-  function isDark()   { return document.body.classList.contains('quarto-dark'); }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   function depthToRGB(t) {
@@ -117,6 +119,11 @@
       Math.round(lerp(CFG.vaporNearClr[1], CFG.vaporFarClr[1], t)),
       Math.round(lerp(CFG.vaporNearClr[2], CFG.vaporFarClr[2], t))
     ];
+  }
+
+  // Log-scale slider: position 0–100 → multiplier 0.1–10 (1.0 at centre)
+  function logSliderToVal(pos) {
+    return Math.pow(10, (pos - 50) / 50);
   }
 
 
@@ -542,31 +549,18 @@
       else ev.currentR = ev.maxR * (1 - (t - 0.7) / 0.3);
     }
 
-    // --- Spawn bubble events (one-time energy burst at spawn) ---
+    // --- Bubble events: sustained hot spots (mirror of ice cold spots) ---
     bubbleTimer++;
     if (bubbleTimer >= CFG.bubbleInterval) {
       bubbleTimer = 0;
       if (bubbleEvents.length < CFG.bubbleMaxActive && Math.random() < CFG.bubbleChance) {
         var bx = 80 + Math.random() * (W - 160);
         var byMin = lvInterface + 20;
-        var byMax = lvInterface + (interfaceY - lvInterface) * 0.45;
+        var byMax = lvInterface + (interfaceY - lvInterface) * 0.5;
         var by = byMin + Math.random() * (byMax - byMin);
         bubbleEvents.push({ x: bx, y: by, age: 0,
           lifetime: CFG.bubbleLifetime + (Math.random() - 0.5) * 80,
           maxR: CFG.bubbleMaxR + (Math.random() - 0.5) * 12, currentR: 0 });
-        // ONE-TIME energy burst: kick particles outward from the injection point
-        var br2 = CFG.burstR * CFG.burstR;
-        for (var i = 0; i < n; i++) {
-          var p = fluid[i];
-          var dx = p.x - bx, dy = p.y - by;
-          var d2 = dx * dx + dy * dy;
-          if (d2 < br2 && d2 > 1) {
-            var dist = Math.sqrt(d2);
-            var kick = CFG.bubbleKick * (1 - dist / CFG.burstR);
-            p.vx += (dx / dist) * kick;
-            p.vy += (dy / dist) * kick;
-          }
-        }
       }
     }
     for (var i = bubbleEvents.length - 1; i >= 0; i--) {
@@ -574,9 +568,9 @@
       ev.age++;
       if (ev.age >= ev.lifetime) { bubbleEvents.splice(i, 1); continue; }
       var t = ev.age / ev.lifetime;
-      if (t < 0.2) ev.currentR = ev.maxR * (t / 0.2);
-      else if (t < 0.5) ev.currentR = ev.maxR;
-      else ev.currentR = ev.maxR * (1 - (t - 0.5) / 0.5);
+      if (t < 0.25) ev.currentR = ev.maxR * (t / 0.25);
+      else if (t < 0.65) ev.currentR = ev.maxR;
+      else ev.currentR = ev.maxR * (1 - (t - 0.65) / 0.35);
     }
 
     // --- Integrate with region-dependent thermostat + cold spot effects ---
@@ -603,6 +597,34 @@
         if (dx * dx + dy * dy < ev.currentR * ev.currentR) {
           localKick *= CFG.freezeKickMul;
           localDamp = CFG.freezeDamp;
+          break;
+        }
+      }
+
+      // Hot spot override (bubble — sustained outward energy injection)
+      for (var e = 0; e < bubbleEvents.length; e++) {
+        var ev = bubbleEvents[e];
+        if (!ev.currentR || ev.currentR < 3) continue;
+        var dx = p.x - ev.x, dy = p.y - ev.y;
+        var d2 = dx * dx + dy * dy;
+        if (d2 < ev.currentR * ev.currentR) {
+          localKick *= CFG.bubbleHeatMul;
+          localDamp = CFG.bubbleHeatDamp;
+          // Radial outward push — creates the void
+          if (d2 > 1) {
+            var dist = Math.sqrt(d2);
+            var coreR = ev.currentR * CFG.bubbleCoreR;
+            var push;
+            if (dist < coreR) {
+              // Hard void core: very strong expulsion, scales with depth
+              push = CFG.bubbleCoreForce * (1 - dist / coreR);
+            } else {
+              // Outer rim: gentler push that heats and expels
+              push = CFG.bubblePushMul * localKick * (1 - dist / ev.currentR);
+            }
+            p.ax += (dx / dist) * push;
+            p.ay += (dy / dist) * push;
+          }
           break;
         }
       }
@@ -752,7 +774,7 @@
     // --- Wall atoms (individual, with thermal vibration) ---
     if (showInterface) {
       var wc = dark ? wallDkCache : wallLtCache;
-      var wr = CFG.wallR;
+      var wr = gFluidR;  // wall atoms same size as fluid (controlled by slider)
       var wd = wr * 2;
       var t = performance.now();
       ctx.globalAlpha = CFG.wallAlpha;
@@ -848,25 +870,45 @@
       }
     }
 
-    // --- Bubble glow (faint red circle at void centre) ---
+    // --- Bubble bond network: connect hot particles near bubble rims ---
+    var bbCut2 = 40 * 40;
     var bc = CFG.bubbleClr;
     for (var e = 0; e < bubbleEvents.length; e++) {
       var ev = bubbleEvents[e];
-      if (!ev.currentR || ev.currentR < 3) continue;
-      var t = ev.age / ev.lifetime;
-      var glowAlpha;
-      if (t < 0.25) glowAlpha = t / 0.25;
-      else if (t < 0.65) glowAlpha = 1;
-      else glowAlpha = 1 - (t - 0.65) / 0.35;
-      glowAlpha *= 0.18;
-      var gr = ctx.createRadialGradient(ev.x, ev.y, 0, ev.x, ev.y, ev.currentR);
-      gr.addColorStop(0, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + glowAlpha + ')');
-      gr.addColorStop(0.6, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + (glowAlpha * 0.4) + ')');
-      gr.addColorStop(1, 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',0)');
-      ctx.fillStyle = gr;
-      ctx.beginPath();
-      ctx.arc(ev.x, ev.y, ev.currentR, 0, Math.PI * 2);
-      ctx.fill();
+      if (!ev.currentR || ev.currentR < 5) continue;
+      var er2 = ev.currentR * ev.currentR * 2.56;  // 1.6x radius for rim
+      var cluster = [];
+      for (var i = 0; i < fluid.length; i++) {
+        var p = fluid[i];
+        var dx = p.x - ev.x, dy = p.y - ev.y;
+        if (dx * dx + dy * dy < er2) {
+          var s2 = p.vx * p.vx + p.vy * p.vy;
+          if (s2 > CFG.hotKE * 0.4) cluster.push(p);
+        }
+      }
+      if (cluster.length > 1) {
+        var t = ev.age / ev.lifetime;
+        var bondAlpha;
+        if (t < 0.25) bondAlpha = t / 0.25;
+        else if (t < 0.65) bondAlpha = 1;
+        else bondAlpha = 1 - (t - 0.65) / 0.35;
+        bondAlpha *= 0.65;
+        ctx.strokeStyle = 'rgba(' + bc[0] + ',' + bc[1] + ',' + bc[2] + ',' + bondAlpha + ')';
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        for (var i = 0; i < cluster.length; i++) {
+          for (var j = i + 1; j < cluster.length; j++) {
+            var dx = cluster[j].x - cluster[i].x;
+            var dy = cluster[j].y - cluster[i].y;
+            if (dx * dx + dy * dy < bbCut2) {
+              ctx.moveTo(cluster[i].x, cluster[i].y);
+              ctx.lineTo(cluster[j].x, cluster[j].y);
+            }
+          }
+        }
+        ctx.stroke();
+      }
     }
   }
 
@@ -922,12 +964,6 @@
 
   // ===== Theme + visibility =====
 
-  function setupTheme() {
-    dark = isDark();
-    new MutationObserver(function() {
-      dark = isDark();
-    }).observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  }
 
   var exploreBtn, controlPanel;
 
@@ -962,13 +998,11 @@
     + '<line x1="18" y1="6" x2="6" y2="18"/>'
     + '</svg>';
 
-  function makeSlider(label, id, min, max, step, val, dec) {
-    dec = dec !== undefined ? dec : 1;
+  function makeSlider(label, id) {
     return '<div class="md-sim-ctrl">'
       + '<div class="md-sim-lbl"><span>' + label + '</span>'
-      + '<span class="md-sim-val" id="md-' + id + '-v">' + val.toFixed(dec) + '</span></div>'
-      + '<input type="range" id="md-' + id + '" min="' + min + '" max="' + max
-      + '" step="' + step + '" value="' + val + '">'
+      + '<span class="md-sim-val" id="md-' + id + '-v">1.0</span></div>'
+      + '<input type="range" id="md-' + id + '" min="0" max="100" step="1" value="50">'
       + '</div>';
   }
 
@@ -990,15 +1024,15 @@
     controlPanel.className = 'md-sim-panel';
     controlPanel.innerHTML =
         '<div class="md-sim-panel-title">Simulation</div>'
-      + makeSlider('Temperature', 'temp', 0.2, 2.5, 0.1, gTemp)
-      + makeSlider('Density',     'dens', 0.3, 1.8, 0.1, gDen)
-      + makeSlider('Interaction', 'eps',  0.3, 3.0, 0.1, gEps)
+      + makeSlider('Temperature', 'temp')
+      + makeSlider('Density',     'dens')
+      + makeSlider('Interaction Strength', 'eps')
       + '<div class="md-sim-panel-title" style="margin-top:0.6rem">Animation</div>'
-      + makeSlider('Trail Opacity',    'trail-a', 0.05, 0.80, 0.05, gTrailAlpha, 2)
-      + makeSlider('Trail Fade',       'trail-f', 0.01, 0.15, 0.01, gTrailFade, 2)
-      + makeSlider('Trail Width',      'trail-w', 0.5, 4.0, 0.5, gTrailWidth)
-      + makeSlider('Particle Opacity', 'part-a',  0.10, 1.00, 0.05, gFluidAlpha, 2)
-      + makeSlider('Particle Size',    'part-r',  4, 16, 1, gFluidR, 0)
+      + makeSlider('Trail Opacity',    'trail-a')
+      + makeSlider('Trail Fade',       'trail-f')
+      + makeSlider('Trail Width',      'trail-w')
+      + makeSlider('Molecule Opacity', 'part-a')
+      + makeSlider('Molecule Size',    'part-r')
       + '<button class="md-sim-reset" id="md-reset">Reset</button>';
     container.appendChild(controlPanel);
 
@@ -1010,15 +1044,15 @@
         + (panelOpen ? ' Close' : ' Explore');
     });
 
-    bindSlider('md-temp', 'md-temp-v', function(v) { gTemp = v; });
-    bindSlider('md-dens', 'md-dens-v', function(v) { gDen = v; adjustCount(); });
-    bindSlider('md-eps',  'md-eps-v',  function(v) { gEps = v; });
+    bindSlider('md-temp', 'md-temp-v', function(m) { gTemp = CFG.tempDefault * m; });
+    bindSlider('md-dens', 'md-dens-v', function(m) { gDen = m; adjustCount(); });
+    bindSlider('md-eps',  'md-eps-v',  function(m) { gEps = m; });
 
-    bindSlider('md-trail-a', 'md-trail-a-v', function(v) { gTrailAlpha = v; }, 2);
-    bindSlider('md-trail-f', 'md-trail-f-v', function(v) { gTrailFade = v; }, 2);
-    bindSlider('md-trail-w', 'md-trail-w-v', function(v) { gTrailWidth = v; });
-    bindSlider('md-part-a',  'md-part-a-v',  function(v) { gFluidAlpha = v; }, 2);
-    bindSlider('md-part-r',  'md-part-r-v',  function(v) { gFluidR = v; }, 0);
+    bindSlider('md-trail-a', 'md-trail-a-v', function(m) { gTrailAlpha = CFG.trailAlpha * m; });
+    bindSlider('md-trail-f', 'md-trail-f-v', function(m) { gTrailFade = CFG.trailFade * m; });
+    bindSlider('md-trail-w', 'md-trail-w-v', function(m) { gTrailWidth = CFG.trailWidth * m; });
+    bindSlider('md-part-a',  'md-part-a-v',  function(m) { gFluidAlpha = Math.min(1, CFG.fluidAlpha * m); });
+    bindSlider('md-part-r',  'md-part-r-v',  function(m) { gFluidR = Math.max(1, Math.round(CFG.fluidR * m)); });
 
     document.getElementById('md-reset').addEventListener('click', function() {
       gTemp = CFG.tempDefault; gEps = 1; gDen = 1;
@@ -1027,35 +1061,23 @@
       gTrailWidth = CFG.trailWidth; gFluidAlpha = CFG.fluidAlpha;
       gFluidR = CFG.fluidR;
 
-      document.getElementById('md-temp').value = CFG.tempDefault;
-      document.getElementById('md-dens').value = 1;
-      document.getElementById('md-eps').value  = 1;
-      document.getElementById('md-temp-v').textContent = CFG.tempDefault.toFixed(1);
-      document.getElementById('md-dens-v').textContent = '1.0';
-      document.getElementById('md-eps-v').textContent  = '1.0';
-      document.getElementById('md-trail-a').value = CFG.trailAlpha;
-      document.getElementById('md-trail-f').value = CFG.trailFade;
-      document.getElementById('md-trail-w').value = CFG.trailWidth;
-      document.getElementById('md-part-a').value  = CFG.fluidAlpha;
-      document.getElementById('md-part-r').value  = CFG.fluidR;
-      document.getElementById('md-trail-a-v').textContent = CFG.trailAlpha.toFixed(2);
-      document.getElementById('md-trail-f-v').textContent = CFG.trailFade.toFixed(2);
-      document.getElementById('md-trail-w-v').textContent = CFG.trailWidth.toFixed(1);
-      document.getElementById('md-part-a-v').textContent  = CFG.fluidAlpha.toFixed(2);
-      document.getElementById('md-part-r-v').textContent  = CFG.fluidR.toFixed(0);
+      var ids = ['temp', 'dens', 'eps', 'trail-a', 'trail-f', 'trail-w', 'part-a', 'part-r'];
+      for (var i = 0; i < ids.length; i++) {
+        document.getElementById('md-' + ids[i]).value = 50;
+        document.getElementById('md-' + ids[i] + '-v').textContent = '1.0';
+      }
       tCtx.clearRect(0, 0, W, H);
       initParticles();
     });
   }
 
-  function bindSlider(sliderId, valId, fn, dec) {
-    dec = dec !== undefined ? dec : 1;
+  function bindSlider(sliderId, valId, fn) {
     var sl = document.getElementById(sliderId);
     var vl = document.getElementById(valId);
     sl.addEventListener('input', function() {
-      var v = parseFloat(this.value);
-      vl.textContent = v.toFixed(dec);
-      fn(v);
+      var mul = logSliderToVal(parseFloat(this.value));
+      vl.textContent = mul < 10 ? mul.toFixed(1) : mul.toFixed(0);
+      fn(mul);
     });
   }
 
@@ -1066,7 +1088,6 @@
     requestAnimationFrame(function() {
       if (!setup()) return;
       buildAllCaches();
-      setupTheme();
       initParticles();
       setupMouse();
       setupVisibility();

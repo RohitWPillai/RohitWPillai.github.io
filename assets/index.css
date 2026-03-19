@@ -1,5 +1,6 @@
 /* ============================================
    Homepage Styles - 50:50 Split Layout
+   Dark mode only
    ============================================
    Specificity note: Quarto's Solana template uses selectors like
    `div.quarto-about-solana .about-entity` (0,2,1). All selectors
@@ -25,8 +26,8 @@ div.quarto-about-solana::before {
   width: 50%;
   height: 120%;
   background:
-    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(45, 48, 71, 0.04) 0%, transparent 60%);
+    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(200, 200, 220, 0.03) 0%, transparent 60%);
   z-index: 0;
   pointer-events: none;
 }
@@ -74,18 +75,18 @@ div.quarto-about-solana .about-entity img.about-image {
   aspect-ratio: 1 / 1 !important;
   object-fit: cover;
   border-radius: 50% !important;
-  margin: 0 !important;  /* Kill Quarto's margin-bottom that misaligns halo */
+  margin: 0 !important;
   box-shadow:
-    0 30px 60px -15px rgba(45, 48, 71, 0.2),
-    0 0 0 6px rgba(212, 160, 58, 0.1);
+    0 30px 60px -15px rgba(0, 0, 0, 0.4),
+    0 0 0 6px rgba(212, 160, 58, 0.15);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
 div.quarto-about-solana .about-entity img.about-image:hover {
   transform: scale(1.02);
   box-shadow:
-    0 35px 70px -15px rgba(45, 48, 71, 0.25),
-    0 0 0 8px rgba(212, 160, 58, 0.15);
+    0 35px 70px -15px rgba(0, 0, 0, 0.5),
+    0 0 0 8px rgba(212, 160, 58, 0.2);
 }
 
 /* Email link wrapping the photo (injected by JS) */
@@ -107,7 +108,6 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Constrain to image size so 140% SVG is relative to photo, not column */
   width: fit-content;
   max-width: 400px;
   margin: 0 auto;
@@ -126,10 +126,6 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
 .halo-img-wrapper .profile-halo a {
   pointer-events: auto;
   cursor: pointer;
-  filter: drop-shadow(0 0 1px rgba(45, 48, 71, 0.25));
-}
-
-.quarto-dark .halo-img-wrapper .profile-halo a {
   filter: drop-shadow(0 0 1px rgba(212, 160, 58, 0.2));
 }
 
@@ -138,9 +134,20 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   stroke: rgba(212, 160, 58, 0.5);
 }
 .halo-seg:focus-visible text {
-  fill: #2d3047;
+  fill: #e8e8ec !important;
 }
-.quarto-dark .halo-seg:focus-visible text {
+
+/* Halo arc and text styles */
+.halo-seg path.halo-bg {
+  stroke: rgba(26, 26, 46, 0.92) !important;
+}
+.halo-seg:hover path.halo-bg {
+  stroke: rgba(45, 45, 70, 0.95) !important;
+}
+.halo-seg text {
+  fill: #d4a03a;
+}
+.halo-seg:hover text {
   fill: #e8e8ec !important;
 }
 
@@ -154,7 +161,7 @@ div.quarto-about-solana h1.title {
   font-family: "Fraunces", serif !important;
   font-size: 3.5rem !important;
   font-weight: 400 !important;
-  color: #2d3047 !important;
+  color: #e8e8ec !important;
   line-height: 1.15;
   margin-bottom: 0.75rem;
   letter-spacing: -0.02em;
@@ -175,19 +182,19 @@ div.quarto-about-solana .subtitle {
 div.quarto-about-solana .about-contents p {
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #444;
+  color: #c0c0c8;
   margin-bottom: 0.75rem;
 }
 
 div.quarto-about-solana .about-contents li {
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #444;
+  color: #c0c0c8;
   margin-bottom: 0.15rem;
 }
 
 div.quarto-about-solana .about-contents strong {
-  color: #2d3047;
+  color: #e8e8ec;
   font-weight: 500;
 }
 
@@ -209,7 +216,7 @@ div.quarto-about-solana .about-entity .about-link {
   align-items: center !important;
   gap: 0.35rem !important;
   padding: 0.45rem 0.9rem !important;
-  background: rgba(248, 246, 241, 0.92) !important;
+  background: rgba(26, 26, 46, 0.92) !important;
   border: 2px solid #d4a03a !important;
   border-radius: 50px !important;
   color: #d4a03a !important;
@@ -225,78 +232,13 @@ div.quarto-about-solana .about-entity .about-link {
 
 div.quarto-about-solana .about-entity .about-link:hover {
   background: #d4a03a !important;
-  color: white !important;
+  color: #1a1a2e !important;
   box-shadow: 0 6px 16px rgba(212, 160, 58, 0.35);
 }
 
 div.quarto-about-solana .about-entity .about-link i,
 div.quarto-about-solana .about-entity .about-link .bi {
   font-size: 0.95rem;
-}
-
-/* ===== Dark Mode ===== */
-.quarto-dark div.quarto-about-solana::before {
-  background:
-    radial-gradient(ellipse 50% 40% at 60% 50%, rgba(212, 160, 58, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 50% at 40% 70%, rgba(200, 200, 220, 0.03) 0%, transparent 60%);
-}
-
-.quarto-dark div.quarto-about-solana h1.title {
-  color: #e8e8ec !important;
-}
-
-.quarto-dark div.quarto-about-solana .subtitle {
-  color: #d4a03a !important;
-}
-
-.quarto-dark div.quarto-about-solana .about-contents p {
-  color: #c0c0c8;
-}
-
-.quarto-dark div.quarto-about-solana .about-contents li {
-  color: #c0c0c8;
-}
-
-.quarto-dark div.quarto-about-solana .about-contents strong {
-  color: #e8e8ec;
-  font-weight: 500;
-}
-
-.quarto-dark div.quarto-about-solana .about-entity .about-link {
-  border-color: #d4a03a !important;
-  color: #d4a03a !important;
-  background: rgba(26, 26, 46, 0.92) !important;
-}
-
-.quarto-dark div.quarto-about-solana .about-entity .about-link:hover {
-  background: #d4a03a !important;
-  color: #1a1a2e !important;
-}
-
-.quarto-dark div.quarto-about-solana .about-entity img.about-image {
-  box-shadow:
-    0 30px 60px -15px rgba(0, 0, 0, 0.4),
-    0 0 0 6px rgba(212, 160, 58, 0.15);
-}
-
-/* Halo dark mode */
-.quarto-dark .halo-seg path.halo-bg {
-  stroke: rgba(26, 26, 46, 0.92) !important;
-}
-.quarto-dark .halo-seg:hover path.halo-bg {
-  stroke: rgba(45, 45, 70, 0.95) !important;
-}
-.quarto-dark .halo-seg text {
-  fill: #d4a03a;
-}
-.quarto-dark .halo-seg:hover text {
-  fill: #e8e8ec !important;
-}
-
-.quarto-dark div.quarto-about-solana .about-entity img.about-image:hover {
-  box-shadow:
-    0 35px 70px -15px rgba(0, 0, 0, 0.5),
-    0 0 0 8px rgba(212, 160, 58, 0.2);
 }
 
 /* ===== Responsive ===== */
@@ -342,7 +284,7 @@ div.quarto-about-solana .about-entity .about-link .bi {
   /* Smaller photo on mobile to fit halo */
   div.quarto-about-solana .about-entity img.about-image {
     max-width: 200px !important;
-    margin-bottom: 0 !important;  /* Kill Quarto's 1.5em margin that shifts halo center */
+    margin-bottom: 0 !important;
   }
 
   div.quarto-about-solana h1.title {

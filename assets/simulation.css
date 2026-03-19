@@ -1,5 +1,6 @@
 /* ============================================
    MD Simulation — Canvas, Controls & Theming
+   Dark mode only
    ============================================ */
 
 /* Canvas — fills hero container, behind all content */
@@ -24,8 +25,6 @@ div.quarto-about-solana.md-sim-active {
   overflow-y: visible;
 }
 
-/* Text card hidden when simulation is active (content moved below hero) */
-
 /* ===== Explore Button (in navbar) ===== */
 .md-sim-explore {
   display: inline-flex;
@@ -34,7 +33,7 @@ div.quarto-about-solana.md-sim-active {
   padding: 0.3rem 0.9rem;
   margin-right: 0.5rem;
   background: transparent;
-  border: 1.5px solid rgba(212, 160, 58, 0.35);
+  border: 1.5px solid rgba(212, 160, 58, 0.3);
   border-radius: 50px;
   color: #d4a03a;
   font-family: 'Inter', sans-serif;
@@ -49,8 +48,8 @@ div.quarto-about-solana.md-sim-active {
 }
 
 .md-sim-explore:hover {
-  background: rgba(212, 160, 58, 0.15);
-  border-color: rgba(212, 160, 58, 0.55);
+  background: rgba(212, 160, 58, 0.12);
+  border-color: rgba(212, 160, 58, 0.5);
 }
 
 .md-sim-explore:active { opacity: 0.8; }
@@ -64,15 +63,15 @@ div.quarto-about-solana.md-sim-active {
   transform: translateY(-50%);
   width: 260px;
   padding: 1.4rem;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(26, 26, 46, 0.82);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 160, 58, 0.2);
+  border: 1px solid rgba(212, 160, 58, 0.12);
   border-radius: 16px;
   z-index: 1050;
   pointer-events: auto;
   transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .md-sim-panel.open { right: 1.5rem; }
@@ -83,10 +82,10 @@ div.quarto-about-solana.md-sim-active {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #2d3047;
+  color: #e8e8ec;
   margin: 0 0 1.1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(45, 48, 71, 0.1);
+  border-bottom: 1px solid rgba(200, 200, 220, 0.1);
 }
 
 .md-sim-ctrl { margin-bottom: 0.9rem; }
@@ -99,7 +98,7 @@ div.quarto-about-solana.md-sim-active {
   font-family: 'Inter', sans-serif;
   font-size: 0.68rem;
   font-weight: 500;
-  color: #4a4d64;
+  color: #b0b0b8;
   margin-bottom: 0.35rem;
 }
 
@@ -115,7 +114,7 @@ div.quarto-about-solana.md-sim-active {
   appearance: none;
   width: 100%;
   height: 4px;
-  background: rgba(45, 48, 71, 0.12);
+  background: rgba(200, 200, 220, 0.1);
   border-radius: 2px;
   outline: none;
 }
@@ -124,7 +123,7 @@ div.quarto-about-solana.md-sim-active {
   -webkit-appearance: none;
   width: 14px; height: 14px;
   background: #d4a03a;
-  border: 2px solid #fff;
+  border: 2px solid #1a1a2e;
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
@@ -133,7 +132,7 @@ div.quarto-about-solana.md-sim-active {
 .md-sim-panel input[type="range"]::-moz-range-thumb {
   width: 14px; height: 14px;
   background: #d4a03a;
-  border: 2px solid #fff;
+  border: 2px solid #1a1a2e;
   border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
@@ -149,7 +148,7 @@ div.quarto-about-solana.md-sim-active {
 
 .md-sim-switch {
   width: 36px; height: 20px;
-  background: rgba(45, 48, 71, 0.15);
+  background: rgba(200, 200, 220, 0.1);
   border-radius: 10px;
   position: relative;
   cursor: pointer;
@@ -177,58 +176,22 @@ div.quarto-about-solana.md-sim-active {
   padding: 0.42rem;
   margin-top: 0.7rem;
   background: transparent;
-  border: 1.5px solid rgba(45, 48, 71, 0.15);
+  border: 1.5px solid rgba(200, 200, 220, 0.12);
   border-radius: 8px;
   font-family: 'Inter', sans-serif;
   font-size: 0.63rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #4a4d64;
+  color: #b0b0b8;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
 
 .md-sim-reset:hover { border-color: #d4a03a; color: #d4a03a; }
 
-/* ===== Dark Mode ===== */
-.quarto-dark .md-sim-explore {
-  border-color: rgba(212, 160, 58, 0.3);
-}
-.quarto-dark .md-sim-explore:hover {
-  background: rgba(212, 160, 58, 0.12);
-  border-color: rgba(212, 160, 58, 0.5);
-}
-
-.quarto-dark .md-sim-panel {
-  background: rgba(26, 26, 46, 0.82);
-  border-color: rgba(212, 160, 58, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-.quarto-dark .md-sim-panel-title {
-  color: #e8e8ec;
-  border-bottom-color: rgba(200, 200, 220, 0.1);
-}
-.quarto-dark .md-sim-lbl { color: #b0b0b8; }
-.quarto-dark .md-sim-panel input[type="range"] {
-  background: rgba(200, 200, 220, 0.1);
-}
-.quarto-dark .md-sim-panel input[type="range"]::-webkit-slider-thumb {
-  border-color: #1a1a2e;
-}
-.quarto-dark .md-sim-panel input[type="range"]::-moz-range-thumb {
-  border-color: #1a1a2e;
-}
-.quarto-dark .md-sim-switch { background: rgba(200, 200, 220, 0.1); }
-.quarto-dark .md-sim-reset {
-  border-color: rgba(200, 200, 220, 0.12);
-  color: #b0b0b8;
-}
-.quarto-dark .md-sim-reset:hover { border-color: #d4a03a; color: #d4a03a; }
-
 /* ===== Mobile ===== */
 @media (max-width: 991.98px) {
-  /* Text card hidden — no mobile styles needed */
   .md-sim-explore {
     font-size: 0.6rem;
     padding: 0.25rem 0.7rem;
