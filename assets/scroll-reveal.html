@@ -59,7 +59,15 @@ main .level2.revealed {
         // Already visible — show instantly, no animation
         sections[i].style.opacity = '1';
         sections[i].style.transform = 'none';
+        sections[i].style.animation = 'none';
       } else {
+        // After animation ends, clear transform to avoid creating
+        // a stacking context that traps child z-indices
+        sections[i].addEventListener('animationend', function() {
+          this.style.opacity = '1';
+          this.style.transform = 'none';
+          this.style.animation = 'none';
+        }, { once: true });
         observer.observe(sections[i]);
       }
     }

@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 **PhD, Chemical and Biomolecular Engineering**
 University of Melbourne, 2017
-*Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops*
 
 ---
 
