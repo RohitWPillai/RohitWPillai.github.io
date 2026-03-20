@@ -4,14 +4,14 @@
     "href": "team.html",
     "title": "Research Group",
     "section": "",
-    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+    "text": "2026"
   },
   {
     "objectID": "team.html#current-members",
     "href": "team.html#current-members",
     "title": "Research Group",
-    "section": "",
-    "text": "Dr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\n\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
+    "section": "Current Members",
+    "text": "Current Members\n\nPostdoctoral Researchers\nDr Thejas Chakrapani (2024-) Spectral heat flows at solid-liquid interfaces\n\n\nPhD Students\nZhaolun Li (2025-) Machine learning potentials for solid-liquid interfaces\nPengxu Chen (2022-) Using nanoscale vibrations to reduce surface icing"
   },
   {
     "objectID": "team.html#past-supervision",
@@ -74,7 +74,7 @@
     "href": "cv.html#education",
     "title": "CV",
     "section": "Education",
-    "text": "Education\nPhD, Chemical and Biomolecular Engineering University of Melbourne, 2017 Thesis: Stretching, bursting, splashing, and bouncing: Electrohydrodynamics of microfluidic drops"
+    "text": "Education\nPhD, Chemical and Biomolecular Engineering University of Melbourne, 2017"
   },
   {
     "objectID": "cv.html#academic-positions",
@@ -137,28 +137,28 @@
     "href": "projects.html",
     "title": "Research",
     "section": "",
-    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation. My research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management."
+    "text": "×"
   },
   {
     "objectID": "projects.html#overview",
     "href": "projects.html#overview",
     "title": "Research",
-    "section": "",
-    "text": "I am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation. My research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management."
+    "section": "Overview",
+    "text": "Overview\nI am a computational engineering scientist at the University of Edinburgh, exploring the nanoscale world through simulation. My research combines molecular dynamics with continuum mechanics to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.\nI lead a research group primarily funded by an ERC Starting Grant (NANO-COOL, 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management."
   },
   {
     "objectID": "projects.html#current-projects",
     "href": "projects.html#current-projects",
     "title": "Research",
     "section": "Current Projects",
-    "text": "Current Projects\n\nNanomaterial-Enhanced Cooling\nHigh-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:\n\nNanoporous membranes for controlled evaporation\nEngineered solid-liquid interfaces for improved heat transfer\nMachine learning potentials for accurate molecular simulations\n\n\n\nIce Nucleation and De-Icing\nUnderstanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:\n\nHeterogeneous ice nucleation on different surface chemistries\nEffects of surface vibrations on ice formation\nDesign principles for icephobic surfaces\n\n\n\nNanoscale Heat Transfer\nHeat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:\n\nSpectral mechanisms of interfacial thermal conductance\nEffects of surface chemistry and structure\nRole of interfacial water structure\n\n\n\nBoiling and Bubble Dynamics\nPhase change at surfaces is central to many cooling technologies. Our work explores:\n\nHeterogeneous vapour bubble nucleation\nEffects of surface wettability on bubble growth\nAcoustically-driven nanobubble dynamics"
+    "text": "Current Projects\n\nNanoscale Heat Transfer\nHeat flow across solid-liquid interfaces is governed by atomic-scale phenomena, with applications in thermal management for high-performance electronics. We investigate:\n\nSpectral mechanisms of interfacial thermal conductance\nEffects of surface chemistry and structure\nRole of interfacial water structure\nNanomaterial-enhanced cooling via engineered interfaces and nanoporous membranes\n\n\n\nIce Nucleation and De-Icing\nUnderstanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:\n\nHeterogeneous ice nucleation on different surface chemistries\nEffects of surface vibrations on ice formation\nDesign principles for icephobic surfaces\n\n\n\nBoiling and Bubble Dynamics\nPhase change at surfaces is central to many cooling technologies. Our work explores:\n\nHeterogeneous vapour bubble nucleation\nEffects of surface wettability on bubble growth\nAcoustically-driven nanobubble dynamics"
   },
   {
     "objectID": "projects.html#methods",
     "href": "projects.html#methods",
     "title": "Research",
     "section": "Methods",
-    "text": "Methods\n\nMolecular Dynamics\nWe use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.\n\n\nMultiscale Modelling\nOur group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.\n\n\nHigh-Performance Computing\nSimulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities."
+    "text": "Methods\n\nMachine Learning Potentials\nWe develop and apply machine-learning interatomic potentials (MLPs) to achieve near-DFT accuracy at classical MD computational cost, enabling large-scale simulations of complex solid-liquid interfaces with quantum-level fidelity.\n\n\nMolecular Dynamics\nWe use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.\n\n\nMultiscale Modelling\nOur group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.\n\n\nHigh-Performance Computing\nSimulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities."
   },
   {
     "objectID": "projects.html#group-website",
