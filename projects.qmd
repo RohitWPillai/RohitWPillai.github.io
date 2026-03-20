@@ -2,6 +2,12 @@
 title: "Research"
 ---
 
+<div id="research-diagram-wrap">
+<div id="research-diagram"></div>
+<div id="research-tooltip" class="research-tooltip"><div class="rt-title"></div><div class="rt-desc"></div></div>
+<div id="research-callout" class="research-callout"><button class="rc-close">&times;</button><h3 class="rc-title"></h3><div class="rc-body"></div></div>
+</div>
+
 ## Overview
 
 I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation. My research combines **molecular dynamics** with **continuum mechanics** to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.
@@ -10,15 +16,18 @@ I lead a research group primarily funded by an **ERC Starting Grant** ([NANO-COO
 
 ---
 
+<div class="research-projects-content">
+
 ## Current Projects
 
-### Nanomaterial-Enhanced Cooling
+### Nanoscale Heat Transfer
 
-High-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:
+Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena, with applications in thermal management for high-performance electronics. We investigate:
 
-- Nanoporous membranes for controlled evaporation
-- Engineered solid-liquid interfaces for improved heat transfer
-- Machine learning potentials for accurate molecular simulations
+- Spectral mechanisms of interfacial thermal conductance
+- Effects of surface chemistry and structure
+- Role of interfacial water structure
+- Nanomaterial-enhanced cooling via engineered interfaces and nanoporous membranes
 
 ### Ice Nucleation and De-Icing
 
@@ -28,14 +37,6 @@ Understanding how ice forms at the nanoscale is crucial for designing surfaces t
 - Effects of surface vibrations on ice formation
 - Design principles for icephobic surfaces
 
-### Nanoscale Heat Transfer
-
-Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:
-
-- Spectral mechanisms of interfacial thermal conductance
-- Effects of surface chemistry and structure
-- Role of interfacial water structure
-
 ### Boiling and Bubble Dynamics
 
 Phase change at surfaces is central to many cooling technologies. Our work explores:
@@ -44,9 +45,15 @@ Phase change at surfaces is central to many cooling technologies. Our work explo
 - Effects of surface wettability on bubble growth
 - Acoustically-driven nanobubble dynamics
 
+</div>
+
 ---
 
 ## Methods
+
+### Machine Learning Potentials
+
+We develop and apply machine-learning interatomic potentials (MLPs) to achieve near-DFT accuracy at classical MD computational cost, enabling large-scale simulations of complex solid-liquid interfaces with quantum-level fidelity.
 
 ### Molecular Dynamics
 

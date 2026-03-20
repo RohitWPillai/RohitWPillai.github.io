@@ -2,6 +2,19 @@
 title: "Research Group"
 ---
 
+<div id="team-network-wrap">
+<div id="team-network"></div>
+<div class="team-timeline"><input type="range" id="team-year-slider" class="team-slider" min="2016" max="2026" value="2026" step="1"><span id="team-year-display" class="team-year-display">2026</span></div>
+<div id="team-tooltip" class="team-tooltip">
+<div class="tt-name"></div>
+<div class="tt-role"></div>
+<div class="tt-topic"></div>
+<div class="tt-now"></div>
+</div>
+</div>
+
+<div class="team-text-content">
+
 ## Current Members
 
 ### Postdoctoral Researchers
@@ -54,6 +67,7 @@ Flows through nanomaterials
 Merging and jumping nanodroplets
 *Left for: PDRA, University of Edinburgh*
 
+</div>
 
 ---
 

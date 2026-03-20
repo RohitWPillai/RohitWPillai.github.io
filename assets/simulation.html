@@ -41,15 +41,15 @@
     trailAlpha: 0.35, trailFade: 0.06, trailWidth: 1.5,
 
     // --- Visual ---
-    fluidAlpha: 0.70, bins: 12, vaporBins: 4, interfaceFrac: 0.84,
+    fluidAlpha: 0.70, bins: 1, vaporBins: 1, interfaceFrac: 0.84,
 
     // --- Depth colour gradient (liquid: blue at solid → yellow at LV) ---
-    nearClr: [70, 135, 215],       // cool blue (near solid)
+    nearClr: [220, 185, 50],       // warm yellow (uniform liquid)
     bulkClr: [220, 185, 50],       // warm yellow (near LV interface)
 
     // --- Vapor colour gradient (yellow transition → red) ---
-    vaporNearClr: [225, 170, 50],   // yellow (smooth from liquid)
-    vaporFarClr:  [220, 65, 45],    // red (hot vapor)
+    vaporNearClr: [220, 65, 45],    // red (uniform vapor)
+    vaporFarClr:  [220, 65, 45],    // red (uniform vapor)
 
     // --- Wall colours (dark silver) ---
     wallClrDark:  [145, 150, 168],
@@ -228,7 +228,7 @@
     binRGB = [];
     // Liquid bins (0 to bins-1): gold near solid → blue near LV interface
     for (var i = 0; i < CFG.bins; i++) {
-      var rgb = depthToRGB(i / (CFG.bins - 1));
+      var rgb = depthToRGB(i / Math.max(1, CFG.bins - 1));
       binRGB.push(rgb);
       fluidCache.push(buildSphere(rgb, CACHE_PX));
     }
@@ -716,23 +716,22 @@
   var bubbleBin;      // index of the hot red sprite
 
   function particleBin(p) {
-    // KE-based coloring: frozen → cyan, hot → red
-    var speed2 = p.vx * p.vx + p.vy * p.vy;
-    if (speed2 < CFG.freezeKE) return nucleationBin;
-    if (speed2 > CFG.hotKE) return bubbleBin;
-    if (p.y >= lvInterface) {
-      // Liquid: bins 0 (near solid, blue) to bins-1 (near LV, yellow)
-      var dist = interfaceY - p.y;
-      var maxDist = interfaceY - lvInterface;
-      var t = Math.min(1, Math.max(0, dist / (maxDist || 1)));
-      return Math.min(CFG.bins - 1, Math.max(0, Math.round(t * (CFG.bins - 1))));
-    } else {
-      // Vapor: bins to bins+vaporBins-1 (yellow → red)
-      var dist = lvInterface - p.y;
-      var maxDist = lvInterface;
-      var t = Math.min(1, Math.max(0, dist / (maxDist || 1)));
-      return CFG.bins + Math.min(CFG.vaporBins - 1, Math.max(0, Math.round(t * (CFG.vaporBins - 1))));
+    // Phase-change coloring: only particles INSIDE active events change colour
+    var e, ev, dx, dy;
+    for (e = 0; e < nucleationEvents.length; e++) {
+      ev = nucleationEvents[e];
+      if (!ev.currentR || ev.currentR < 3) continue;
+      dx = p.x - ev.x; dy = p.y - ev.y;
+      if (dx * dx + dy * dy < ev.currentR * ev.currentR) return nucleationBin;
     }
+    for (e = 0; e < bubbleEvents.length; e++) {
+      ev = bubbleEvents[e];
+      if (!ev.currentR || ev.currentR < 3) continue;
+      dx = p.x - ev.x; dy = p.y - ev.y;
+      if (dx * dx + dy * dy < ev.currentR * ev.currentR) return bubbleBin;
+    }
+    // Liquid (yellow) or vapor (red) — uniform within each phase
+    return p.y >= lvInterface ? 0 : CFG.bins;
   }
 
   function render() {
