@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.9.36">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Research – Rohit Pillai</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -33,15 +36,14 @@ ul.task-list li input[type="checkbox"] {
 <link href="./images/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2028f8fcba4432dcc2752f3d8b12af33.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-68f7dd7d174541da12b618b46a741a99.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -105,10 +107,6 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./cv.html"> 
-<span class="menu-text">CV</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="./team.html"> 
 <span class="menu-text">Team</span></a>
   </li>  
@@ -119,6 +117,10 @@ ul.task-list li input[type="checkbox"] {
   <li class="nav-item">
     <a class="nav-link" href="./publications.html"> 
 <span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./cv.html"> 
+<span class="menu-text">CV</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -139,13 +141,13 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#current-projects" id="toc-current-projects" class="nav-link" data-scroll-target="#current-projects">Current Projects</a>
   <ul class="collapse">
-  <li><a href="#nanomaterial-enhanced-cooling" id="toc-nanomaterial-enhanced-cooling" class="nav-link" data-scroll-target="#nanomaterial-enhanced-cooling">Nanomaterial-Enhanced Cooling</a></li>
-  <li><a href="#ice-nucleation-and-de-icing" id="toc-ice-nucleation-and-de-icing" class="nav-link" data-scroll-target="#ice-nucleation-and-de-icing">Ice Nucleation and De-Icing</a></li>
   <li><a href="#nanoscale-heat-transfer" id="toc-nanoscale-heat-transfer" class="nav-link" data-scroll-target="#nanoscale-heat-transfer">Nanoscale Heat Transfer</a></li>
+  <li><a href="#ice-nucleation-and-de-icing" id="toc-ice-nucleation-and-de-icing" class="nav-link" data-scroll-target="#ice-nucleation-and-de-icing">Ice Nucleation and De-Icing</a></li>
   <li><a href="#boiling-and-bubble-dynamics" id="toc-boiling-and-bubble-dynamics" class="nav-link" data-scroll-target="#boiling-and-bubble-dynamics">Boiling and Bubble Dynamics</a></li>
   </ul></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
   <ul class="collapse">
+  <li><a href="#machine-learning-potentials" id="toc-machine-learning-potentials" class="nav-link" data-scroll-target="#machine-learning-potentials">Machine Learning Potentials</a></li>
   <li><a href="#molecular-dynamics" id="toc-molecular-dynamics" class="nav-link" data-scroll-target="#molecular-dynamics">Molecular Dynamics</a></li>
   <li><a href="#multiscale-modelling" id="toc-multiscale-modelling" class="nav-link" data-scroll-target="#multiscale-modelling">Multiscale Modelling</a></li>
   <li><a href="#high-performance-computing" id="toc-high-performance-computing" class="nav-link" data-scroll-target="#high-performance-computing">High-Performance Computing</a></li>
@@ -176,21 +178,45 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div id="research-diagram-wrap">
+<div id="research-diagram">
+
+</div>
+<div id="research-tooltip" class="research-tooltip">
+<div class="rt-title">
+
+</div>
+<div class="rt-desc">
+
+</div>
+</div>
+<div id="research-callout" class="research-callout">
+<button class="rc-close">
+×
+</button>
+<h3 class="rc-title anchored">
+</h3>
+<div class="rc-body">
+
+</div>
+</div>
+</div>
 <section id="overview" class="level2">
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <p>I am a computational engineering scientist at the <strong>University of Edinburgh</strong>, exploring the nanoscale world through simulation. My research combines <strong>molecular dynamics</strong> with <strong>continuum mechanics</strong> to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.</p>
 <p>I lead a research group primarily funded by an <strong>ERC Starting Grant</strong> (<a href="https://gtr.ukri.org/projects?ref=EP%2FY036107%2F1">NANO-COOL</a>, 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management.</p>
 <hr>
 </section>
-<section id="current-projects" class="level2">
+<section id="current-projects" class="level2 research-projects-content">
 <h2 class="anchored" data-anchor-id="current-projects">Current Projects</h2>
-<section id="nanomaterial-enhanced-cooling" class="level3">
-<h3 class="anchored" data-anchor-id="nanomaterial-enhanced-cooling">Nanomaterial-Enhanced Cooling</h3>
-<p>High-performance electronics generate extreme heat fluxes that conventional cooling cannot handle. This project investigates how nanomaterials can enhance liquid cooling through:</p>
+<section id="nanoscale-heat-transfer" class="level3">
+<h3 class="anchored" data-anchor-id="nanoscale-heat-transfer">Nanoscale Heat Transfer</h3>
+<p>Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena, with applications in thermal management for high-performance electronics. We investigate:</p>
 <ul>
-<li>Nanoporous membranes for controlled evaporation</li>
-<li>Engineered solid-liquid interfaces for improved heat transfer</li>
-<li>Machine learning potentials for accurate molecular simulations</li>
+<li>Spectral mechanisms of interfacial thermal conductance</li>
+<li>Effects of surface chemistry and structure</li>
+<li>Role of interfacial water structure</li>
+<li>Nanomaterial-enhanced cooling via engineered interfaces and nanoporous membranes</li>
 </ul>
 </section>
 <section id="ice-nucleation-and-de-icing" class="level3">
@@ -202,15 +228,6 @@ ul.task-list li input[type="checkbox"] {
 <li>Design principles for icephobic surfaces</li>
 </ul>
 </section>
-<section id="nanoscale-heat-transfer" class="level3">
-<h3 class="anchored" data-anchor-id="nanoscale-heat-transfer">Nanoscale Heat Transfer</h3>
-<p>Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena. We investigate:</p>
-<ul>
-<li>Spectral mechanisms of interfacial thermal conductance</li>
-<li>Effects of surface chemistry and structure</li>
-<li>Role of interfacial water structure</li>
-</ul>
-</section>
 <section id="boiling-and-bubble-dynamics" class="level3">
 <h3 class="anchored" data-anchor-id="boiling-and-bubble-dynamics">Boiling and Bubble Dynamics</h3>
 <p>Phase change at surfaces is central to many cooling technologies. Our work explores:</p>
@@ -219,11 +236,15 @@ ul.task-list li input[type="checkbox"] {
 <li>Effects of surface wettability on bubble growth</li>
 <li>Acoustically-driven nanobubble dynamics</li>
 </ul>
+</section>
+</section>
 <hr>
-</section>
-</section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="machine-learning-potentials" class="level3">
+<h3 class="anchored" data-anchor-id="machine-learning-potentials">Machine Learning Potentials</h3>
+<p>We develop and apply machine-learning interatomic potentials (MLPs) to achieve near-DFT accuracy at classical MD computational cost, enabling large-scale simulations of complex solid-liquid interfaces with quantum-level fidelity.</p>
+</section>
 <section id="molecular-dynamics" class="level3">
 <h3 class="anchored" data-anchor-id="molecular-dynamics">Molecular Dynamics</h3>
 <p>We use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.</p>
@@ -253,7 +274,7 @@ ul.task-list li input[type="checkbox"] {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   document.addEventListener('DOMContentLoaded', function() {
-    if (document.querySelector('.md-sim-canvas')) return;
+    if (document.querySelector('.quarto-about-solana')) return;
 
     var CACHE_PX = 64;
     var N = 15;
@@ -485,10 +506,746 @@ main .level2.revealed {
         // Already visible — show instantly, no animation
         sections[i].style.opacity = '1';
         sections[i].style.transform = 'none';
+        sections[i].style.animation = 'none';
       } else {
+        // After animation ends, clear transform to avoid creating
+        // a stacking context that traps child z-indices
+        sections[i].addEventListener('animationend', function() {
+          this.style.opacity = '1';
+          this.style.transform = 'none';
+          this.style.animation = 'none';
+        }, { once: true });
         observer.observe(sections[i]);
       }
     }
+  });
+})();
+</script>
+<script>
+(function() {
+  'use strict';
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('team-network');
+    if (!container) return;
+
+    // ===== Configuration =====
+    var CX = 400, CY = 280;
+    var RING_R = 175;
+    var PI_R = 30, POSTDOC_R = 22, PHD_R = 17;
+    var SPRING_K = 0.012, BROWNIAN = 0.25, DAMPING = 0.90;
+    var OPACITY_LERP = 0.08;
+    var ACTIVE_OPACITY = 1.0, FADED_OPACITY = 0.25;
+    var ACTIVE_BOND = 0.35, FADED_BOND = 0.08;
+    var YEAR_MIN = 2016, YEAR_MAX = 2026;
+
+    var COLORS = {
+      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18', glow: 'rgba(212,160,58,0.3)' },
+      blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590', glow: 'rgba(74,135,215,0.3)' },
+      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' }
+    };
+
+    // ===== Member data (sorted by startYear for clockwise chronological layout) =====
+    var members = [
+      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, color: 'amber', r: PI_R },
+      // Ring members — sorted by start year
+      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc', topic: 'Multiscale fluid dynamics', startYear: 2016, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', color: 'blue', r: POSTDOC_R },
+      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', color: 'slate', r: PHD_R },
+      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', color: 'blue', r: POSTDOC_R },
+      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', color: 'slate', r: PHD_R },
+      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', color: 'slate', r: PHD_R },
+      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', color: 'slate', r: PHD_R },
+      { id: 'pc', name: 'Pengxu Chen', role: 'PhD Student', topic: 'Nanoscale vibrations to reduce surface icing', startYear: 2022, endYear: null, color: 'slate', r: PHD_R },
+      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, color: 'blue', r: POSTDOC_R },
+      { id: 'zl', name: 'Zhaolun Li', role: 'PhD Student', topic: 'Machine learning potentials for solid-liquid interfaces', startYear: 2025, endYear: null, color: 'slate', r: PHD_R }
+    ];
+
+    // ===== Static radial layout (PI centre, everyone else on ring sorted chronologically) =====
+    var ringMembers = members.slice(1);
+    var n = ringMembers.length;
+    members[0].ex = CX; members[0].ey = CY;
+    for (var i = 0; i < n; i++) {
+      var angle = -Math.PI / 2 + (i * 2 * Math.PI / n);
+      ringMembers[i].ex = CX + RING_R * Math.cos(angle);
+      ringMembers[i].ey = CY + RING_R * Math.sin(angle);
+    }
+
+    // Initialise positions at equilibrium
+    members.forEach(function(m) {
+      m.x = m.ex; m.y = m.ey;
+      m.vx = 0; m.vy = 0;
+      m.opacity = 1; m.targetOpacity = 1;
+      m.bondOpacity = ACTIVE_BOND; m.targetBondOpacity = ACTIVE_BOND;
+      m.dashed = false;
+    });
+
+    // ===== SVG creation =====
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 800 560');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+
+    // Defs
+    var defs = document.createElementNS(NS, 'defs');
+    Object.keys(COLORS).forEach(function(key) {
+      var c = COLORS[key];
+      var g = document.createElementNS(NS, 'radialGradient');
+      g.id = 'sphere-' + key;
+      g.setAttribute('cx', '0.35'); g.setAttribute('cy', '0.35');
+      g.setAttribute('r', '0.65');
+      [{ o: '0%', c: c.light }, { o: '45%', c: c.base }, { o: '100%', c: c.dark }].forEach(function(s) {
+        var st = document.createElementNS(NS, 'stop');
+        st.setAttribute('offset', s.o);
+        st.setAttribute('stop-color', s.c);
+        g.appendChild(st);
+      });
+      defs.appendChild(g);
+    });
+
+    // Specular highlight
+    var hl = document.createElementNS(NS, 'radialGradient');
+    hl.id = 'specular';
+    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30');
+    hl.setAttribute('r', '0.40');
+    [{ o: '0%', a: '0.70' }, { o: '30%', a: '0.25' }, { o: '100%', a: '0' }].forEach(function(s) {
+      var st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', s.o);
+      st.setAttribute('stop-color', 'white');
+      st.setAttribute('stop-opacity', s.a);
+      hl.appendChild(st);
+    });
+    defs.appendChild(hl);
+
+    // Glow filter
+    var filt = document.createElementNS(NS, 'filter');
+    filt.id = 'node-glow';
+    filt.setAttribute('x', '-50%'); filt.setAttribute('y', '-50%');
+    filt.setAttribute('width', '200%'); filt.setAttribute('height', '200%');
+    var blur = document.createElementNS(NS, 'feGaussianBlur');
+    blur.setAttribute('in', 'SourceGraphic'); blur.setAttribute('stdDeviation', '4');
+    blur.setAttribute('result', 'blur');
+    filt.appendChild(blur);
+    var merge = document.createElementNS(NS, 'feMerge');
+    var mn1 = document.createElementNS(NS, 'feMergeNode'); mn1.setAttribute('in', 'blur');
+    merge.appendChild(mn1);
+    var mn2 = document.createElementNS(NS, 'feMergeNode'); mn2.setAttribute('in', 'SourceGraphic');
+    merge.appendChild(mn2);
+    filt.appendChild(merge);
+    defs.appendChild(filt);
+    svg.appendChild(defs);
+
+    // Bond layer
+    var bondGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(bondGroup);
+
+    // Node layer
+    var nodeGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(nodeGroup);
+
+    // Create bonds (PI to everyone else)
+    var pi = members[0];
+    var bonds = [];
+    for (var i = 1; i < members.length; i++) {
+      var line = document.createElementNS(NS, 'line');
+      line.setAttribute('stroke', COLORS[members[i].color].base);
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-opacity', ACTIVE_BOND);
+      bondGroup.appendChild(line);
+      bonds.push({ el: line, to: members[i] });
+    }
+
+    // Create nodes
+    var shortNames = { 'vn': 'Martin', 'sp': 'Sree Hari' };
+    members.forEach(function(m) {
+      var g = document.createElementNS(NS, 'g');
+      g.style.cursor = m.url ? 'pointer' : 'default';
+
+      // Glow (hover)
+      var glow = document.createElementNS(NS, 'circle');
+      glow.setAttribute('r', m.r + 6);
+      glow.setAttribute('fill', COLORS[m.color].glow);
+      glow.setAttribute('filter', 'url(#node-glow)');
+      glow.setAttribute('opacity', '0');
+      g.appendChild(glow);
+
+      // Sphere
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('r', m.r);
+      circ.setAttribute('fill', 'url(#sphere-' + m.color + ')');
+      g.appendChild(circ);
+
+      // Specular
+      var spec = document.createElementNS(NS, 'circle');
+      spec.setAttribute('r', m.r);
+      spec.setAttribute('fill', 'url(#specular)');
+      g.appendChild(spec);
+
+      // Name label
+      var text = document.createElementNS(NS, 'text');
+      text.setAttribute('y', m.r + 16);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#c0c0c8');
+      text.setAttribute('font-family', 'Inter, sans-serif');
+      text.setAttribute('font-size', m.id === 'rp' ? '13' : '11');
+      text.setAttribute('font-weight', m.id === 'rp' ? '600' : '400');
+      if (m.id === 'rp') text.setAttribute('fill', '#e8e8ec');
+      text.textContent = m.id === 'rp' ? m.name : (shortNames[m.id] || m.name.split(' ')[0]);
+      g.appendChild(text);
+
+      // PI sub-label
+      if (m.id === 'rp') {
+        var sub = document.createElementNS(NS, 'text');
+        sub.setAttribute('y', m.r + 30);
+        sub.setAttribute('text-anchor', 'middle');
+        sub.setAttribute('fill', COLORS.amber.base);
+        sub.setAttribute('font-family', 'Inter, sans-serif');
+        sub.setAttribute('font-size', '9');
+        sub.setAttribute('font-weight', '600');
+        sub.setAttribute('letter-spacing', '0.1em');
+        sub.textContent = 'PI';
+        g.appendChild(sub);
+      }
+
+      m.el = g;
+      m.glowEl = glow;
+      nodeGroup.appendChild(g);
+    });
+
+    container.appendChild(svg);
+
+    // ===== Year state =====
+    function updateForYear(year) {
+      members.forEach(function(m) {
+        if (m.id === 'rp') return;
+        var active = year >= m.startYear && (m.endYear === null || year <= m.endYear);
+        m.targetOpacity = active ? ACTIVE_OPACITY : FADED_OPACITY;
+        m.targetBondOpacity = active ? ACTIVE_BOND : FADED_BOND;
+        m.dashed = !active;
+      });
+    }
+
+    // ===== Tooltip =====
+    var tooltip = document.getElementById('team-tooltip');
+    var ttName = tooltip.querySelector('.tt-name');
+    var ttRole = tooltip.querySelector('.tt-role');
+    var ttTopic = tooltip.querySelector('.tt-topic');
+    var ttNow = tooltip.querySelector('.tt-now');
+    var hoveredNode = null;
+
+    function showTooltip(m, screenX, screenY) {
+      ttName.textContent = m.name;
+      var years = m.startYear + '\u2013' + (m.endYear || 'present');
+      ttRole.textContent = m.role + (m.id !== 'rp' ? ' (' + years + ')' : '');
+      ttTopic.textContent = m.topic;
+      if (m.now) {
+        ttNow.textContent = 'Now: ' + m.now;
+        ttNow.style.display = 'block';
+      } else {
+        ttNow.style.display = 'none';
+      }
+      var rect = container.getBoundingClientRect();
+      var tx = screenX - rect.left + 15;
+      var ty = screenY - rect.top - 10;
+      tooltip.style.left = Math.min(tx, rect.width - 290) + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.classList.add('visible');
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+      hoveredNode = null;
+      members.forEach(function(m) { m.glowEl.setAttribute('opacity', '0'); });
+    }
+
+    function hitTest(svgX, svgY) {
+      for (var i = members.length - 1; i >= 0; i--) {
+        var m = members[i];
+        var dx = svgX - m.x, dy = svgY - m.y;
+        if (dx * dx + dy * dy < (m.r + 8) * (m.r + 8)) return m;
+      }
+      return null;
+    }
+
+    svg.addEventListener('mousemove', function(e) {
+      var rect = svg.getBoundingClientRect();
+      var svgX = (e.clientX - rect.left) * (800 / rect.width);
+      var svgY = (e.clientY - rect.top) * (560 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit) {
+        if (hoveredNode !== hit) {
+          hoveredNode = hit;
+          members.forEach(function(m) { m.glowEl.setAttribute('opacity', m === hit ? '0.6' : '0'); });
+        }
+        showTooltip(hit, e.clientX, e.clientY);
+        svg.style.cursor = hit.url ? 'pointer' : 'default';
+      } else {
+        if (hoveredNode) hideTooltip();
+        svg.style.cursor = 'default';
+      }
+    });
+
+    svg.addEventListener('mouseleave', hideTooltip);
+
+    svg.addEventListener('click', function(e) {
+      var rect = svg.getBoundingClientRect();
+      var svgX = (e.clientX - rect.left) * (800 / rect.width);
+      var svgY = (e.clientY - rect.top) * (560 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit && hit.url) window.open(hit.url, '_blank', 'noopener');
+    });
+
+    // Touch support: tap to show tooltip, tap elsewhere to dismiss
+    svg.addEventListener('touchend', function(e) {
+      var touch = e.changedTouches[0];
+      var rect = svg.getBoundingClientRect();
+      var svgX = (touch.clientX - rect.left) * (800 / rect.width);
+      var svgY = (touch.clientY - rect.top) * (560 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit) {
+        e.preventDefault();
+        hoveredNode = hit;
+        members.forEach(function(m) { m.glowEl.setAttribute('opacity', m === hit ? '0.6' : '0'); });
+        showTooltip(hit, touch.clientX, touch.clientY);
+      } else {
+        hideTooltip();
+      }
+    });
+
+    // ===== Slider =====
+    var slider = document.getElementById('team-year-slider');
+    var yearDisplay = document.getElementById('team-year-display');
+
+    if (slider) {
+      slider.addEventListener('input', function() {
+        var year = parseInt(this.value);
+        if (yearDisplay) yearDisplay.textContent = year;
+        updateForYear(year);
+      });
+    }
+
+    // ===== Animation loop =====
+    var running = true;
+
+    function physics() {
+      for (var i = 1; i < members.length; i++) {
+        var m = members[i];
+
+        // Spring to equilibrium
+        m.vx += -SPRING_K * (m.x - m.ex);
+        m.vy += -SPRING_K * (m.y - m.ey);
+
+        // Brownian kick
+        m.vx += (Math.random() - 0.5) * BROWNIAN;
+        m.vy += (Math.random() - 0.5) * BROWNIAN;
+
+        m.vx *= DAMPING;
+        m.vy *= DAMPING;
+        m.x += m.vx;
+        m.y += m.vy;
+
+        // Smooth opacity
+        m.opacity += (m.targetOpacity - m.opacity) * OPACITY_LERP;
+        m.bondOpacity += (m.targetBondOpacity - m.bondOpacity) * OPACITY_LERP;
+      }
+    }
+
+    function render() {
+      members.forEach(function(m) {
+        m.el.setAttribute('transform', 'translate(' + m.x.toFixed(1) + ',' + m.y.toFixed(1) + ')');
+        m.el.style.opacity = m.opacity.toFixed(3);
+      });
+      bonds.forEach(function(b) {
+        b.el.setAttribute('x1', pi.x.toFixed(1));
+        b.el.setAttribute('y1', pi.y.toFixed(1));
+        b.el.setAttribute('x2', b.to.x.toFixed(1));
+        b.el.setAttribute('y2', b.to.y.toFixed(1));
+        b.el.setAttribute('stroke-opacity', b.to.bondOpacity.toFixed(3));
+        b.el.setAttribute('stroke-dasharray', b.to.dashed ? '6 4' : 'none');
+      });
+    }
+
+    function loop() {
+      if (!running) return;
+      physics();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) { running = false; }
+      else { running = true; requestAnimationFrame(loop); }
+    });
+
+    // ===== Init =====
+    updateForYear(YEAR_MAX);
+    render();
+    requestAnimationFrame(loop);
+  });
+})();
+</script>
+<script>
+(function() {
+  'use strict';
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('research-diagram');
+    if (!container) return;
+
+    var NS = 'http://www.w3.org/2000/svg';
+
+    // ===== Key coordinates =====
+    var TP = { x: 300, y: 330 };
+    var CP = { x: 620, y: 130 };
+    var FT = { x: 280, y: 45 };
+
+    var SUBLIMATION  = 'M 80 450 Q 190 400 ' + TP.x + ' ' + TP.y;
+    var FUSION       = 'M ' + TP.x + ' ' + TP.y + ' Q 290 180 ' + FT.x + ' ' + FT.y;
+    var VAPORIZATION = 'M ' + TP.x + ' ' + TP.y + ' C 380 290 500 200 ' + CP.x + ' ' + CP.y;
+
+    var SOLID_FILL  = 'M 80 40 L ' + FT.x + ' ' + FT.y + ' Q 290 180 ' + TP.x + ' ' + TP.y + ' Q 190 400 80 450 Z';
+    var LIQUID_FILL = 'M ' + FT.x + ' ' + FT.y + ' L 750 40 L 750 130 L ' + CP.x + ' ' + CP.y + ' C 500 200 380 290 ' + TP.x + ' ' + TP.y + ' Q 290 180 ' + FT.x + ' ' + FT.y + ' Z';
+    var VAPOR_FILL  = 'M 80 460 L 80 450 Q 190 400 ' + TP.x + ' ' + TP.y + ' C 380 290 500 200 ' + CP.x + ' ' + CP.y + ' L 750 130 L 750 460 Z';
+
+    // Three phenomena — positioned inside their metastable phase regions
+    var themes = [
+      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220, section: 'ice-nucleation-and-de-icing',
+        desc: 'Supercooled water \u2014 ice nucleation on surfaces, vibration effects, icephobic design',
+        boundary: 'fusion' },
+      { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140, section: 'nanoscale-heat-transfer',
+        desc: 'Interfacial thermal conductance \u2014 spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
+        boundary: 'fusion' },
+      { id: 'boil', label: 'Phase Change and Bubble Dynamics', x: 510, y: 370, section: 'boiling-and-bubble-dynamics',
+        desc: 'Superheated liquid \u2014 vapour bubble nucleation, wettability effects, acoustothermal dynamics',
+        boundary: 'vapor' }
+    ];
+
+    // ===== Build SVG =====
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 800 500');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+
+    var defs = document.createElementNS(NS, 'defs');
+
+    // Amber sphere gradient
+    var sgA = document.createElementNS(NS, 'radialGradient');
+    sgA.id = 'pd-amber';
+    sgA.setAttribute('cx', '0.35'); sgA.setAttribute('cy', '0.35'); sgA.setAttribute('r', '0.65');
+    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
+      var st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
+      sgA.appendChild(st);
+    });
+    defs.appendChild(sgA);
+
+    // Specular highlight
+    var hl = document.createElementNS(NS, 'radialGradient');
+    hl.id = 'pd-spec';
+    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
+    [{ o: '0%', a: '0.65' }, { o: '30%', a: '0.20' }, { o: '100%', a: '0' }].forEach(function(s) {
+      var st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
+      hl.appendChild(st);
+    });
+    defs.appendChild(hl);
+
+    // Glow filters
+    var gf = document.createElementNS(NS, 'filter');
+    gf.id = 'boundary-glow';
+    gf.setAttribute('x', '-20%'); gf.setAttribute('y', '-20%');
+    gf.setAttribute('width', '140%'); gf.setAttribute('height', '140%');
+    var gb = document.createElementNS(NS, 'feGaussianBlur');
+    gb.setAttribute('in', 'SourceGraphic'); gb.setAttribute('stdDeviation', '6');
+    gf.appendChild(gb);
+    defs.appendChild(gf);
+
+    var mf = document.createElementNS(NS, 'filter');
+    mf.id = 'marker-glow';
+    mf.setAttribute('x', '-50%'); mf.setAttribute('y', '-50%');
+    mf.setAttribute('width', '200%'); mf.setAttribute('height', '200%');
+    var mb = document.createElementNS(NS, 'feGaussianBlur');
+    mb.setAttribute('in', 'SourceGraphic'); mb.setAttribute('stdDeviation', '4');
+    mb.setAttribute('result', 'blur');
+    mf.appendChild(mb);
+    var mm = document.createElementNS(NS, 'feMerge');
+    var mm1 = document.createElementNS(NS, 'feMergeNode'); mm1.setAttribute('in', 'blur'); mm.appendChild(mm1);
+    var mm2 = document.createElementNS(NS, 'feMergeNode'); mm2.setAttribute('in', 'SourceGraphic'); mm.appendChild(mm2);
+    mf.appendChild(mm);
+    defs.appendChild(mf);
+    svg.appendChild(defs);
+
+    // Helpers
+    function makePath(d, fill, stroke, sw, opacity) {
+      var p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', d);
+      p.setAttribute('fill', fill || 'none');
+      if (stroke) p.setAttribute('stroke', stroke);
+      if (sw) p.setAttribute('stroke-width', sw);
+      if (opacity !== undefined) p.setAttribute('opacity', opacity);
+      return p;
+    }
+
+    function makeText(x, y, text, opts) {
+      var t = document.createElementNS(NS, 'text');
+      t.setAttribute('x', x); t.setAttribute('y', y);
+      t.setAttribute('text-anchor', opts.anchor || 'middle');
+      t.setAttribute('fill', opts.fill || '#c0c0c8');
+      t.setAttribute('font-family', opts.font || 'Inter, sans-serif');
+      t.setAttribute('font-size', opts.size || '12');
+      if (opts.weight) t.setAttribute('font-weight', opts.weight);
+      if (opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
+      if (opts.transform) t.setAttribute('transform', opts.transform);
+      t.textContent = text;
+      return t;
+    }
+
+    // ===== Phase fills =====
+    svg.appendChild(makePath(SOLID_FILL, 'rgba(70,135,215,0.06)'));
+    svg.appendChild(makePath(LIQUID_FILL, 'rgba(100,190,170,0.05)'));
+    svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
+
+    // ===== Phase labels =====
+    svg.appendChild(makeText(155, 180, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(600, 400, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.08)', font: '"Fraunces", serif', spacing: '0.15em' }));
+
+    // ===== Axes =====
+    var axG = document.createElementNS(NS, 'g');
+    var xAx = document.createElementNS(NS, 'line');
+    xAx.setAttribute('x1', 80); xAx.setAttribute('y1', 460);
+    xAx.setAttribute('x2', 750); xAx.setAttribute('y2', 460);
+    xAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); xAx.setAttribute('stroke-width', '1');
+    axG.appendChild(xAx);
+    var yAx = document.createElementNS(NS, 'line');
+    yAx.setAttribute('x1', 80); yAx.setAttribute('y1', 460);
+    yAx.setAttribute('x2', 80); yAx.setAttribute('y2', 40);
+    yAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); yAx.setAttribute('stroke-width', '1');
+    axG.appendChild(yAx);
+    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500' }));
+    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
+    svg.appendChild(axG);
+
+    // ===== Boundary glows (hidden) =====
+    var glowFusion = makePath(FUSION, 'none', '#d4a03a', '12', 0);
+    glowFusion.setAttribute('filter', 'url(#boundary-glow)');
+    glowFusion.style.transition = 'opacity 0.3s ease';
+    svg.appendChild(glowFusion);
+
+    var glowVapor = makePath(VAPORIZATION, 'none', '#d4a03a', '12', 0);
+    glowVapor.setAttribute('filter', 'url(#boundary-glow)');
+    glowVapor.style.transition = 'opacity 0.3s ease';
+    svg.appendChild(glowVapor);
+
+    var glowSublim = makePath(SUBLIMATION, 'none', '#d4a03a', '8', 0);
+    glowSublim.setAttribute('filter', 'url(#boundary-glow)');
+    glowSublim.style.transition = 'opacity 0.3s ease';
+    svg.appendChild(glowSublim);
+
+    var glowMap = { fusion: [glowFusion], vapor: [glowVapor] };
+
+    // ===== Base boundary curves =====
+    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.25)', '2'));
+    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.3)', '2'));
+    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.3)', '2'));
+
+    // ===== Triple & critical points =====
+    var tpDot = document.createElementNS(NS, 'circle');
+    tpDot.setAttribute('cx', TP.x); tpDot.setAttribute('cy', TP.y);
+    tpDot.setAttribute('r', '4'); tpDot.setAttribute('fill', 'rgba(200,200,210,0.4)');
+    svg.appendChild(tpDot);
+    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.25)' }));
+
+    var cpDot = document.createElementNS(NS, 'circle');
+    cpDot.setAttribute('cx', CP.x); cpDot.setAttribute('cy', CP.y);
+    cpDot.setAttribute('r', '3'); cpDot.setAttribute('fill', 'rgba(200,200,210,0.3)');
+    svg.appendChild(cpDot);
+    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.2)', anchor: 'start' }));
+
+    // ===== Research markers =====
+    var MARKER_R = 14;
+    var markerGroup = document.createElementNS(NS, 'g');
+
+    themes.forEach(function(th) {
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + th.x + ',' + th.y + ')');
+      g.style.cursor = 'pointer';
+
+      var glow = document.createElementNS(NS, 'circle');
+      glow.setAttribute('r', MARKER_R + 6);
+      glow.setAttribute('fill', 'rgba(212,160,58,0.3)');
+      glow.setAttribute('filter', 'url(#marker-glow)');
+      glow.setAttribute('opacity', '0');
+      glow.style.transition = 'opacity 0.3s ease';
+      g.appendChild(glow);
+
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('r', MARKER_R);
+      circ.setAttribute('fill', 'url(#pd-amber)');
+      g.appendChild(circ);
+
+      var spec = document.createElementNS(NS, 'circle');
+      spec.setAttribute('r', MARKER_R);
+      spec.setAttribute('fill', 'url(#pd-spec)');
+      g.appendChild(spec);
+
+      var label = document.createElementNS(NS, 'text');
+      label.setAttribute('y', MARKER_R + 18);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('fill', '#c0c0c8');
+      label.setAttribute('font-family', 'Inter, sans-serif');
+      label.setAttribute('font-size', '10');
+      label.setAttribute('font-weight', '600');
+      label.setAttribute('letter-spacing', '0.03em');
+      label.textContent = th.label;
+      g.appendChild(label);
+
+      th.el = g;
+      th.glowEl = glow;
+      markerGroup.appendChild(g);
+    });
+    svg.appendChild(markerGroup);
+    container.appendChild(svg);
+
+    // ===== Tooltip (hover) =====
+    var tooltip = document.getElementById('research-tooltip');
+    var ttTitle = tooltip.querySelector('.rt-title');
+    var ttDesc = tooltip.querySelector('.rt-desc');
+    var hoveredTheme = null;
+
+    function showTooltip(th, screenX, screenY) {
+      ttTitle.textContent = th.label;
+      ttDesc.textContent = th.desc;
+      var rect = container.getBoundingClientRect();
+      var tx = screenX - rect.left + 15;
+      var ty = screenY - rect.top - 10;
+      tooltip.style.left = Math.min(tx, rect.width - 280) + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.classList.add('visible');
+    }
+
+    function hideTooltip() { tooltip.classList.remove('visible'); }
+
+    function highlightTheme(th) {
+      if (hoveredTheme === th) return;
+      clearHighlight();
+      hoveredTheme = th;
+      th.glowEl.setAttribute('opacity', '0.7');
+      var glows = glowMap[th.boundary];
+      if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0.4'); });
+    }
+
+    function clearHighlight() {
+      if (!hoveredTheme) return;
+      hoveredTheme.glowEl.setAttribute('opacity', '0');
+      var glows = glowMap[hoveredTheme.boundary];
+      if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0'); });
+      hoveredTheme = null;
+      hideTooltip();
+    }
+
+    function hitTest(svgX, svgY) {
+      for (var i = 0; i < themes.length; i++) {
+        var th = themes[i];
+        var dx = svgX - th.x, dy = svgY - th.y;
+        if (dx * dx + dy * dy < (MARKER_R + 12) * (MARKER_R + 12)) return th;
+      }
+      return null;
+    }
+
+    svg.addEventListener('mousemove', function(e) {
+      var rect = svg.getBoundingClientRect();
+      var svgX = (e.clientX - rect.left) * (800 / rect.width);
+      var svgY = (e.clientY - rect.top) * (500 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit) {
+        highlightTheme(hit);
+        showTooltip(hit, e.clientX, e.clientY);
+        svg.style.cursor = 'pointer';
+      } else {
+        clearHighlight();
+        svg.style.cursor = 'default';
+      }
+    });
+
+    svg.addEventListener('mouseleave', clearHighlight);
+
+    // Touch: tap highlights + opens callout, tap elsewhere dismisses
+    svg.addEventListener('touchend', function(e) {
+      var touch = e.changedTouches[0];
+      var rect = svg.getBoundingClientRect();
+      var svgX = (touch.clientX - rect.left) * (800 / rect.width);
+      var svgY = (touch.clientY - rect.top) * (500 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit) {
+        e.preventDefault();
+        highlightTheme(hit);
+        openCallout(hit);
+      } else {
+        clearHighlight();
+        if (calloutOpen) closeCallout();
+      }
+    });
+
+    // ===== Callout card (click) =====
+    var callout = document.getElementById('research-callout');
+    var rcTitle = callout.querySelector('.rc-title');
+    var rcBody = callout.querySelector('.rc-body');
+    var rcClose = callout.querySelector('.rc-close');
+    var calloutOpen = false;
+
+    function openCallout(th) {
+      // Pull content from the page section
+      var section = document.getElementById(th.section);
+      if (!section) return;
+
+      rcTitle.textContent = th.label;
+      // Clone everything after the h3
+      rcBody.innerHTML = '';
+      var children = section.children;
+      for (var i = 0; i < children.length; i++) {
+        if (children[i].tagName === 'H3') continue;
+        rcBody.appendChild(children[i].cloneNode(true));
+      }
+
+      callout.classList.add('visible');
+      calloutOpen = true;
+    }
+
+    function closeCallout() {
+      callout.classList.remove('visible');
+      calloutOpen = false;
+    }
+
+    svg.addEventListener('click', function(e) {
+      var rect = svg.getBoundingClientRect();
+      var svgX = (e.clientX - rect.left) * (800 / rect.width);
+      var svgY = (e.clientY - rect.top) * (500 / rect.height);
+      var hit = hitTest(svgX, svgY);
+      if (hit) {
+        openCallout(hit);
+      } else if (calloutOpen) {
+        closeCallout();
+      }
+    });
+
+    rcClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeCallout();
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && calloutOpen) closeCallout();
+    });
   });
 })();
 </script>
