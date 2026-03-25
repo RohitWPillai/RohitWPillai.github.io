@@ -209,6 +209,31 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ===== Ambient particles toggle button (navbar) ===== */
+.ambient-toggle {
+  background: none;
+  border: none;
+  color: #d4a03a;
+  cursor: pointer;
+  padding: 0.3rem 0.45rem;
+  margin-right: 0.2rem;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+.ambient-toggle:hover {
+  opacity: 1;
+}
+.ambient-toggle.off {
+  opacity: 0.35;
+  color: #888;
+}
+.ambient-toggle.off:hover {
+  opacity: 0.6;
+}
+
 /* ===== Content above ambient particles ===== */
 /* The ambient-dust canvas is position:fixed z-index:10.
    Quarto's Bootstrap sets main.column-page-left to z-index:0 (with opacity:.999
@@ -457,6 +482,10 @@ html {
   position: relative;
   max-width: 800px;
   margin: 0 auto 1.5rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 12;
 }
 
 #team-network svg {
@@ -471,6 +500,31 @@ html {
   max-width: 500px;
   margin: 0.5rem auto 0;
   padding: 0 1rem;
+}
+
+.team-play-btn {
+  background: none;
+  border: 1px solid rgba(212,160,58,0.35);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: #d4a03a;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 2px;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.team-play-btn:hover {
+  background: rgba(212,160,58,0.12);
+  border-color: rgba(212,160,58,0.6);
+}
+.team-play-btn.playing {
+  background: rgba(212,160,58,0.15);
+  border-color: #d4a03a;
 }
 
 .team-slider {
@@ -509,7 +563,7 @@ html {
   font-size: 1.4rem;
   font-variation-settings: 'opsz' 144;
   color: var(--amber);
-  min-width: 3.5rem;
+  min-width: 4.2rem;
   text-align: center;
   flex-shrink: 0;
 }
@@ -560,13 +614,490 @@ html {
   font-style: italic;
 }
 
+/* Team controls: timeline + member count */
+.team-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 560px;
+  margin: 0.5rem auto 0;
+}
+
+.team-controls .team-timeline {
+  margin: 0;
+  flex: 1;
+}
+
+.team-member-count {
+  font-family: "Fraunces", serif;
+  font-size: 0.85rem;
+  font-variation-settings: 'opsz' 72;
+  color: #c0c0c8;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 5.5rem;
+}
+
+/* Role legend */
+.team-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: #8888a0;
+  font-family: Inter, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-amber { background: #d4a03a; }
+.legend-blue { background: #4a87d7; }
+.legend-slate { background: #7888a8; }
+.legend-teal { background: #4daa88; }
+
+/* ===== Career Timeline ===== */
+#career-timeline-wrap {
+  position: relative;
+  max-width: 750px;
+  margin: 0 auto 1rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 12;
+}
+
+.career-tooltip {
+  position: absolute;
+  background: #252538;
+  border: 1px solid rgba(212, 160, 58, 0.3);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+  max-width: 260px;
+}
+
+.career-tooltip.visible { opacity: 1; }
+
+.career-tooltip .ct-title {
+  font-family: "Fraunces", serif;
+  font-size: 0.95rem;
+  color: #e8e8ec;
+  margin-bottom: 0.15rem;
+}
+
+.career-tooltip .ct-desc {
+  font-size: 0.8rem;
+  color: #b0b0bc;
+  line-height: 1.4;
+}
+
+/* ===== Grants Gantt ===== */
+#grants-gantt-wrap {
+  position: relative;
+  max-width: 750px;
+  margin: 0 auto 1.5rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 12;
+}
+
+.grants-tooltip {
+  position: absolute;
+  background: #252538;
+  border: 1px solid rgba(212, 160, 58, 0.3);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+  max-width: 250px;
+}
+
+.grants-tooltip.visible { opacity: 1; }
+
+.grants-tooltip .gt-title {
+  font-family: "Fraunces", serif;
+  font-size: 0.95rem;
+  color: #e8e8ec;
+  margin-bottom: 0.15rem;
+}
+
+.grants-tooltip .gt-funder {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+  margin-bottom: 0.2rem;
+}
+
+.grants-tooltip .gt-value {
+  font-family: "Fraunces", serif;
+  font-size: 1.1rem;
+  color: #e8e8ec;
+}
+
+/* ===== Service Timeline ===== */
+#service-timeline-wrap {
+  position: relative;
+  max-width: 750px;
+  margin: 0 auto 1.5rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 12;
+}
+
+.service-tooltip {
+  position: absolute;
+  background: #252538;
+  border: 1px solid rgba(212, 160, 58, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+  max-width: 280px;
+}
+
+.service-tooltip.visible { opacity: 1; }
+
+.service-tooltip .st-title {
+  font-family: "Fraunces", serif;
+  font-size: 0.95rem;
+  color: #e8e8ec;
+  margin-bottom: 0.2rem;
+}
+
+.service-tooltip .st-body {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #d4a03a;
+  margin-bottom: 0.3rem;
+}
+
+.service-tooltip .st-desc {
+  font-size: 0.8rem;
+  color: #b0b0bc;
+  line-height: 1.4;
+  margin-bottom: 0.25rem;
+}
+
+.service-tooltip .st-period {
+  font-size: 0.7rem;
+  color: #7a7a8c;
+  font-style: italic;
+}
+
+/* ===== Talks Map ===== */
+#talks-map-wrap {
+  max-width: 850px;
+  margin: 0 auto 1rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 12;
+}
+
+.talks-tooltip {
+  position: absolute;
+  background: #252538;
+  border: 1px solid rgba(212,160,58,0.25);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 20;
+  max-width: 320px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+.talks-tooltip.visible { opacity: 1; }
+
+.talks-tooltip .tt-city {
+  font-family: "Fraunces", serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+.talks-tooltip .tt-row {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #c0c0c8;
+}
+.talks-tooltip .tt-year {
+  color: #888898;
+  font-weight: 600;
+  margin-right: 0.2em;
+}
+.talks-tooltip .tt-name {
+  color: #e0e0e0;
+}
+.talks-tooltip .tt-type {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  margin-left: 0.3em;
+}
+.talks-tooltip .tt-type-keynote {
+  background: rgba(212,160,58,0.2);
+  color: #d4a03a;
+}
+.talks-tooltip .tt-type-invited {
+  background: rgba(77,170,136,0.2);
+  color: #4daa88;
+}
+.talks-tooltip .tt-count {
+  font-size: 0.7rem;
+  color: #888898;
+  font-weight: 400;
+}
+
+.talks-legend {
+  display: flex;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: 0.4rem;
+  font-family: Inter, sans-serif;
+  font-size: 0.75rem;
+  color: #c0c0c8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.talks-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.talks-legend .legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.talks-summary {
+  text-align: center;
+  font-family: Inter, sans-serif;
+  font-size: 0.78rem;
+  color: #888898;
+  margin-top: 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+/* Talks timeline scrubber */
+.talks-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.talks-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: 500px;
+  width: 100%;
+  margin: 0.3rem auto 0;
+  padding: 0 1rem;
+}
+.talks-play-btn {
+  background: none;
+  border: 1px solid rgba(212,160,58,0.35);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  color: #d4a03a;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 0 2px;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.talks-play-btn:hover {
+  background: rgba(212,160,58,0.12);
+  border-color: rgba(212,160,58,0.6);
+}
+.talks-play-btn.playing {
+  background: rgba(212,160,58,0.15);
+  border-color: #d4a03a;
+}
+.talks-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.talks-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--amber);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(212, 160, 58, 0.4);
+}
+.talks-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--amber);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(212, 160, 58, 0.4);
+}
+.talks-year-display {
+  font-family: "Fraunces", serif;
+  font-size: 1.4rem;
+  font-variation-settings: 'opsz' 144;
+  color: var(--amber);
+  min-width: 4.2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ===== Service Badges ===== */
+.service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-top: 0.8rem;
+}
+
+@media (max-width: 700px) {
+  .service-grid { grid-template-columns: 1fr; }
+}
+
+.service-category {
+  background: #252538;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.service-cat-label {
+  font-family: "Fraunces", serif;
+  font-size: 0.85rem;
+  color: #d4a03a;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.service-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.service-pill {
+  font-family: Inter, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.pill-amber { background: rgba(212, 160, 58, 0.15); color: #d4a03a; border: 1px solid rgba(212, 160, 58, 0.3); }
+.pill-blue  { background: rgba(74, 135, 215, 0.12); color: #6ea3e0; border: 1px solid rgba(74, 135, 215, 0.25); }
+.pill-slate { background: rgba(120, 136, 168, 0.1); color: #9098a8; border: 1px solid rgba(120, 136, 168, 0.2); }
+
+/* ===== Press Cards ===== */
+.press-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.press-card {
+  background: #252538;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  border-left: 3px solid var(--amber);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.press-card:hover {
+  border-color: #e8b94d;
+  transform: translateY(-2px);
+}
+
+.press-year {
+  font-family: "Fraunces", serif;
+  font-size: 1.3rem;
+  font-variation-settings: 'opsz' 144;
+  color: var(--amber);
+  margin-bottom: 0.3rem;
+}
+
+.press-outlets {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c0c0c8;
+  margin-bottom: 0.3rem;
+  line-height: 1.5;
+}
+
+.press-outlets a {
+  color: #c0c0c8;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 160, 58, 0.3);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.press-outlets a:hover {
+  color: #d4a03a;
+  border-color: #d4a03a;
+}
+
+.press-topic {
+  font-size: 0.85rem;
+  color: #8888a0;
+  font-style: italic;
+}
+
 /* ===== Research Phase Diagram ===== */
 #research-diagram-wrap {
   position: relative;
   max-width: 800px;
   margin: 0 auto 2rem;
-  background: var(--bg-dark);
-  border-radius: 12px;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 12;
 }
 
 .research-tooltip {
@@ -599,81 +1130,133 @@ html {
   line-height: 1.4;
 }
 
-/* Research callout card (click overlay) */
-.research-callout {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.95);
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 12px;
-  padding: 1.5rem 1.8rem;
-  max-width: 420px;
-  width: 90%;
-  z-index: 25;
+/* Research theme panel (slides down below diagram on click) */
+.research-panel {
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.4s ease;
+  background: #252538;
+  border-top: 1px solid rgba(212, 160, 58, 0.2);
+  border-radius: 0 0 8px 8px;
+  padding: 0 1.5rem;
+  position: relative;
 }
-
-.research-callout.visible {
+.research-panel.visible {
+  max-height: 600px;
   opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
+  padding: 1.2rem 1.5rem 1.5rem;
 }
-
-.research-callout .rc-close {
+.research-panel .rp-close {
   position: absolute;
   top: 0.6rem;
   right: 0.8rem;
   background: none;
   border: none;
-  color: var(--slate-light);
+  color: #888898;
   font-size: 1.4rem;
   cursor: pointer;
   line-height: 1;
   padding: 0.2rem 0.4rem;
-  transition: color 0.2s ease;
+  transition: color 0.2s;
 }
-
-.research-callout .rc-close:hover {
-  color: var(--amber);
-}
-
-.research-callout .rc-title {
+.research-panel .rp-close:hover { color: var(--amber); }
+.research-panel .rp-title {
   font-family: "Fraunces", serif;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: #e8e8ec;
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.5rem;
   padding: 0;
   border: none;
   display: block;
   font-variation-settings: 'opsz' 48;
 }
-
-.research-callout .rc-body p {
-  font-size: 0.9rem;
+.research-panel .rp-narrative {
+  font-size: 0.88rem;
   color: #c0c0c8;
   line-height: 1.6;
-  margin-bottom: 0.6rem;
+  margin: 0 0 1rem;
+}
+.research-panel .rp-papers {
+  display: flex;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212,160,58,0.3) transparent;
+}
+.research-panel .rp-papers::-webkit-scrollbar { height: 4px; }
+.research-panel .rp-papers::-webkit-scrollbar-thumb { background: rgba(212,160,58,0.3); border-radius: 2px; }
+.research-panel .rp-paper {
+  flex-shrink: 0;
+  width: 140px;
+  background: #1a1a2e;
+  border: 1px solid rgba(200,200,216,0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+  display: block;
+}
+.research-panel .rp-paper:hover {
+  border-color: rgba(212,160,58,0.4);
+  transform: translateY(-2px);
+}
+.research-panel .rp-thumb {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+}
+.research-panel .rp-paper-info {
+  padding: 0.5rem 0.6rem;
+}
+.research-panel .rp-paper-title {
+  font-size: 0.72rem;
+  color: #e0e0e0;
+  line-height: 1.4;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+.research-panel .rp-paper-meta {
+  font-size: 0.65rem;
+  color: #888898;
 }
 
-.research-callout .rc-body ul {
-  margin: 0.4rem 0 0;
-  padding-left: 1.2rem;
+/* ===== Methods Pipeline ===== */
+#methods-pipeline-wrap {
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+  background: #1a1a2e;
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 12;
 }
-
-.research-callout .rc-body li {
-  font-size: 0.85rem;
-  color: #b0b0bc;
-  line-height: 1.5;
+.methods-tooltip {
+  position: absolute;
+  background: #252538;
+  border: 1px solid rgba(212, 160, 58, 0.3);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+  max-width: 270px;
+}
+.methods-tooltip.visible { opacity: 1; }
+.methods-tooltip .mt-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.05rem;
+  color: #e8e8ec;
   margin-bottom: 0.3rem;
 }
-
-/* Current Projects hidden — content accessed via diagram callout */
-.research-projects-content { display: none; }
+.methods-tooltip .mt-desc {
+  font-size: 0.85rem;
+  color: #c0c0c8;
+  line-height: 1.4;
+}
 
 /* Text list hidden when network is active (all viewports) */
 .team-text-content { display: none; }
