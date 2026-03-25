@@ -2,6 +2,7 @@ project:
   type: website
   resources:
     - assets/press/*
+    - images/team/*
   render:
     - "*.qmd"
     - "posts/**/*.qmd"
@@ -20,14 +21,14 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: cv.qmd
+        text: CV
       - href: team.qmd
         text: Team
       - href: projects.qmd
         text: Research
       - href: publications.qmd
         text: Publications
-      - href: cv.qmd
-        text: CV
   page-footer:
     center: "Rohit Pillai · University of Edinburgh"
 
@@ -50,3 +51,8 @@ format:
       - assets/scroll-reveal.html
       - assets/team-network.html
       - assets/research-diagram.html
+      - assets/career-timeline.html
+      - assets/grants-gantt.html
+      - assets/service-timeline.html
+      - assets/talks-map.html
+      - assets/methods-pipeline.html

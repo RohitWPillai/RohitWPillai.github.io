@@ -1,0 +1,166 @@
+<script>
+(function() {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('grants-gantt');
+    if (!container) return;
+
+    // ===== Grants data (month-level from full CV) =====
+    // Month M in year Y = Y + M/12 (Jan=1/12, Dec=12/12)
+    var grants = [
+      // PI grants
+      { title: 'ERC Starting Grant — NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
+      { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#d4a03a' },
+      { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#d4a03a' },
+      { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#d4a03a' },
+      // Co-I grants
+      { title: 'Stabilising Bulk Nanobubbles', short: 'Nanobubbles', funder: 'EPSRC/ARCHER2', start: 2025 + 2/12, end: 2026 + 2/12, value: '£38.6K', role: 'Co-I', color: '#7888a8' },
+      { title: 'Vibrations for freeze-desalination', short: 'Freeze-desal', funder: 'EPSRC/CIRRUS', start: 2023 + 9/12, end: 2024 + 9/12, value: '£50K', role: 'Co-I', color: '#7888a8' },
+      { title: 'Nano-Engineered Flow Technologies', short: 'NEFT', funder: 'EPSRC', start: 2019 + 1/12, end: 2020 + 12/12, value: '£100K', role: 'Co-I', color: '#7888a8' }
+    ];
+
+    var YEAR_MIN = 2019, YEAR_MAX = 2030;
+    var W = 780, BAR_H = 28, BAR_GAP = 6, HEADER_H = 30, PAD_L = 10, PAD_R = 100;
+    var CHART_W = W - PAD_L - PAD_R;
+    var H = HEADER_H + grants.length * (BAR_H + BAR_GAP) + 20;
+
+    function yearToX(y) { return PAD_L + (y - YEAR_MIN) / (YEAR_MAX - YEAR_MIN) * CHART_W; }
+
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+
+    // Year axis
+    for (var y = YEAR_MIN; y <= YEAR_MAX; y++) {
+      var x = yearToX(y);
+      // Grid line
+      var line = document.createElementNS(NS, 'line');
+      line.setAttribute('x1', x); line.setAttribute('y1', HEADER_H);
+      line.setAttribute('x2', x); line.setAttribute('y2', H - 10);
+      line.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+      line.setAttribute('stroke-width', '1');
+      svg.appendChild(line);
+      // Year label
+      var text = document.createElementNS(NS, 'text');
+      text.setAttribute('x', x);
+      text.setAttribute('y', HEADER_H - 10);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('fill', '#666878');
+      text.setAttribute('font-family', '"Fraunces", serif');
+      text.setAttribute('font-size', '11');
+      text.textContent = y;
+      svg.appendChild(text);
+    }
+
+    // "Now" indicator
+    var nowX = yearToX(2026.22); // March 2026
+    var nowLine = document.createElementNS(NS, 'line');
+    nowLine.setAttribute('x1', nowX); nowLine.setAttribute('y1', HEADER_H);
+    nowLine.setAttribute('x2', nowX); nowLine.setAttribute('y2', H - 10);
+    nowLine.setAttribute('stroke', 'rgba(212,160,58,0.3)');
+    nowLine.setAttribute('stroke-width', '1');
+    nowLine.setAttribute('stroke-dasharray', '4 3');
+    svg.appendChild(nowLine);
+    var nowLabel = document.createElementNS(NS, 'text');
+    nowLabel.setAttribute('x', nowX);
+    nowLabel.setAttribute('y', H - 2);
+    nowLabel.setAttribute('text-anchor', 'middle');
+    nowLabel.setAttribute('fill', '#d4a03a');
+    nowLabel.setAttribute('font-family', 'Inter, sans-serif');
+    nowLabel.setAttribute('font-size', '9');
+    nowLabel.setAttribute('letter-spacing', '0.05em');
+    nowLabel.textContent = 'NOW';
+    svg.appendChild(nowLabel);
+
+    // Month names for tooltip
+    var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    function fracToDate(f) {
+      var yr = Math.floor(f);
+      var mo = Math.round((f - yr) * 12);
+      if (mo <= 1) return 'Jan ' + yr;
+      if (mo >= 12) return 'Dec ' + yr;
+      return MONTHS[mo - 1] + ' ' + yr;
+    }
+
+    // Tooltip
+    var tooltip = document.getElementById('grants-tooltip');
+    var ttTitle = tooltip.querySelector('.gt-title');
+    var ttFunder = tooltip.querySelector('.gt-funder');
+    var ttValue = tooltip.querySelector('.gt-value');
+
+    // Bars
+    grants.forEach(function(g, i) {
+      var x1 = yearToX(g.start);
+      var x2 = yearToX(g.end);
+      var by = HEADER_H + i * (BAR_H + BAR_GAP);
+
+      var group = document.createElementNS(NS, 'g');
+      group.style.cursor = 'default';
+
+      // Bar background (rounded rect)
+      var rect = document.createElementNS(NS, 'rect');
+      rect.setAttribute('x', x1);
+      rect.setAttribute('y', by);
+      rect.setAttribute('width', Math.max(x2 - x1, 8));
+      rect.setAttribute('height', BAR_H);
+      rect.setAttribute('rx', '4');
+      rect.setAttribute('fill', g.color);
+      rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
+      group.appendChild(rect);
+
+      // Role badge
+      var badge = document.createElementNS(NS, 'text');
+      badge.setAttribute('x', x1 + 6);
+      badge.setAttribute('y', by + BAR_H / 2 + 1);
+      badge.setAttribute('dominant-baseline', 'middle');
+      badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
+      badge.setAttribute('font-family', 'Inter, sans-serif');
+      badge.setAttribute('font-size', '8');
+      badge.setAttribute('font-weight', '700');
+      badge.setAttribute('letter-spacing', '0.06em');
+      badge.textContent = g.role;
+      group.appendChild(badge);
+
+      // Short label to the right of bar
+      var titleEl = document.createElementNS(NS, 'text');
+      titleEl.setAttribute('x', x2 + 6);
+      titleEl.setAttribute('y', by + BAR_H / 2 + 1);
+      titleEl.setAttribute('dominant-baseline', 'middle');
+      titleEl.setAttribute('text-anchor', 'start');
+      titleEl.setAttribute('fill', g.role === 'PI' ? '#d4a03a' : '#9098a8');
+      titleEl.setAttribute('font-family', 'Inter, sans-serif');
+      titleEl.setAttribute('font-size', '10');
+      titleEl.setAttribute('font-weight', '500');
+      titleEl.textContent = g.short;
+      group.appendChild(titleEl);
+
+      // Hover: show tooltip
+      group.addEventListener('mouseenter', function(e) {
+        rect.setAttribute('opacity', '1');
+        ttTitle.textContent = g.title;
+        ttFunder.textContent = g.funder + ' \u00b7 ' + fracToDate(g.start) + '\u2013' + fracToDate(g.end);
+        ttValue.textContent = g.value;
+        tooltip.classList.add('visible');
+      });
+      group.addEventListener('mousemove', function(e) {
+        var cr = container.getBoundingClientRect();
+        tooltip.style.left = Math.min(e.clientX - cr.left + 10, cr.width - 260) + 'px';
+        tooltip.style.top = (e.clientY - cr.top - 50) + 'px';
+      });
+      group.addEventListener('mouseleave', function() {
+        rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
+        tooltip.classList.remove('visible');
+      });
+
+      svg.appendChild(group);
+    });
+
+    container.appendChild(svg);
+  });
+})();
+</script>

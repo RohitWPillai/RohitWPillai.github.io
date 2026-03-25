@@ -9,59 +9,86 @@
     if (!container) return;
 
     // ===== Configuration =====
-    var CX = 400, CY = 280;
-    var RING_R = 175;
-    var PI_R = 30, POSTDOC_R = 22, PHD_R = 17;
+    var CX = 400, CY = 270;
+    var INNER_R = 160, OUTER_R = 240;
+    var PI_R = 30, POSTDOC_R = 22, PHD_R = 22;
     var SPRING_K = 0.012, BROWNIAN = 0.25, DAMPING = 0.90;
     var OPACITY_LERP = 0.08;
-    var ACTIVE_OPACITY = 1.0, FADED_OPACITY = 0.25;
-    var ACTIVE_BOND = 0.35, FADED_BOND = 0.08;
-    var YEAR_MIN = 2016, YEAR_MAX = 2026;
+    var ACTIVE_OPACITY = 1.0, FADED_OPACITY = 0.45;
+    var ACTIVE_BOND = 0.35, FADED_BOND = 0.10;
+    var BOND_WIDTH_ACTIVE = 2.5, BOND_WIDTH_MIN = 1.2;
+    var YEAR_MIN = 2018, YEAR_MAX = 2026;
+    var AUTOPLAY_DURATION = 16000;
+    var AUTOPLAY_DELAY = 800;
 
     var COLORS = {
       amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18', glow: 'rgba(212,160,58,0.3)' },
       blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590', glow: 'rgba(74,135,215,0.3)' },
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' }
+      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' },
+      teal:  { light: '#80d0b0', base: '#4daa88', dark: '#2a7060', glow: 'rgba(77,170,136,0.3)' }
     };
 
     // ===== Member data (sorted by startYear for clockwise chronological layout) =====
     var members = [
-      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, color: 'amber', r: PI_R },
+      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, url: 'https://multiscaleflowx.github.io/team/rohit-pillai/', photo: 'images/profile.jpg', color: 'amber', r: PI_R },
       // Ring members — sorted by start year
-      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc', topic: 'Multiscale fluid dynamics', startYear: 2016, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', color: 'blue', r: POSTDOC_R },
-      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', color: 'slate', r: PHD_R },
-      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', color: 'blue', r: POSTDOC_R },
-      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', color: 'slate', r: PHD_R },
-      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', color: 'slate', r: PHD_R },
-      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', color: 'slate', r: PHD_R },
-      { id: 'pc', name: 'Pengxu Chen', role: 'PhD Student', topic: 'Nanoscale vibrations to reduce surface icing', startYear: 2022, endYear: null, color: 'slate', r: PHD_R },
-      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, color: 'blue', r: POSTDOC_R },
-      { id: 'zl', name: 'Zhaolun Li', role: 'PhD Student', topic: 'Machine learning potentials for solid-liquid interfaces', startYear: 2025, endYear: null, color: 'slate', r: PHD_R }
+      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Multiscale fluid dynamics', startYear: 2019, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', photo: 'images/team/sp.jpg', color: 'slate', r: POSTDOC_R, roles: [{ from: 2019, to: 2019, color: 'slate' }, { from: 2020, to: 2023, color: 'blue' }, { from: 2024, to: null, color: 'amber' }] },
+      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', url: 'https://multiscaleflowx.github.io/team/martin-nikiforidis/', photo: 'images/team/vn.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2017, to: 2021, color: 'slate' }, { from: 2022, to: null, color: 'blue' }] },
+      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', photo: 'images/team/sd.jpg', color: 'blue', r: POSTDOC_R, roles: [{ from: 2018, to: 2024, color: 'blue' }, { from: 2025, to: null, color: 'amber' }] },
+      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', url: 'https://multiscaleflowx.github.io/team/mistry-sritay/', photo: 'images/team/sm.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2018, to: 2022, color: 'slate' }, { from: 2023, to: null, color: 'blue' }] },
+      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', url: 'https://www.durham.ac.uk/staff/patrick-j-sullivan/', photo: 'images/team/ps.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2019, to: 2023, color: 'slate' }, { from: 2024, to: null, color: 'blue' }] },
+      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', url: 'https://uk.linkedin.com/in/abdullahelrifai', photo: 'images/team/ae.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2020, to: 2024, color: 'slate' }, { from: 2025, to: null, color: 'teal' }] },
+      { id: 'pc', name: 'Pengxu Chen', role: 'PhD Student', topic: 'Nanoscale vibrations to reduce surface icing', startYear: 2022, endYear: null, url: 'https://multiscaleflowx.github.io/team/chen-pengxu/', photo: 'images/team/pc.jpg', color: 'slate', r: PHD_R },
+      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, url: 'https://multiscaleflowx.github.io/team/thejas-hulikal-chakrapani/', photo: 'images/team/tc.png', color: 'blue', r: POSTDOC_R },
+      { id: 'zl', name: 'Zhaolun Li', role: 'PhD Student', topic: 'Machine learning potentials for solid-liquid interfaces', startYear: 2025, endYear: null, url: 'https://multiscaleflowx.github.io/team/zhaolun-li/', photo: 'images/team/zl.jpg', color: 'slate', r: PHD_R }
     ];
 
-    // ===== Static radial layout (PI centre, everyone else on ring sorted chronologically) =====
-    var ringMembers = members.slice(1);
-    var n = ringMembers.length;
+    // ===== Dynamic layout: positions computed per-year in updateForYear =====
+    var ANGLE_LERP = 0.06;
+    var RADIUS_LERP = 0.06;
+
     members[0].ex = CX; members[0].ey = CY;
-    for (var i = 0; i < n; i++) {
-      var angle = -Math.PI / 2 + (i * 2 * Math.PI / n);
-      ringMembers[i].ex = CX + RING_R * Math.cos(angle);
-      ringMembers[i].ey = CY + RING_R * Math.sin(angle);
+    members.forEach(function(m) {
+      m.x = CX; m.y = CY;
+      m.ex = CX; m.ey = CY;
+      m.vx = 0; m.vy = 0;
+      m.opacity = 0; m.targetOpacity = 0;
+      m.bondOpacity = 0; m.targetBondOpacity = 0;
+      m.bondWidth = 0; m.targetBondWidth = 0;
+      m.dashed = false;
+      m.state = 'unborn';
+      m._prevState = 'unborn';
+      m.eAngle = -Math.PI / 2;
+      m.eRadius = 0;
+      m.targetAngle = -Math.PI / 2;
+      m.targetRadius = 0;
+    });
+    members[0].opacity = 1; members[0].targetOpacity = 1;
+    members[0].state = 'active';
+
+    function angleDiff(from, to) {
+      var d = to - from;
+      while (d > Math.PI) d -= 2 * Math.PI;
+      while (d < -Math.PI) d += 2 * Math.PI;
+      return d;
     }
 
-    // Initialise positions at equilibrium
-    members.forEach(function(m) {
-      m.x = m.ex; m.y = m.ey;
-      m.vx = 0; m.vy = 0;
-      m.opacity = 1; m.targetOpacity = 1;
-      m.bondOpacity = ACTIVE_BOND; m.targetBondOpacity = ACTIVE_BOND;
-      m.dashed = false;
-    });
+    function distributeOnRing(list, radius, angularOffset) {
+      var n = list.length;
+      if (n === 0) return;
+      var step = 2 * Math.PI / n;
+      var start = -Math.PI / 2 + (angularOffset || 0);
+      for (var i = 0; i < n; i++) {
+        var angle = start + i * step;
+        list[i].targetAngle = angle;
+        list[i].targetRadius = radius;
+      }
+    }
 
     // ===== SVG creation =====
     var NS = 'http://www.w3.org/2000/svg';
     var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 800 560');
+    svg.setAttribute('viewBox', '0 0 800 580');
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     svg.style.width = '100%';
     svg.style.height = 'auto';
@@ -116,6 +143,41 @@
     defs.appendChild(filt);
     svg.appendChild(defs);
 
+    // Orbital guide circles with labels
+    var orbitGroup = document.createElementNS(NS, 'g');
+    [{ r: INNER_R, label: 'TEAM' }, { r: OUTER_R, label: 'ALUMNI' }].forEach(function(o) {
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('cx', CX); circ.setAttribute('cy', CY);
+      circ.setAttribute('r', o.r);
+      circ.setAttribute('fill', 'none');
+      circ.setAttribute('stroke', 'rgba(200,200,216,0.15)');
+      circ.setAttribute('stroke-width', '1.5');
+      circ.setAttribute('stroke-dasharray', '6 8');
+      orbitGroup.appendChild(circ);
+
+      /* Horizontal label at top of orbit with background pill */
+      var lx = CX, ly = CY - o.r;
+      var bg = document.createElementNS(NS, 'rect');
+      bg.setAttribute('x', lx - 30); bg.setAttribute('y', ly - 8);
+      bg.setAttribute('width', 60); bg.setAttribute('height', 16);
+      bg.setAttribute('rx', 8);
+      bg.setAttribute('fill', '#1a1a2e');
+      orbitGroup.appendChild(bg);
+
+      var txt = document.createElementNS(NS, 'text');
+      txt.setAttribute('x', lx); txt.setAttribute('y', ly + 1);
+      txt.setAttribute('text-anchor', 'middle');
+      txt.setAttribute('dy', '0.35em');
+      txt.setAttribute('fill', 'rgba(200,200,216,0.50)');
+      txt.setAttribute('font-family', 'Inter, sans-serif');
+      txt.setAttribute('font-size', '9');
+      txt.setAttribute('font-weight', '700');
+      txt.setAttribute('letter-spacing', '0.2em');
+      txt.textContent = o.label;
+      orbitGroup.appendChild(txt);
+    });
+    svg.appendChild(orbitGroup);
+
     // Bond layer
     var bondGroup = document.createElementNS(NS, 'g');
     svg.appendChild(bondGroup);
@@ -134,6 +196,7 @@
       line.setAttribute('stroke-opacity', ACTIVE_BOND);
       bondGroup.appendChild(line);
       bonds.push({ el: line, to: members[i] });
+      members[i].bondEl = line;
     }
 
     // Create nodes
@@ -150,17 +213,64 @@
       glow.setAttribute('opacity', '0');
       g.appendChild(glow);
 
-      // Sphere
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', m.r);
-      circ.setAttribute('fill', 'url(#sphere-' + m.color + ')');
-      g.appendChild(circ);
+      // Spawn pulse ring
+      var pulse = document.createElementNS(NS, 'circle');
+      pulse.setAttribute('r', m.r);
+      pulse.setAttribute('fill', 'none');
+      pulse.setAttribute('stroke', COLORS[m.color].base);
+      pulse.setAttribute('stroke-width', '3');
+      pulse.setAttribute('opacity', '0');
+      g.appendChild(pulse);
+      m.pulseEl = pulse;
 
-      // Specular
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', m.r);
-      spec.setAttribute('fill', 'url(#specular)');
-      g.appendChild(spec);
+      if (m.photo) {
+        // Photo node: circular-clipped image + border ring + specular overlay
+        var d = m.r * 2;
+        var clipId = 'clip-' + m.id;
+        var clip = document.createElementNS(NS, 'clipPath');
+        clip.id = clipId;
+        var clipCirc = document.createElementNS(NS, 'circle');
+        clipCirc.setAttribute('r', m.r);
+        clip.appendChild(clipCirc);
+        defs.appendChild(clip);
+
+        var img = document.createElementNS(NS, 'image');
+        img.setAttribute('href', m.photo);
+        img.setAttribute('x', -m.r);
+        img.setAttribute('y', -m.r);
+        img.setAttribute('width', d);
+        img.setAttribute('height', d);
+        img.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+        img.setAttribute('clip-path', 'url(#' + clipId + ')');
+        g.appendChild(img);
+
+        // Role-colored border ring
+        var border = document.createElementNS(NS, 'circle');
+        border.setAttribute('r', m.r);
+        border.setAttribute('fill', 'none');
+        border.setAttribute('stroke', COLORS[m.color].base);
+        border.setAttribute('stroke-width', m.id === 'rp' ? '3' : '2');
+        g.appendChild(border);
+        m.borderEl = border;
+
+        // Subtle specular overlay for glass effect
+        var spec = document.createElementNS(NS, 'circle');
+        spec.setAttribute('r', m.r);
+        spec.setAttribute('fill', 'url(#specular)');
+        spec.setAttribute('opacity', '0.25');
+        g.appendChild(spec);
+      } else {
+        // Fallback: Phong sphere (for members without photos)
+        var circ = document.createElementNS(NS, 'circle');
+        circ.setAttribute('r', m.r);
+        circ.setAttribute('fill', 'url(#sphere-' + m.color + ')');
+        g.appendChild(circ);
+
+        var spec = document.createElementNS(NS, 'circle');
+        spec.setAttribute('r', m.r);
+        spec.setAttribute('fill', 'url(#specular)');
+        g.appendChild(spec);
+      }
 
       // Name label
       var text = document.createElementNS(NS, 'text');
@@ -195,15 +305,117 @@
 
     container.appendChild(svg);
 
+    // ===== Role color by year =====
+    function getRoleColor(m, year) {
+      if (!m.roles) return m.color;
+      for (var i = m.roles.length - 1; i >= 0; i--) {
+        if (year >= m.roles[i].from && (m.roles[i].to === null || year <= m.roles[i].to)) return m.roles[i].color;
+      }
+      return m.color;
+    }
+
+    // ===== Spawn pulse animation =====
+    function triggerSpawnPulse(m) {
+      var start = performance.now();
+      var duration = 600;
+      function animPulse(now) {
+        var t = Math.min(1, (now - start) / duration);
+        var r = m.r + 20 * t;
+        var op = 0.6 * (1 - t * t);
+        m.pulseEl.setAttribute('r', r.toFixed(1));
+        m.pulseEl.setAttribute('opacity', op.toFixed(3));
+        if (t < 1) requestAnimationFrame(animPulse);
+        else m.pulseEl.setAttribute('opacity', '0');
+      }
+      requestAnimationFrame(animPulse);
+    }
+
     // ===== Year state =====
+    var countDisplay = document.getElementById('team-member-count');
+
     function updateForYear(year) {
+      var innerList = [], outerList = [];
+
       members.forEach(function(m) {
         if (m.id === 'rp') return;
-        var active = year >= m.startYear && (m.endYear === null || year <= m.endYear);
-        m.targetOpacity = active ? ACTIVE_OPACITY : FADED_OPACITY;
-        m.targetBondOpacity = active ? ACTIVE_BOND : FADED_BOND;
-        m.dashed = !active;
+
+        // Classify state
+        if (year < m.startYear) {
+          m.state = 'unborn';
+        } else if (m.endYear === null || year <= m.endYear) {
+          m.state = 'active';
+          innerList.push(m);
+        } else {
+          m.state = 'alumni';
+          outerList.push(m);
+        }
+
+        // Detect spawn: unborn → active
+        if (m.state === 'active' && m._prevState === 'unborn') {
+          triggerSpawnPulse(m);
+        }
+        m._prevState = m.state;
+
+        // Set targets per state
+        if (m.state === 'unborn') {
+          m.targetOpacity = 0;
+          m.targetBondOpacity = 0;
+          m.targetBondWidth = 0;
+          m.dashed = false;
+          m.targetRadius = 0;
+        } else if (m.state === 'active') {
+          m.targetOpacity = ACTIVE_OPACITY;
+          m.targetBondOpacity = ACTIVE_BOND;
+          m.targetBondWidth = BOND_WIDTH_ACTIVE;
+          m.dashed = false;
+        } else {
+          m.targetOpacity = FADED_OPACITY;
+          m.targetBondOpacity = FADED_BOND;
+          m.targetBondWidth = BOND_WIDTH_MIN;
+          m.dashed = true;
+        }
+
+        // Dynamic role color
+        var colorKey = getRoleColor(m, year);
+        if (colorKey !== m._currentColor) {
+          m._currentColor = colorKey;
+          var c = COLORS[colorKey];
+          if (m.borderEl) m.borderEl.setAttribute('stroke', c.base);
+          if (m.bondEl) m.bondEl.setAttribute('stroke', c.base);
+          m.glowEl.setAttribute('fill', c.glow);
+          m.pulseEl.setAttribute('stroke', c.base);
+        }
       });
+
+      // Sort each list by startYear for stable chronological ordering
+      innerList.sort(function(a, b) { return a.startYear - b.startYear; });
+      outerList.sort(function(a, b) { return a.startYear - b.startYear; });
+
+      // Equidistant distribution on two rings
+      // Offset outer ring by half the denser ring's step for maximum misalignment
+      distributeOnRing(innerList, INNER_R);
+      var maxN = Math.max(innerList.length, outerList.length, 1);
+      distributeOnRing(outerList, OUTER_R, Math.PI / maxN);
+
+      // Snap newly spawned members to their ring position
+      members.forEach(function(m) {
+        if (m.state !== 'unborn' && m._prevState === 'unborn' || (m.state === 'active' && m.opacity < 0.01)) {
+          m.eAngle = m.targetAngle;
+          m.eRadius = m.targetRadius;
+          m.ex = CX + m.eRadius * Math.cos(m.eAngle);
+          m.ey = CY + m.eRadius * Math.sin(m.eAngle);
+          m.x = m.ex; m.y = m.ey;
+        }
+      });
+
+      // Reorder SVG: alumni behind, active in front, PI on top
+      outerList.forEach(function(m) { nodeGroup.appendChild(m.el); });
+      innerList.forEach(function(m) { nodeGroup.appendChild(m.el); });
+      nodeGroup.appendChild(members[0].el);
+
+      // Update active member count
+      var activeCount = 1 + innerList.length;
+      if (countDisplay) countDisplay.textContent = activeCount + (activeCount === 1 ? ' member' : ' members');
     }
 
     // ===== Tooltip =====
@@ -215,9 +427,9 @@
     var hoveredNode = null;
 
     function showTooltip(m, screenX, screenY) {
-      ttName.textContent = m.name;
       var years = m.startYear + '\u2013' + (m.endYear || 'present');
-      ttRole.textContent = m.role + (m.id !== 'rp' ? ' (' + years + ')' : '');
+      ttName.textContent = m.id !== 'rp' ? m.name + ' (' + years + ')' : m.name;
+      ttRole.textContent = m.role;
       ttTopic.textContent = m.topic;
       if (m.now) {
         ttNow.textContent = 'Now: ' + m.now;
@@ -242,6 +454,7 @@
     function hitTest(svgX, svgY) {
       for (var i = members.length - 1; i >= 0; i--) {
         var m = members[i];
+        if (m.state === 'unborn') continue;
         var dx = svgX - m.x, dy = svgY - m.y;
         if (dx * dx + dy * dy < (m.r + 8) * (m.r + 8)) return m;
       }
@@ -251,7 +464,7 @@
     svg.addEventListener('mousemove', function(e) {
       var rect = svg.getBoundingClientRect();
       var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (560 / rect.height);
+      var svgY = (e.clientY - rect.top) * (580 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit) {
         if (hoveredNode !== hit) {
@@ -271,7 +484,7 @@
     svg.addEventListener('click', function(e) {
       var rect = svg.getBoundingClientRect();
       var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (560 / rect.height);
+      var svgY = (e.clientY - rect.top) * (580 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit && hit.url) window.open(hit.url, '_blank', 'noopener');
     });
@@ -281,7 +494,7 @@
       var touch = e.changedTouches[0];
       var rect = svg.getBoundingClientRect();
       var svgX = (touch.clientX - rect.left) * (800 / rect.width);
-      var svgY = (touch.clientY - rect.top) * (560 / rect.height);
+      var svgY = (touch.clientY - rect.top) * (580 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit) {
         e.preventDefault();
@@ -297,10 +510,15 @@
     var slider = document.getElementById('team-year-slider');
     var yearDisplay = document.getElementById('team-year-display');
 
+    function formatYear(y) {
+      return String(Math.floor(y));
+    }
+
     if (slider) {
+      slider.setAttribute('step', '0.5');
       slider.addEventListener('input', function() {
-        var year = parseInt(this.value);
-        if (yearDisplay) yearDisplay.textContent = year;
+        var year = parseFloat(this.value);
+        if (yearDisplay) yearDisplay.textContent = formatYear(year);
         updateForYear(year);
       });
     }
@@ -311,6 +529,20 @@
     function physics() {
       for (var i = 1; i < members.length; i++) {
         var m = members[i];
+
+        // Smooth opacity (always, so unborn members stay at 0)
+        m.opacity += (m.targetOpacity - m.opacity) * OPACITY_LERP;
+        m.bondOpacity += (m.targetBondOpacity - m.bondOpacity) * OPACITY_LERP;
+        m.bondWidth += (m.targetBondWidth - m.bondWidth) * OPACITY_LERP;
+
+        // Skip physics for invisible members
+        if (m.state === 'unborn') continue;
+
+        // Smoothly interpolate equilibrium via shortest angular path
+        m.eAngle += angleDiff(m.eAngle, m.targetAngle) * ANGLE_LERP;
+        m.eRadius += (m.targetRadius - m.eRadius) * RADIUS_LERP;
+        m.ex = CX + m.eRadius * Math.cos(m.eAngle);
+        m.ey = CY + m.eRadius * Math.sin(m.eAngle);
 
         // Spring to equilibrium
         m.vx += -SPRING_K * (m.x - m.ex);
@@ -324,10 +556,6 @@
         m.vy *= DAMPING;
         m.x += m.vx;
         m.y += m.vy;
-
-        // Smooth opacity
-        m.opacity += (m.targetOpacity - m.opacity) * OPACITY_LERP;
-        m.bondOpacity += (m.targetBondOpacity - m.bondOpacity) * OPACITY_LERP;
       }
     }
 
@@ -341,6 +569,7 @@
         b.el.setAttribute('y1', pi.y.toFixed(1));
         b.el.setAttribute('x2', b.to.x.toFixed(1));
         b.el.setAttribute('y2', b.to.y.toFixed(1));
+        b.el.setAttribute('stroke-width', b.to.bondWidth.toFixed(2));
         b.el.setAttribute('stroke-opacity', b.to.bondOpacity.toFixed(3));
         b.el.setAttribute('stroke-dasharray', b.to.dashed ? '6 4' : 'none');
       });
@@ -358,10 +587,61 @@
       else { running = true; requestAnimationFrame(loop); }
     });
 
-    // ===== Init =====
-    updateForYear(YEAR_MAX);
+    // ===== Init: start at YEAR_MIN for auto-play =====
+    updateForYear(YEAR_MIN);
+    if (slider) slider.value = YEAR_MIN;
+    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
     render();
     requestAnimationFrame(loop);
+
+    // ===== Auto-play: scrub from YEAR_MIN to YEAR_MAX =====
+    var autoPlaying = true;
+    var playBtn = document.getElementById('team-play-btn');
+
+    function runTimeline(fromYear) {
+      var startY = fromYear != null ? fromYear : YEAR_MIN;
+      autoPlaying = true;
+      updateForYear(startY);
+      if (slider) slider.value = startY;
+      if (yearDisplay) yearDisplay.textContent = formatYear(startY);
+      if (playBtn) playBtn.classList.add('playing');
+      var span = YEAR_MAX - startY;
+      if (span <= 0) { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); return; }
+      var duration = AUTOPLAY_DURATION * (span / (YEAR_MAX - YEAR_MIN));
+      var autoStart = null;
+      function autoStep(timestamp) {
+        if (!autoPlaying) { if (playBtn) playBtn.classList.remove('playing'); return; }
+        if (!autoStart) autoStart = timestamp;
+        var t = Math.min(1, (timestamp - autoStart) / duration);
+        var eased = 1 - Math.pow(1 - t, 2);
+        var year = Math.round((startY + eased * span) * 2) / 2;
+        if (slider) slider.value = year;
+        if (yearDisplay) yearDisplay.textContent = formatYear(year);
+        updateForYear(year);
+        if (t < 1) requestAnimationFrame(autoStep);
+        else { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); }
+      }
+      requestAnimationFrame(autoStep);
+    }
+
+    // Stop auto-play if user touches slider
+    if (slider) {
+      slider.addEventListener('pointerdown', function() {
+        autoPlaying = false;
+        if (playBtn) playBtn.classList.remove('playing');
+      });
+    }
+
+    // Play button replays the timeline
+    if (playBtn) {
+      playBtn.addEventListener('click', function() {
+        if (autoPlaying) { autoPlaying = false; playBtn.classList.remove('playing'); return; }
+        var cur = slider ? parseInt(slider.value, 10) : YEAR_MIN;
+        runTimeline(cur >= YEAR_MAX ? YEAR_MIN : cur);
+      });
+    }
+
+    setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
   });
 })();
 </script>

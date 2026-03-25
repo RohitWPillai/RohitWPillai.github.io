@@ -16,114 +16,68 @@ document.addEventListener('DOMContentLoaded', function() {
 
 [Download PDF](assets/short-cv.pdf){.btn .btn-outline-primary .btn-sm}
 
-## Education
-
-**PhD, Chemical and Biomolecular Engineering**
-University of Melbourne, 2017
-
----
-
-## Academic Positions
-
-**Senior Lecturer (Associate Professor) in Mechanical Engineering**
-University of Edinburgh, 2023-present
-
-**Lecturer (Assistant Professor) in Mechanical Engineering**
-University of Edinburgh, 2018-2023
-
-**Postdoctoral Research Associate**
-University of Edinburgh, 2017-2018
+<div id="career-timeline-wrap">
+<div id="career-timeline"></div>
+<div id="career-tooltip" class="career-tooltip">
+<div class="ct-title"></div>
+<div class="ct-desc"></div>
+</div>
+</div>
 
 ---
 
-## Research Grants
+## Research Funding
 
-### Principal Investigator
-
-| Year | Funder | Project | Value |
-|------|--------|---------|-------|
-| 2024-2029 | ERC Starting Grant | NANO-COOL: Nanomaterial-enhanced liquid cooling for extreme thermal management | £1,270,000 |
-| 2024 | EPSRC/ARCHER2 | Spectral heat transfer at metal/graphene/water interfaces | £32,000 |
-| 2021-2022 | EPSRC/CIRRUS | Nano-engineering of surface de-icing | £35,000 |
-| 2019 | EPSRC eCSE | Efficient Multi-Scale Simulations | £100,000 |
-
-### Co-Investigator
-
-| Year | Funder | Project | Value |
-|------|--------|---------|-------|
-| 2025-2026 | EPSRC/ARCHER2 | Stabilising Bulk Nanobubbles | £38,600 |
-| 2023-2024 | EPSRC/CIRRUS | Ultrahigh-frequency surface vibrations for freeze-desalination | £50,000 |
-| 2019-2020 | EPSRC | Nano-Engineered Flow Technologies (internal grant) | £100,000 |
+<div id="grants-gantt-wrap">
+<div id="grants-gantt"></div>
+<div id="grants-tooltip" class="grants-tooltip">
+<div class="gt-title"></div>
+<div class="gt-funder"></div>
+<div class="gt-value"></div>
+</div>
+</div>
 
 ---
 
-## Invited Talks
+## Talks & Presentations
 
-### Selected Keynote Presentations
-
-- **2027**: Gordon Research Conference on Micro and Nanoscale Phase Change Phenomena, Tuscany, Italy
-- **2025**: NEMD Conference, Osaka, Japan
-- **2022**: China University of Petroleum Summer School - Modelling Multiscale Heat and Flow Systems
-- **2020**: Sino-Japan-UK Frontiers in Phase Change Heat Transfer
-- **2019**: Hewitt-Reese Spring School, UK Fluids Network
-- **2018**: Surface Wettability Effects on Phase Change Phenomena, Brighton
+<div id="talks-map-wrap">
+<div id="talks-map"></div>
+<div class="talks-controls"><div class="talks-timeline"><button id="talks-play-btn" class="talks-play-btn" aria-label="Replay timeline">&#9654;</button><input type="range" id="talks-year-slider" class="talks-slider" min="2014" max="2027" value="2014" step="0.5"><span id="talks-year-display" class="talks-year-display">2014</span></div></div>
+</div>
 
 ---
 
 ## Service & Leadership
 
-### School Roles
-
-**PDRA Champion** (2022-present)
-Leading initiatives to support postdoctoral researchers, including reformed annual reviews, fellowship screening processes, and career development events.
-
-**Co-chair, Staff Development Committee** (2022-2024)
-
-**Member, People & Culture Committee** (2025-present)
-
-**Academic Representative, Diversity & Inclusion Committee** (2022-present)
-
-### External Roles
-
-**Expert Evaluator**, European Research Council (2024-present)
-
-**College Member**, EPSRC Peer Review College (2024-present)
-
-
-**External PhD Examiner**: Imperial College London (2024), Brunel University London (2026)
-
-**Conference Organiser**:
-
-- Conference Chair, Non-Equilibrium Molecular Dynamics Conference, Edinburgh, UK (2026) 
-- Organising Committee, 9th International Conference on Micro and Nano Flows, Edinburgh (2025)
-- Organising Committee, UK Fluids Network SIG in Non-Equilibrium Molecular Dynamics, London, UK (2024)
-- Co-organiser, UK Fluids Network Early Career Researcher Event, Warwick, UK (2018)
-
-### Journal Reviewing
-
-Regular reviewer for: *International Journal of Heat and Mass Transfer, Langmuir, Physics of Fluids, Physical Review E, Journal of Molecular Liquids, Applied Mathematical Modelling*
+<div id="service-timeline-wrap">
+<div id="service-timeline"></div>
+<div id="service-tooltip" class="service-tooltip">
+<div class="st-title"></div>
+<div class="st-body"></div>
+<div class="st-desc"></div>
+<div class="st-period"></div>
+</div>
+</div>
 
 ---
 
-## Media Coverage
+## In the Press
 
-### Selected Press
-
-- **2023**: [The Conversation](https://theconversation.com/cicadas-could-hold-the-secret-to-self-cleaning-surfaces-new-study-207435), [Phys.org](https://phys.org/news/2023-07-cicadas-secret-self-cleaning-surfacesnew.html), [TechXplore](https://techxplore.com/news/2023-09-wing-screen-wipers-self-cleaning-cicadas-cleaner.html) - Cicadas and self-cleaning surfaces
-- **2021**: [EurekAlert](https://www.eurekalert.org/news-releases/691043), [ScienceDaily](https://www.sciencedaily.com/releases/2021/02/210225113306.htm), [Phys.org](https://phys.org/news/2021-02-tiny-dentists-tools.html) - Nanobubbles for ultrasonic cleaning
-- **2018**: [BBC Scotland](https://www.bbc.co.uk/news/uk-scotland-edinburgh-east-fife-45471403), [ScienceDaily](https://www.sciencedaily.com/releases/2018/09/180910093518.htm), [Phys.org](https://phys.org/news/2018-09-power-tiny-vibrations-devices.html), [The Times](assets/press/Pillai.Times.11Sep18.pdf), [Metro](assets/press/Pillai.Metro.11Sep18.pdf), [Daily Express](assets/press/Pillai.Express.11Sep18.pdf), [The Sun](assets/press/Pillai.Sun.11Sep18.pdf) - Acoustothermal atomization
-
----
-
-## Professional Memberships
-
-- Scotland Beyond Net Zero (2025-)
-- RSC Interest Group in Statistical Mechanics and Thermodynamics (2022-)
-- UK Fluids Network SIG on Non-Equilibrium Molecular Dynamics (2019-)
-- Society of Industrial and Applied Mathematics (2014-)
-
----
-
-## Publications
-
-See [Publications page](publications.qmd) for full list (20 journal articles, 31 conference abstracts, 1 book chapter).
+<div class="press-cards">
+<div class="press-card">
+<div class="press-year">2023</div>
+<div class="press-outlets"><a href="https://theconversation.com/cicadas-could-hold-the-secret-to-self-cleaning-surfaces-new-study-207435">The Conversation</a> · <a href="https://phys.org/news/2023-07-cicadas-secret-self-cleaning-surfacesnew.html">Phys.org</a> · <a href="https://techxplore.com/news/2023-09-wing-screen-wipers-self-cleaning-cicadas-cleaner.html">TechXplore</a></div>
+<div class="press-topic">Cicadas and self-cleaning surfaces</div>
+</div>
+<div class="press-card">
+<div class="press-year">2021</div>
+<div class="press-outlets"><a href="https://www.eurekalert.org/news-releases/691043">EurekAlert</a> · <a href="https://www.sciencedaily.com/releases/2021/02/210225113306.htm">ScienceDaily</a> · <a href="https://phys.org/news/2021-02-tiny-dentists-tools.html">Phys.org</a></div>
+<div class="press-topic">Nanobubbles for ultrasonic cleaning</div>
+</div>
+<div class="press-card">
+<div class="press-year">2018</div>
+<div class="press-outlets"><a href="https://www.bbc.co.uk/news/uk-scotland-edinburgh-east-fife-45471403">BBC Scotland</a> · <a href="https://www.sciencedaily.com/releases/2018/09/180910093518.htm">ScienceDaily</a> · <a href="https://phys.org/news/2018-09-power-tiny-vibrations-devices.html">Phys.org</a> · <a href="assets/press/Pillai.Times.11Sep18.pdf">The Times</a> · <a href="assets/press/Pillai.Metro.11Sep18.pdf">Metro</a> · <a href="assets/press/Pillai.Express.11Sep18.pdf">Daily Express</a> · <a href="assets/press/Pillai.Sun.11Sep18.pdf">The Sun</a></div>
+<div class="press-topic">Acoustothermal atomization</div>
+</div>
+</div>

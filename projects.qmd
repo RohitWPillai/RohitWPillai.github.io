@@ -2,70 +2,28 @@
 title: "Research"
 ---
 
+My research uses molecular simulation to understand interfacial phenomena that govern ice formation, heat flow, and phase change at the nanoscale. I lead a group at the **University of Edinburgh** funded by an **ERC Starting Grant** ([NANO-COOL](https://gtr.ukri.org/projects?ref=EP%2FY036107%2F1), 2024-2029). Our work falls into three themes, mapped on the phase diagram below. Click a marker to explore.
+
+**Ice Nucleation and Surface Engineering.** We study how ice forms on [nanostructured surfaces](https://doi.org/10.1063/5.0069896), how [surface vibrations influence ice nucleation](https://doi.org/10.1039/D5NR00326A), and the design principles behind [icephobic coatings](https://doi.org/10.1007/978-3-030-82992-6_8).
+
+**Interfacial Heat Transfer.** Thermal transport across solid-liquid interfaces depends on atomic-scale structure. We investigate [spectral mechanisms](https://doi.org/10.1039/D4CP04768K) of interfacial thermal conductance and how [surface chemistry governs conductance regimes](https://doi.org/10.1021/acs.jpcc.4c00536).
+
+**Phase Change and Bubble Dynamics.** We study [heterogeneous bubble nucleation](https://doi.org/10.1063/5.0259208) in superheated liquids, how [wettability shapes bubble growth](https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657), [inertio-thermal growth dynamics](https://doi.org/10.1017/jfm.2022.734) from molecular to continuum scales, [acoustothermal nanobubble nucleation](https://doi.org/10.1021/acs.nanolett.0c03895), and [acoustothermal atomization](https://doi.org/10.1103/PhysRevLett.121.104502) of water nanofilms.
+
 <div id="research-diagram-wrap">
 <div id="research-diagram"></div>
 <div id="research-tooltip" class="research-tooltip"><div class="rt-title"></div><div class="rt-desc"></div></div>
-<div id="research-callout" class="research-callout"><button class="rc-close">&times;</button><h3 class="rc-title"></h3><div class="rc-body"></div></div>
-</div>
-
-## Overview
-
-I am a computational engineering scientist at the **University of Edinburgh**, exploring the nanoscale world through simulation. My research combines **molecular dynamics** with **continuum mechanics** to understand how droplets move, how surfaces clean themselves, and how heat flows at interfaces, with applications in thermal management, de-icing, and self-cleaning surfaces.
-
-I lead a research group primarily funded by an **ERC Starting Grant** ([NANO-COOL](https://gtr.ukri.org/projects?ref=EP%2FY036107%2F1), 2024–2029) investigating nanomaterial-enhanced cooling for extreme thermal management.
-
----
-
-<div class="research-projects-content">
-
-## Current Projects
-
-### Nanoscale Heat Transfer
-
-Heat flow across solid-liquid interfaces is governed by atomic-scale phenomena, with applications in thermal management for high-performance electronics. We investigate:
-
-- Spectral mechanisms of interfacial thermal conductance
-- Effects of surface chemistry and structure
-- Role of interfacial water structure
-- Nanomaterial-enhanced cooling via engineered interfaces and nanoporous membranes
-
-### Ice Nucleation and De-Icing
-
-Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We study:
-
-- Heterogeneous ice nucleation on different surface chemistries
-- Effects of surface vibrations on ice formation
-- Design principles for icephobic surfaces
-
-### Boiling and Bubble Dynamics
-
-Phase change at surfaces is central to many cooling technologies. Our work explores:
-
-- Heterogeneous vapour bubble nucleation
-- Effects of surface wettability on bubble growth
-- Acoustically-driven nanobubble dynamics
-
+<div id="research-panel" class="research-panel"><button class="rp-close">&times;</button><h3 class="rp-title"></h3><p class="rp-narrative"></p><div class="rp-papers"></div></div>
 </div>
 
 ---
 
 ## Methods
 
-### Machine Learning Potentials
-
-We develop and apply machine-learning interatomic potentials (MLPs) to achieve near-DFT accuracy at classical MD computational cost, enabling large-scale simulations of complex solid-liquid interfaces with quantum-level fidelity.
-
-### Molecular Dynamics
-
-We use classical MD with both empirical potentials and machine-learning interatomic potentials to simulate systems of millions of atoms over nanosecond timescales.
-
-### Multiscale Modelling
-
-Our group develops methods to couple molecular simulations with continuum solvers, enabling simulation of macroscale problems while retaining nanoscale physics at interfaces.
-
-### High-Performance Computing
-
-Simulations run on UK national supercomputers (ARCHER2, CIRRUS) and institutional HPC facilities.
+<div id="methods-pipeline-wrap">
+<div id="methods-pipeline"></div>
+<div id="methods-tooltip" class="methods-tooltip"><div class="mt-title"></div><div class="mt-desc"></div></div>
+</div>
 
 ---
 

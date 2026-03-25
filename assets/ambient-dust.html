@@ -8,7 +8,7 @@
     if (document.querySelector('.quarto-about-solana')) return;
 
     var CACHE_PX = 64;
-    var N = 15;
+    var N = 30;
     var R = 4;  // matches homepage CFG.fluidR
 
     // Same Phong sphere renderer as homepage simulation
@@ -73,9 +73,9 @@
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 25;  // frames of trail history
-    var trailAlpha = 0.35 * 0.6;
-    var trailWidth = 1.5;
+    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
+    var trailAlpha = 0.35 * 0.8;
+    var trailWidth = 1.2;
 
     var W, H, dpr;
     var particles = [];
@@ -160,19 +160,52 @@
       requestAnimationFrame(loop);
     }
 
+    /* Toggle button */
+    var PREF_KEY = 'ambient-dust-v2';
+    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+
+    var btn = document.createElement('button');
+    btn.className = 'ambient-toggle';
+    btn.setAttribute('aria-label', 'Toggle floating particles');
+    btn.title = 'Toggle particles';
+    /* Inline SVG atom icon — three elliptical orbits + central dot */
+    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
+    /* Insert into navbar-tools (right side, left of search icon) */
+    var toolsEl = document.querySelector('.quarto-navbar-tools');
+    if (toolsEl) {
+      toolsEl.appendChild(btn);
+    } else {
+      /* Fallback: try inserting before search icon */
+      var searchEl = document.getElementById('quarto-search');
+      if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
+    }
+
+    function applyState() {
+      canvas.style.display = dustOff ? 'none' : '';
+      running = !dustOff;
+      btn.classList.toggle('off', dustOff);
+      if (running) requestAnimationFrame(loop);
+    }
+
+    btn.addEventListener('click', function() {
+      dustOff = !dustOff;
+      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      applyState();
+    });
+
     init();
     window.addEventListener('resize', resize);
 
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else {
+      } else if (!dustOff) {
         running = true;
         requestAnimationFrame(loop);
       }
     });
 
-    requestAnimationFrame(loop);
+    applyState();
   });
 })();
 </script>

@@ -1,0 +1,209 @@
+<script>
+(function() {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('methods-pipeline');
+    if (!container) return;
+
+    var NS = 'http://www.w3.org/2000/svg';
+    var W = 800, H = 200;
+
+    var stages = [
+      { id: 'dft', label: 'DFT / AIMD', x: 100, detail: 'Ab initio training data', desc: 'Ab initio calculations generate training data with quantum-level accuracy for atomic interactions at solid\u2013liquid interfaces.' },
+      { id: 'mlp', label: 'ML Potentials', x: 300, detail: 'Near-DFT accuracy, classical cost', desc: 'Machine-learning interatomic potentials achieve near-DFT accuracy at classical MD cost, enabling large-scale simulations with quantum-level fidelity.' },
+      { id: 'md',  label: 'Large-Scale MD', x: 500, detail: 'Millions of atoms, nanoseconds', desc: 'Classical and MLP-driven molecular dynamics simulations of millions of atoms over nanosecond timescales resolve interfacial phenomena.' },
+      { id: 'cont', label: 'Continuum\nCoupling', x: 700, detail: 'Molecular to macroscale', desc: 'Multiscale methods couple molecular simulations with continuum solvers, bridging nanoscale physics to macroscale engineering problems.' }
+    ];
+
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+
+    var defs = document.createElementNS(NS, 'defs');
+
+    // Amber gradient (small sphere)
+    var sg = document.createElementNS(NS, 'radialGradient');
+    sg.id = 'mp-amber';
+    sg.setAttribute('cx', '0.35'); sg.setAttribute('cy', '0.35'); sg.setAttribute('r', '0.65');
+    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
+      var st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
+      sg.appendChild(st);
+    });
+    defs.appendChild(sg);
+
+    var hl = document.createElementNS(NS, 'radialGradient');
+    hl.id = 'mp-spec';
+    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
+    [{ o: '0%', a: '0.50' }, { o: '30%', a: '0.15' }, { o: '100%', a: '0' }].forEach(function(s) {
+      var st = document.createElementNS(NS, 'stop');
+      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
+      hl.appendChild(st);
+    });
+    defs.appendChild(hl);
+
+    // Arrow marker
+    var marker = document.createElementNS(NS, 'marker');
+    marker.id = 'mp-arrow';
+    marker.setAttribute('viewBox', '0 0 10 6');
+    marker.setAttribute('refX', '10'); marker.setAttribute('refY', '3');
+    marker.setAttribute('markerWidth', '8'); marker.setAttribute('markerHeight', '6');
+    marker.setAttribute('orient', 'auto');
+    var arrowPath = document.createElementNS(NS, 'path');
+    arrowPath.setAttribute('d', 'M 0 0 L 10 3 L 0 6 Z');
+    arrowPath.setAttribute('fill', 'rgba(212,160,58,0.35)');
+    marker.appendChild(arrowPath);
+    defs.appendChild(marker);
+
+    svg.appendChild(defs);
+
+    var CY = 80;
+    var NODE_R = 14;
+
+    // ===== Conduit lines between stages =====
+    for (var i = 0; i < stages.length - 1; i++) {
+      var fromX = stages[i].x + NODE_R + 4;
+      var toX = stages[i + 1].x - NODE_R - 12;
+      var line = document.createElementNS(NS, 'line');
+      line.setAttribute('x1', fromX); line.setAttribute('y1', CY);
+      line.setAttribute('x2', toX); line.setAttribute('y2', CY);
+      line.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+      line.setAttribute('stroke-width', '2');
+      line.setAttribute('stroke-dasharray', '6 4');
+      line.setAttribute('marker-end', 'url(#mp-arrow)');
+      line.style.transition = 'stroke 0.3s';
+      stages[i].lineOut = line;
+      stages[i + 1].lineIn = line;
+      svg.appendChild(line);
+    }
+
+    // ===== Stage nodes =====
+    var tooltip = document.getElementById('methods-tooltip');
+    var mtTitle = tooltip.querySelector('.mt-title');
+    var mtDesc = tooltip.querySelector('.mt-desc');
+    var hoveredStage = null;
+
+    stages.forEach(function(st) {
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + st.x + ',' + CY + ')');
+      g.style.cursor = 'pointer';
+
+      // Glow
+      var glow = document.createElementNS(NS, 'circle');
+      glow.setAttribute('r', NODE_R + 5);
+      glow.setAttribute('fill', 'rgba(212,160,58,0.25)');
+      glow.setAttribute('opacity', '0');
+      glow.style.transition = 'opacity 0.3s';
+      g.appendChild(glow);
+
+      // Sphere
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('r', NODE_R);
+      circ.setAttribute('fill', 'url(#mp-amber)');
+      g.appendChild(circ);
+
+      // Specular
+      var spec = document.createElementNS(NS, 'circle');
+      spec.setAttribute('r', NODE_R);
+      spec.setAttribute('fill', 'url(#mp-spec)');
+      g.appendChild(spec);
+
+      // Label (multi-line support)
+      var lines = st.label.split('\n');
+      lines.forEach(function(line, i) {
+        var lbl = document.createElementNS(NS, 'text');
+        lbl.setAttribute('y', NODE_R + 20 + i * 14);
+        lbl.setAttribute('text-anchor', 'middle');
+        lbl.setAttribute('fill', '#e0e0e0');
+        lbl.setAttribute('font-family', 'Inter, sans-serif');
+        lbl.setAttribute('font-size', '11');
+        lbl.setAttribute('font-weight', '600');
+        lbl.textContent = line;
+        g.appendChild(lbl);
+      });
+
+      // Detail line
+      var detail = document.createElementNS(NS, 'text');
+      detail.setAttribute('y', NODE_R + 20 + lines.length * 14);
+      detail.setAttribute('text-anchor', 'middle');
+      detail.setAttribute('fill', '#888898');
+      detail.setAttribute('font-family', 'Inter, sans-serif');
+      detail.setAttribute('font-size', '9');
+      detail.textContent = st.detail;
+      g.appendChild(detail);
+
+      // Hit area
+      var hit = document.createElementNS(NS, 'circle');
+      hit.setAttribute('r', NODE_R + 10);
+      hit.setAttribute('fill', 'transparent');
+      g.appendChild(hit);
+
+      st.el = g;
+      st.glowEl = glow;
+      svg.appendChild(g);
+
+      hit.addEventListener('mouseenter', function(e) {
+        hoveredStage = st;
+        glow.setAttribute('opacity', '1');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        showMethodTip(st, e);
+      });
+      hit.addEventListener('mousemove', function(e) { showMethodTip(st, e); });
+      hit.addEventListener('mouseleave', function() {
+        hoveredStage = null;
+        glow.setAttribute('opacity', '0');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        tooltip.classList.remove('visible');
+      });
+      hit.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        var te = e.changedTouches[0];
+        glow.setAttribute('opacity', '1');
+        showMethodTip(st, te);
+        setTimeout(function() { glow.setAttribute('opacity', '0'); tooltip.classList.remove('visible'); }, 3000);
+      });
+    });
+
+    // HPC underpinning badge
+    var hpcText = document.createElementNS(NS, 'text');
+    hpcText.setAttribute('x', W / 2); hpcText.setAttribute('y', H - 12);
+    hpcText.setAttribute('text-anchor', 'middle');
+    hpcText.setAttribute('fill', 'rgba(200,200,210,0.3)');
+    hpcText.setAttribute('font-family', 'Inter, sans-serif');
+    hpcText.setAttribute('font-size', '9');
+    hpcText.setAttribute('letter-spacing', '0.08em');
+    hpcText.textContent = 'ARCHER2 \u00b7 CIRRUS \u00b7 LOCAL GPU';
+    svg.appendChild(hpcText);
+
+    // Subtle underline for HPC
+    var hpcLine = document.createElementNS(NS, 'line');
+    hpcLine.setAttribute('x1', 200); hpcLine.setAttribute('y1', H - 24);
+    hpcLine.setAttribute('x2', 600); hpcLine.setAttribute('y2', H - 24);
+    hpcLine.setAttribute('stroke', 'rgba(200,200,210,0.08)');
+    hpcLine.setAttribute('stroke-width', '1');
+    hpcLine.setAttribute('stroke-dasharray', '4 6');
+    svg.appendChild(hpcLine);
+
+    container.appendChild(svg);
+
+    function showMethodTip(st, evt) {
+      mtTitle.textContent = st.label.replace('\n', ' ');
+      mtDesc.textContent = st.desc;
+      var rect = container.getBoundingClientRect();
+      var tx = evt.clientX - rect.left + 15;
+      var ty = evt.clientY - rect.top - 10;
+      var tw = tooltip.offsetWidth || 250;
+      if (tx + tw > rect.width - 8) tx = evt.clientX - rect.left - tw - 15;
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.classList.add('visible');
+    }
+  });
+})();
+</script>

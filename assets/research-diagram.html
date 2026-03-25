@@ -23,17 +23,50 @@
     var LIQUID_FILL = 'M ' + FT.x + ' ' + FT.y + ' L 750 40 L 750 130 L ' + CP.x + ' ' + CP.y + ' C 500 200 380 290 ' + TP.x + ' ' + TP.y + ' Q 290 180 ' + FT.x + ' ' + FT.y + ' Z';
     var VAPOR_FILL  = 'M 80 460 L 80 450 Q 190 400 ' + TP.x + ' ' + TP.y + ' C 380 290 500 200 ' + CP.x + ' ' + CP.y + ' L 750 130 L 750 460 Z';
 
-    // Three phenomena — positioned inside their metastable phase regions
+    // ===== Research themes =====
     var themes = [
-      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220, section: 'ice-nucleation-and-de-icing',
+      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
         desc: 'Supercooled water \u2014 ice nucleation on surfaces, vibration effects, icephobic design',
-        boundary: 'fusion' },
-      { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140, section: 'nanoscale-heat-transfer',
+        boundary: 'fusion',
+        narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
+        papers: [
+          { num: 17, title: 'Vibration-induced ice nucleation', journal: 'Nanoscale', year: 2025, img: 'images/papers/17-ice-nucleation-vibration.jpg', doi: 'https://doi.org/10.1039/D5NR00326A' },
+          { num: 9, title: 'Ice physics on nanostructured surfaces', journal: 'J. Chem. Phys.', year: 2021, img: 'images/papers/09-ice-nanostructure.jpg', doi: 'https://doi.org/10.1063/5.0069896' },
+          { num: 20, title: 'Contaminant removal via vibrating surfaces', journal: 'Nano Lett.', year: 2025, img: 'images/papers/20-contaminant-vibrating.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.4c05973' }
+        ]
+      },
+      { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140,
         desc: 'Interfacial thermal conductance \u2014 spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
-        boundary: 'fusion' },
-      { id: 'boil', label: 'Phase Change and Bubble Dynamics', x: 510, y: 370, section: 'boiling-and-bubble-dynamics',
+        boundary: 'fusion',
+        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies \u2014 the core focus of our ERC-funded NANO-COOL programme.',
+        papers: [
+          { num: 19, title: 'Spectral heat transfer with a meniscus', journal: 'Phys. Chem. Chem. Phys.', year: 2025, img: 'images/papers/19-spectral-meniscus.jpg', doi: 'https://doi.org/10.1039/D4CP04768K' },
+          { num: 16, title: 'Regimes of interfacial thermal conductance', journal: 'J. Phys. Chem. C', year: 2024, img: 'images/papers/16-thermal-conductance.jpeg', doi: 'https://doi.org/10.1021/acs.jpcc.4c00536' },
+          { num: 13, title: 'Self-cleaning surfaces', journal: 'Nano Lett.', year: 2023, img: 'images/papers/13-self-cleaning.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.3c00257' }
+        ]
+      },
+      { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
         desc: 'Superheated liquid \u2014 vapour bubble nucleation, wettability effects, acoustothermal dynamics',
-        boundary: 'vapor' }
+        boundary: 'vapor',
+        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation \u2014 bridging atomistic simulations with continuum theory.',
+        papers: [
+          { num: 18, title: 'Surface effects on bubble nucleation', journal: 'J. Chem. Phys.', year: 2025, img: 'images/papers/18-bubble-nucleation-surface.png', doi: 'https://doi.org/10.1063/5.0259208' },
+          { num: 15, title: 'Wettability and vapour bubble growth', journal: 'Int. J. Heat Mass Transf.', year: 2023, img: 'images/papers/15-bubble-wettability.jpg', doi: 'https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657' },
+          { num: 12, title: 'Inertio-thermal bubble growth', journal: 'J. Fluid Mech.', year: 2022, img: 'images/papers/12-inertio-thermal-bubble.png', doi: 'https://doi.org/10.1017/jfm.2022.734' },
+          { num: 11, title: 'Acoustothermal nanobubbles', journal: 'Nano Lett.', year: 2021, img: 'images/papers/11-nanobubble-acoustothermal.jpeg', doi: 'https://doi.org/10.1021/acs.nanolett.0c03895' },
+          { num: 6, title: 'Acoustothermal atomization', journal: 'Phys. Rev. Lett.', year: 2018, img: 'images/papers/06-acoustothermal-prl.png', doi: 'https://doi.org/10.1103/PhysRevLett.121.104502' }
+        ]
+      }
+    ];
+
+    // ===== Orbit bonds (cross-cutting connections) =====
+    var orbits = [
+      { from: 0, to: 1, label: 'Surface chemistry controls both ice adhesion and thermal conductance',
+        path: 'M 175 220 C 250 120 380 100 470 140' },
+      { from: 1, to: 2, label: 'Boiling heat transfer depends on interfacial thermal resistance',
+        path: 'M 470 140 C 530 220 540 300 510 370' },
+      { from: 2, to: 0, label: 'Nucleation kinetics unify freezing and boiling',
+        path: 'M 510 370 C 420 380 250 340 175 220' }
     ];
 
     // ===== Build SVG =====
@@ -124,9 +157,9 @@
     svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
 
     // ===== Phase labels =====
-    svg.appendChild(makeText(155, 180, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
     svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(600, 400, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.08)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.08)', font: '"Fraunces", serif', spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
@@ -180,6 +213,86 @@
     svg.appendChild(cpDot);
     svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.2)', anchor: 'start' }));
 
+    // ===== Orbit bonds between themes =====
+    var orbitGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(orbitGroup);
+
+    var orbitData = [];
+    orbits.forEach(function(orb) {
+      // Visible arc
+      var arc = document.createElementNS(NS, 'path');
+      arc.setAttribute('d', orb.path);
+      arc.setAttribute('fill', 'none');
+      arc.setAttribute('stroke', 'rgba(212,160,58,0.12)');
+      arc.setAttribute('stroke-width', '1.5');
+      arc.setAttribute('stroke-dasharray', '6 4');
+      arc.style.transition = 'stroke 0.3s, stroke-width 0.3s';
+      orbitGroup.appendChild(arc);
+
+      // Wide invisible hit area for hover
+      var hitArc = document.createElementNS(NS, 'path');
+      hitArc.setAttribute('d', orb.path);
+      hitArc.setAttribute('fill', 'none');
+      hitArc.setAttribute('stroke', 'transparent');
+      hitArc.setAttribute('stroke-width', '20');
+      hitArc.style.cursor = 'pointer';
+      orbitGroup.appendChild(hitArc);
+
+      // Drifting particle
+      var particle = document.createElementNS(NS, 'circle');
+      particle.setAttribute('r', '2.5');
+      particle.setAttribute('fill', '#d4a03a');
+      particle.setAttribute('opacity', '0.5');
+      orbitGroup.appendChild(particle);
+
+      var entry = { arc: arc, hitArc: hitArc, particle: particle, pathEl: arc, orb: orb, t: Math.random() };
+      orbitData.push(entry);
+
+      hitArc.addEventListener('mouseenter', function(e) {
+        arc.setAttribute('stroke', 'rgba(212,160,58,0.35)');
+        arc.setAttribute('stroke-width', '2');
+        particle.setAttribute('opacity', '0.9');
+        showOrbitTip(orb, e);
+      });
+      hitArc.addEventListener('mousemove', function(e) { showOrbitTip(orb, e); });
+      hitArc.addEventListener('mouseleave', function() {
+        arc.setAttribute('stroke', 'rgba(212,160,58,0.12)');
+        arc.setAttribute('stroke-width', '1.5');
+        particle.setAttribute('opacity', '0.5');
+        hideTooltip();
+      });
+    });
+
+    // Orbit tooltip (reuses the research-tooltip element)
+    var tooltip = document.getElementById('research-tooltip');
+    var ttTitle = tooltip.querySelector('.rt-title');
+    var ttDesc = tooltip.querySelector('.rt-desc');
+
+    function showOrbitTip(orb, evt) {
+      var from = themes[orb.from], to = themes[orb.to];
+      ttTitle.textContent = from.label.replace('\n', ' ') + ' \u2194 ' + to.label.replace('\n', ' ');
+      ttDesc.textContent = orb.label;
+      var rect = container.getBoundingClientRect();
+      var tx = evt.clientX - rect.left + 15;
+      var ty = evt.clientY - rect.top - 10;
+      tooltip.style.left = Math.min(tx, rect.width - 280) + 'px';
+      tooltip.style.top = ty + 'px';
+      tooltip.classList.add('visible');
+    }
+
+    // Animate orbit particles
+    function animateParticles() {
+      orbitData.forEach(function(entry) {
+        entry.t += 0.0008;
+        if (entry.t > 1) entry.t -= 1;
+        var len = entry.pathEl.getTotalLength();
+        var pt = entry.pathEl.getPointAtLength(entry.t * len);
+        entry.particle.setAttribute('cx', pt.x.toFixed(1));
+        entry.particle.setAttribute('cy', pt.y.toFixed(1));
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
     // ===== Research markers =====
     var MARKER_R = 14;
     var markerGroup = document.createElementNS(NS, 'g');
@@ -207,16 +320,20 @@
       spec.setAttribute('fill', 'url(#pd-spec)');
       g.appendChild(spec);
 
-      var label = document.createElementNS(NS, 'text');
-      label.setAttribute('y', MARKER_R + 18);
-      label.setAttribute('text-anchor', 'middle');
-      label.setAttribute('fill', '#c0c0c8');
-      label.setAttribute('font-family', 'Inter, sans-serif');
-      label.setAttribute('font-size', '10');
-      label.setAttribute('font-weight', '600');
-      label.setAttribute('letter-spacing', '0.03em');
-      label.textContent = th.label;
-      g.appendChild(label);
+      // Multi-line label support
+      var lines = th.label.split('\n');
+      lines.forEach(function(line, i) {
+        var label = document.createElementNS(NS, 'text');
+        label.setAttribute('y', MARKER_R + 18 + i * 14);
+        label.setAttribute('text-anchor', 'middle');
+        label.setAttribute('fill', '#c0c0c8');
+        label.setAttribute('font-family', 'Inter, sans-serif');
+        label.setAttribute('font-size', '10');
+        label.setAttribute('font-weight', '600');
+        label.setAttribute('letter-spacing', '0.03em');
+        label.textContent = line;
+        g.appendChild(label);
+      });
 
       th.el = g;
       th.glowEl = glow;
@@ -226,13 +343,11 @@
     container.appendChild(svg);
 
     // ===== Tooltip (hover) =====
-    var tooltip = document.getElementById('research-tooltip');
-    var ttTitle = tooltip.querySelector('.rt-title');
-    var ttDesc = tooltip.querySelector('.rt-desc');
     var hoveredTheme = null;
 
     function showTooltip(th, screenX, screenY) {
-      ttTitle.textContent = th.label;
+      var displayLabel = th.label.replace('\n', ' ');
+      ttTitle.textContent = displayLabel;
       ttDesc.textContent = th.desc;
       var rect = container.getBoundingClientRect();
       var tx = screenX - rect.left + 15;
@@ -288,7 +403,7 @@
 
     svg.addEventListener('mouseleave', clearHighlight);
 
-    // Touch: tap highlights + opens callout, tap elsewhere dismisses
+    // Touch: tap highlights + opens panel, tap elsewhere dismisses
     svg.addEventListener('touchend', function(e) {
       var touch = e.changedTouches[0];
       var rect = svg.getBoundingClientRect();
@@ -298,41 +413,63 @@
       if (hit) {
         e.preventDefault();
         highlightTheme(hit);
-        openCallout(hit);
+        openPanel(hit);
       } else {
         clearHighlight();
-        if (calloutOpen) closeCallout();
+        if (panelOpen) closePanel();
       }
     });
 
-    // ===== Callout card (click) =====
-    var callout = document.getElementById('research-callout');
-    var rcTitle = callout.querySelector('.rc-title');
-    var rcBody = callout.querySelector('.rc-body');
-    var rcClose = callout.querySelector('.rc-close');
-    var calloutOpen = false;
+    // ===== Theme panel (click) =====
+    var panel = document.getElementById('research-panel');
+    var rpTitle = panel.querySelector('.rp-title');
+    var rpNarrative = panel.querySelector('.rp-narrative');
+    var rpPapers = panel.querySelector('.rp-papers');
+    var rpClose = panel.querySelector('.rp-close');
+    var panelOpen = false;
 
-    function openCallout(th) {
-      // Pull content from the page section
-      var section = document.getElementById(th.section);
-      if (!section) return;
+    function openPanel(th) {
+      rpTitle.textContent = th.label.replace('\n', ' ');
+      rpNarrative.textContent = th.narrative;
 
-      rcTitle.textContent = th.label;
-      // Clone everything after the h3
-      rcBody.innerHTML = '';
-      var children = section.children;
-      for (var i = 0; i < children.length; i++) {
-        if (children[i].tagName === 'H3') continue;
-        rcBody.appendChild(children[i].cloneNode(true));
-      }
+      rpPapers.innerHTML = '';
+      th.papers.forEach(function(p) {
+        var card = document.createElement('a');
+        card.className = 'rp-paper';
+        card.href = p.doi;
+        card.target = '_blank';
+        card.rel = 'noopener';
 
-      callout.classList.add('visible');
-      calloutOpen = true;
+        var img = document.createElement('img');
+        img.className = 'rp-thumb';
+        img.src = p.img;
+        img.alt = '';
+        card.appendChild(img);
+
+        var info = document.createElement('div');
+        info.className = 'rp-paper-info';
+
+        var title = document.createElement('div');
+        title.className = 'rp-paper-title';
+        title.textContent = '[' + p.num + '] ' + p.title;
+        info.appendChild(title);
+
+        var meta = document.createElement('div');
+        meta.className = 'rp-paper-meta';
+        meta.textContent = p.journal + ' (' + p.year + ')';
+        info.appendChild(meta);
+
+        card.appendChild(info);
+        rpPapers.appendChild(card);
+      });
+
+      panel.classList.add('visible');
+      panelOpen = true;
     }
 
-    function closeCallout() {
-      callout.classList.remove('visible');
-      calloutOpen = false;
+    function closePanel() {
+      panel.classList.remove('visible');
+      panelOpen = false;
     }
 
     svg.addEventListener('click', function(e) {
@@ -341,21 +478,23 @@
       var svgY = (e.clientY - rect.top) * (500 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit) {
-        openCallout(hit);
-      } else if (calloutOpen) {
-        closeCallout();
+        openPanel(hit);
+      } else if (panelOpen) {
+        closePanel();
       }
     });
 
-    rcClose.addEventListener('click', function(e) {
+    rpClose.addEventListener('click', function(e) {
       e.stopPropagation();
-      closeCallout();
+      closePanel();
     });
 
-    // Close on Escape
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && calloutOpen) closeCallout();
+      if (e.key === 'Escape' && panelOpen) closePanel();
     });
+
+    // Start particle animation
+    requestAnimationFrame(animateParticles);
   });
 })();
 </script>
