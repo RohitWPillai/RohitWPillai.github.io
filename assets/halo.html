@@ -89,8 +89,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var style = document.createElementNS(ns, 'style');
   style.textContent =
     '.halo-seg path.halo-bg { transition: stroke 0.3s ease; }' +
+    '.halo-seg path.halo-outline { transition: stroke-opacity 0.3s ease; }' +
     '.halo-seg text { transition: fill 0.3s ease; cursor: pointer; }' +
     '.halo-seg:hover path.halo-bg { stroke: rgba(240, 238, 232, 0.95); }' +
+    '.halo-seg:hover path.halo-outline { stroke-opacity: 0; }' +
     '.halo-seg:hover text { fill: #2d3047; }';
   svg.appendChild(style);
 
@@ -155,6 +157,18 @@ document.addEventListener('DOMContentLoaded', function() {
     anchor.setAttribute('rel', 'noopener');
     anchor.setAttribute('class', 'halo-seg');
     anchor.setAttribute('aria-label', links[i].text);
+    // Outline arc (slightly wider, drawn behind bgPath to create a border)
+    var outPath = document.createElementNS(ns, 'path');
+    outPath.setAttribute('d', arc(bgR, a1, a2, true));
+    outPath.setAttribute('class', 'halo-outline');
+    outPath.setAttribute('fill', 'none');
+    outPath.setAttribute('stroke', '#d4a03a');
+    outPath.setAttribute('stroke-width', String(bgStroke + 3));
+    outPath.setAttribute('stroke-linecap', 'round');
+    outPath.setAttribute('stroke-opacity', '0.5');
+    outPath.style.pointerEvents = 'none';
+
+    anchor.appendChild(outPath);
     anchor.appendChild(bgPath);
     anchor.appendChild(text);
     svg.appendChild(anchor);

@@ -4,7 +4,8 @@ title: "Research Group"
 
 <div id="team-network-wrap">
 <div id="team-network"></div>
-<div class="team-timeline"><input type="range" id="team-year-slider" class="team-slider" min="2016" max="2026" value="2026" step="1"><span id="team-year-display" class="team-year-display">2026</span></div>
+<div class="team-controls"><div class="team-timeline"><button id="team-play-btn" class="team-play-btn" aria-label="Replay timeline">&#9654;</button><input type="range" id="team-year-slider" class="team-slider" min="2018" max="2026" value="2026" step="0.5"><span id="team-year-display" class="team-year-display">2026</span></div><span id="team-member-count" class="team-member-count"></span></div>
+<div class="team-legend"><span class="legend-item"><span class="legend-dot legend-amber"></span>PI</span><span class="legend-item"><span class="legend-dot legend-blue"></span>Postdoc</span><span class="legend-item"><span class="legend-dot legend-slate"></span>PhD</span><span class="legend-item"><span class="legend-dot legend-teal"></span>Industry</span></div>
 <div id="team-tooltip" class="team-tooltip">
 <div class="tt-name"></div>
 <div class="tt-role"></div>

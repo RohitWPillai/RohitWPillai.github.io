@@ -15,18 +15,18 @@
     wallSigma: 20, wallEps: 3.0, wallCutoff: 60,
 
     // --- Integration (fast dynamics — time-lapse feel) ---
-    damping: 0.88, brownian: 0.6, maxForce: 3.0, maxVel: 4.0,
+    damping: 0.88, brownian: 0.384, maxForce: 3.0, maxVel: 4.0,
 
     // --- Fluid ---
     fluidDensity: 0.001, fluidR: 4,  // particles per px² (constant across all viewports)
 
     // --- Liquid-vapor interface ---
-    lvFrac: 0.33,              // top 1/3 of fluid region is vapor
-    vaporBrownMul: 3,           // vapor gets 3x Brownian kick
+    lvFrac: 0.19,              // vapour region ≈ same thickness as solid
+    vaporBrownMul: 1.08,        // vapor gets 1.08x Brownian kick
     vaporDamp: 0.96,            // vapor: low friction
     vaporTargetFrac: 0.12,     // target 12% particles in vapor
     vaporMinFrac: 0.08,        // force evaporation below this
-    evapKick: 2.5,             // upward velocity for evaporation
+    evapKick: 0.9,             // upward velocity for evaporation
 
     // --- Nanoparticles (disabled — disrupt liquid structure) ---
     nanoDesktop: 0, nanoMobile: 0,
@@ -785,20 +785,6 @@
       }
       ctx.globalAlpha = 1;
 
-      // Interface glow line
-      var iy = interfaceY;
-      var ig = ctx.createLinearGradient(0, iy - 8, 0, iy + 8);
-      if (dark) {
-        ig.addColorStop(0,   'rgba(70,135,215,0)');
-        ig.addColorStop(0.5, 'rgba(70,135,215,0.08)');
-        ig.addColorStop(1,   'rgba(70,135,215,0)');
-      } else {
-        ig.addColorStop(0,   'rgba(45,48,71,0)');
-        ig.addColorStop(0.5, 'rgba(45,48,71,0.04)');
-        ig.addColorStop(1,   'rgba(45,48,71,0)');
-      }
-      ctx.fillStyle = ig;
-      ctx.fillRect(0, iy - 8, W, 16);
     }
 
     // --- Nanoparticles ---
@@ -1076,6 +1062,10 @@
 
     bindSlider('md-trail-a', 'md-trail-a-v', function(m) { gTrailAlpha = CFG.trailAlpha * m; });
     bindSlider('md-trail-f', 'md-trail-f-v', function(m) { gTrailFade = CFG.trailFade * m; });
+    /* Default trail fade slider to 10x */
+    var tfSlider = document.getElementById('md-trail-f');
+    var tfVal = document.getElementById('md-trail-f-v');
+    if (tfSlider) { tfSlider.value = 100; tfVal.textContent = '10'; gTrailFade = CFG.trailFade * 10; }
     bindSlider('md-trail-w', 'md-trail-w-v', function(m) { gTrailWidth = CFG.trailWidth * m; });
     bindSlider('md-part-a',  'md-part-a-v',  function(m) { gFluidAlpha = Math.min(1, CFG.fluidAlpha * m); });
     bindSlider('md-part-r',  'md-part-r-v',  function(m) { gFluidR = Math.max(1, Math.round(CFG.fluidR * m)); });
@@ -1083,14 +1073,16 @@
     document.getElementById('md-reset').addEventListener('click', function() {
       gTemp = CFG.tempDefault; gEps = 1; gDen = 1;
       scaleFactor = 1; ftBuf = [];
-      gTrailAlpha = CFG.trailAlpha; gTrailFade = CFG.trailFade;
+      gTrailAlpha = CFG.trailAlpha; gTrailFade = CFG.trailFade * 10;
       gTrailWidth = CFG.trailWidth; gFluidAlpha = CFG.fluidAlpha;
       gFluidR = CFG.fluidR;
 
       var ids = ['temp', 'dens', 'eps', 'trail-a', 'trail-f', 'trail-w', 'part-a', 'part-r'];
       for (var i = 0; i < ids.length; i++) {
-        document.getElementById('md-' + ids[i]).value = 50;
-        document.getElementById('md-' + ids[i] + '-v').textContent = '1.0';
+        var defVal = ids[i] === 'trail-f' ? 100 : 50;
+        var defTxt = ids[i] === 'trail-f' ? '10' : '1.0';
+        document.getElementById('md-' + ids[i]).value = defVal;
+        document.getElementById('md-' + ids[i] + '-v').textContent = defTxt;
       }
       tCtx.clearRect(0, 0, W, H);
       initParticles();
