@@ -4,7 +4,7 @@
     "href": "team.html",
     "title": "Research Group",
     "section": "",
-    "text": "▶\n\n2026\n\n\n\n\nPIPostdocPhDIndustry"
+    "text": "2026\n\n\n\n\nPIPostdocPhDIndustry"
   },
   {
     "objectID": "team.html#current-members",
@@ -77,11 +77,11 @@
     "text": "Research Funding"
   },
   {
-    "objectID": "cv.html#talks-presentations",
-    "href": "cv.html#talks-presentations",
+    "objectID": "cv.html#talks",
+    "href": "cv.html#talks",
     "title": "CV",
-    "section": "Talks & Presentations",
-    "text": "Talks & Presentations\n\n\n\n\n\n\n\n▶\n\n2014"
+    "section": "Talks",
+    "text": "Talks\n\n\n\n\n\n\n2027"
   },
   {
     "objectID": "cv.html#service-leadership",
@@ -109,7 +109,7 @@
     "href": "index.html",
     "title": "Rohit Pillai",
     "section": "",
-    "text": "My group uses molecular simulations to study how freezing/boiling occurs, and how heat is transported at surfaces and interfaces, with applications from aircraft icing to designing next-generation cooling technologies.\n  \n    Explore research →\n  \n  \n    \n      Ice Nucleation\n      How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings\n    \n    \n      Interfacial Heat Transfer\n      Spectral thermal conductance at solid–liquid interfaces, surface chemistry, and nanomaterial-enhanced cooling\n    \n    \n      Phase Change & Bubbles\n      Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics"
+    "text": "My group uses molecular simulations to study how freezing/boiling occurs, and how heat is transported at surfaces and interfaces, with applications from aircraft icing to designing next-generation cooling technologies.\n  \n    Explore research →\n  \n  \n    \n      Ice Nucleation\n      How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings\n    \n    \n      Interfacial Thermofluids\n      Thermal conductance at solid–liquid interfaces, surface wetting and self-cleaning, and nanomaterial-enhanced cooling\n    \n    \n      Phase Change & Bubbles\n      Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics"
   },
   {
     "objectID": "projects.html",

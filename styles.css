@@ -515,31 +515,6 @@ html {
   padding: 0 1rem;
 }
 
-.team-play-btn {
-  background: none;
-  border: 1px solid rgba(212,160,58,0.35);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  color: #d4a03a;
-  font-size: 0.7rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0 0 2px;
-  flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
-}
-.team-play-btn:hover {
-  background: rgba(212,160,58,0.12);
-  border-color: rgba(212,160,58,0.6);
-}
-.team-play-btn.playing {
-  background: rgba(212,160,58,0.15);
-  border-color: #d4a03a;
-}
-
 .team-slider {
   flex: 1;
   -webkit-appearance: none;
@@ -916,30 +891,6 @@ html {
   width: 100%;
   margin: 0.3rem auto 0;
   padding: 0 1rem;
-}
-.talks-play-btn {
-  background: none;
-  border: 1px solid rgba(212,160,58,0.35);
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-  color: #d4a03a;
-  font-size: 0.7rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0 0 2px;
-  flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
-}
-.talks-play-btn:hover {
-  background: rgba(212,160,58,0.12);
-  border-color: rgba(212,160,58,0.6);
-}
-.talks-play-btn.playing {
-  background: rgba(212,160,58,0.15);
-  border-color: #d4a03a;
 }
 .talks-slider {
   flex: 1;
