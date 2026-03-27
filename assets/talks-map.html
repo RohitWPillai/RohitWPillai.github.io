@@ -633,6 +633,37 @@
     }
     if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MAX);
 
+    /* ── Autoplay: scrub from YEAR_MIN to YEAR_MAX on load ── */
+    var autoPlaying = false;
+    var AUTOPLAY_DURATION = 12000;
+    var AUTOPLAY_DELAY = 800;
+
+    function runTimeline() {
+      autoPlaying = true;
+      updateForYear(YEAR_MIN);
+      if (slider) slider.value = YEAR_MIN;
+      if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
+      var span = YEAR_MAX - YEAR_MIN;
+      var autoStart = null;
+      function autoStep(timestamp) {
+        if (!autoPlaying) return;
+        if (!autoStart) autoStart = timestamp;
+        var t = Math.min(1, (timestamp - autoStart) / AUTOPLAY_DURATION);
+        var eased = 1 - Math.pow(1 - t, 2);
+        var year = Math.round((YEAR_MIN + eased * span) * 2) / 2;
+        if (slider) slider.value = year;
+        if (yearDisplay) yearDisplay.textContent = formatYear(year);
+        updateForYear(year);
+        if (t < 1) requestAnimationFrame(autoStep);
+        else autoPlaying = false;
+      }
+      requestAnimationFrame(autoStep);
+    }
+
+    if (slider) {
+      slider.addEventListener("pointerdown", function() { autoPlaying = false; });
+    }
+
     /* ── Global nearest-city hit test (handles overlapping pins) ── */
     var hoveredCity = null;
     var MAX_HIT_DIST = 25; // max SVG-space px to snap to a pin
@@ -843,24 +874,15 @@
         renderDots();
         drawInset(rings);
         addLegend();
-        updateForYear(YEAR_MAX);
-        /* Snap all visible dots to full opacity immediately (no fade-in on load) */
-        cities.forEach(function(city) {
-          var visible = city.firstYear <= YEAR_MAX;
-          if (city.mainDot) city.mainDot.style.transition = "none";
-          if (city.insetDot) city.insetDot.style.transition = "none";
-          if (city.mainDot) city.mainDot.style.opacity = visible ? "1" : "0";
-          if (city.insetDot) city.insetDot.style.opacity = visible ? "1" : "0";
-        });
-        /* Re-enable transitions after a frame so manual scrubbing animates smoothly */
-        requestAnimationFrame(function() {
-          requestAnimationFrame(function() {
-            cities.forEach(function(city) {
-              if (city.mainDot) city.mainDot.style.transition = "opacity 0.4s";
-              if (city.insetDot) city.insetDot.style.transition = "opacity 0.4s";
-            });
-          });
-        });
+        updateForYear(YEAR_MIN);
+        // Autoplay when map scrolls into view (once)
+        var observer = new IntersectionObserver(function(entries) {
+          if (entries[0].isIntersecting) {
+            observer.disconnect();
+            setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
+          }
+        }, { threshold: 0.3 });
+        observer.observe(container);
       })
       .catch(function() {
         renderDots();

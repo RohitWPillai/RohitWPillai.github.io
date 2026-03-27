@@ -44,12 +44,27 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.pub-card').forEach(function(card) {
     card.addEventListener('click', function(e) {
       if (e.target.closest('a')) return;
-      var doi = card.querySelector('a[href*="doi.org"]');
-      if (doi) window.open(doi.href, '_blank');
+      var link = card.querySelector('a[href*="doi.org"]') || card.querySelector('a[href*="ssrn.com"]') || card.querySelector('.pub-text a[href]');
+      if (link) window.open(link.href, '_blank');
     });
   });
 });
 </script>
+
+## Preprints
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/preprint-liquid-utilisation.jpg" alt="The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance">
+<div class="pub-text">
+
+**The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance at Metal/Water Interfaces**
+El-Rifai A, Merabia S, Hulikal Chakrapani T, <u>Pillai R</u>
+Submitted to <a href="https://www.sciencedirect.com/journal/international-journal-of-heat-and-mass-transfer"><em>International Journal of Heat and Mass Transfer</em></a> (2026) | <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6479492">Preprint</a>
+
+</div>
+</div>
+
+---
 
 ## Journal Articles
 
@@ -297,9 +312,16 @@ Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
 
 ## Book Chapters
 
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/book-icephobic-surfaces.jpg" alt="On the Development of Icephobic Surfaces">
+<div class="pub-text">
+
 **On the Development of Icephobic Surfaces: Bridging Experiments and Simulations**
 Tagliaro I, Cerpelloni A, Nikiforidis VM, <u>Pillai R</u>, Antonini C
-In: Marengo M, De Coninck J (eds) *The Surface Wettability Effect on Phase Change*, Springer, Cham, pp. 235–272 (2022) | [DOI](https://doi.org/10.1007/978-3-030-82992-6_8)
+In: Marengo M, De Coninck J (eds) <a href="https://www.springer.com/gp/book/9783030829919"><em>The Surface Wettability Effect on Phase Change</em></a>, Springer, Cham, pp. 235–272 (2022) | [DOI](https://doi.org/10.1007/978-3-030-82992-6_8)
+
+</div>
+</div>
 
 ---
 
