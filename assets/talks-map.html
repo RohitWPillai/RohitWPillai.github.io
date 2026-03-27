@@ -202,6 +202,7 @@
     svg.style.width = "100%";
     svg.style.height = "auto";
     svg.style.display = "block";
+    svg.setAttribute("aria-label", "World map of conference and invited talks with timeline scrubber");
 
     /* Radial gradients */
     var defs = document.createElementNS(NS, "defs");
@@ -377,6 +378,19 @@
         var te = e.changedTouches[0];
         glow.setAttribute("opacity", "1"); showTip(city, te);
         setTimeout(function() { glow.setAttribute("opacity", "0"); hideTip(); }, 3000);
+      });
+
+      // Keyboard accessibility
+      g.setAttribute("tabindex", "0");
+      g.setAttribute("role", "img");
+      g.setAttribute("aria-label", city.city + ": " + city.total + " talk" + (city.total > 1 ? "s" : ""));
+      g.addEventListener("focus", function() {
+        glow.setAttribute("opacity", "1");
+        var r = g.getBoundingClientRect();
+        showTip(city, { clientX: r.left + r.width / 2, clientY: r.top });
+      });
+      g.addEventListener("blur", function() {
+        glow.setAttribute("opacity", "0"); hideTip();
       });
 
       parent.appendChild(g);
@@ -692,6 +706,10 @@
         renderDots();
         addLegend();
         updateForYear(YEAR_MAX);
+        var msg = document.createElement("div");
+        msg.style.cssText = "text-align:center;color:#9898b0;font-size:0.75rem;padding:0.5rem;";
+        msg.textContent = "Map outline unavailable";
+        container.appendChild(msg);
       });
   });
 })();

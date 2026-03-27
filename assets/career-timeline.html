@@ -78,7 +78,7 @@
       { yearFrac: 2021.17, side: -1, label: 'Nanobubble press', url: 'https://www.eurekalert.org/news-releases/691043',
         tip: 'Acoustothermal nanobubble nucleation paper covered by EurekAlert, ScienceDaily, Phys.org, February 2021.' },
       { yearFrac: 2022.75, side: 1,  label: 'PDRA Champion',
-        tip: 'Appointed PDRA Champion for the School of Engineering \u2014 advocate for postdoc welfare and career development, September 2022.' },
+        tip: 'Appointed PDRA Champion for the School of Engineering, advocate for postdoc welfare and career development, September 2022.' },
       { yearFrac: 2023.58, side: 1,  label: 'Cicada press', url: 'https://theconversation.com/cicadas-could-hold-the-secret-to-self-cleaning-surfaces-new-study-207435',
         tip: 'Self-cleaning cicada wing paper covered by The Conversation, Phys.org, TechXplore, July 2023.' },
       { yearFrac: 2024.08, side: -1, label: 'ERC Evaluator \u00b7 EPSRC College',
@@ -153,6 +153,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive career timeline from 2017 PhD to present, with milestones');
 
     var defs = document.createElementNS(NS, 'defs');
     Object.keys(COLORS).forEach(function(key) {
@@ -281,7 +282,7 @@
         roleText.setAttribute('x', '0');
         roleText.setAttribute('y', YEAR_R + 32);
         roleText.setAttribute('text-anchor', 'middle');
-        roleText.setAttribute('fill', '#8888a0');
+        roleText.setAttribute('fill', '#9898b0');
         roleText.setAttribute('font-family', 'Inter, sans-serif');
         roleText.setAttribute('font-size', '9');
         roleText.setAttribute('font-weight', '600');
@@ -291,9 +292,21 @@
       }
 
       (function(d, g) {
-        g.addEventListener('mouseenter', function() { showTip(d.year + (d.role ? ' \u2014 ' + d.role : ''), d.tip); });
+        g.addEventListener('mouseenter', function() { showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip); });
         g.addEventListener('mousemove', moveTip);
         g.addEventListener('mouseleave', hideTip);
+        // Keyboard accessibility
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', d.year + (d.role ? ', ' + d.role : '') + '. ' + d.tip);
+        g.addEventListener('focus', function() {
+          showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', hideTip);
       })(d, g);
 
       d.el = g;
@@ -330,6 +343,18 @@
         g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
         g.addEventListener('mousemove', moveTip);
         g.addEventListener('mouseleave', hideTip);
+        // Keyboard accessibility
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', t.label + '. ' + t.tip);
+        g.addEventListener('focus', function() {
+          showTip(t.label, t.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', hideTip);
       })(t, g);
 
       t.markerEl = g;
@@ -374,6 +399,26 @@
           g.addEventListener('mouseleave', hideTip);
         })(m, g);
       }
+
+      // Keyboard accessibility
+      (function(m, g) {
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', m.url ? 'link' : 'img');
+        g.setAttribute('aria-label', m.label + (m.tip ? '. ' + m.tip : ''));
+        g.addEventListener('focus', function() {
+          if (m.tip) {
+            showTip(m.label, m.tip);
+            var cr = container.getBoundingClientRect();
+            var r = g.getBoundingClientRect();
+            tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+            tooltip.style.top = (r.top - cr.top - 55) + 'px';
+          }
+        });
+        g.addEventListener('blur', hideTip);
+        g.addEventListener('keydown', function(e) {
+          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
+        });
+      })(m, g);
 
       m.el = g;
       nodeGroup.appendChild(g);

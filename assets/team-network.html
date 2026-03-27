@@ -93,6 +93,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive team network, use Tab to navigate members, Enter to visit profiles');
 
     // Defs
     var defs = document.createElementNS(NS, 'defs');
@@ -300,10 +301,36 @@
 
       m.el = g;
       m.glowEl = glow;
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', m.url ? 'link' : 'img');
+      g.setAttribute('aria-label', m.name + ', ' + m.role + (m.now ? '. Now: ' + m.now : ''));
+      (function(m, g) {
+        g.addEventListener('focus', function() {
+          hoveredNode = m;
+          members.forEach(function(o) { o.glowEl.setAttribute('opacity', o === m ? '0.6' : '0'); });
+          var r = g.getBoundingClientRect();
+          showTooltip(m, r.left + r.width / 2, r.top);
+        });
+        g.addEventListener('blur', function() { hideTooltip(); });
+        g.addEventListener('keydown', function(e) {
+          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
+        });
+      })(m, g);
+
       nodeGroup.appendChild(g);
     });
 
     container.appendChild(svg);
+
+    // Hide text fallback only after SVG is confirmed in DOM
+    try {
+      if (container.querySelector('svg')) {
+        var textFallback = document.querySelector('.team-text-content');
+        if (textFallback) textFallback.classList.add('js-hidden');
+      }
+    } catch(e) { /* SVG failed — keep text fallback visible */ }
 
     // ===== Role color by year =====
     function getRoleColor(m, year) {

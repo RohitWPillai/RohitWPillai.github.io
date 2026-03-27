@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ### 2025
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/20-contaminant-vibrating.jpg" alt="">
+<img class="pub-thumb" src="images/papers/20-contaminant-vibrating.jpg" alt="Contaminant Removal Using Vibrating Surfaces">
 <div class="pub-text">
 
 [20] **Contaminant Removal Using Vibrating Surfaces: Nanoscale Insights and a Universal Scaling Law**
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/19-spectral-meniscus.jpg" alt="">
+<img class="pub-thumb" src="images/papers/19-spectral-meniscus.jpg" alt="Spectral mechanisms of interfacial heat transfer with a meniscus">
 <div class="pub-text">
 
 [19] **Spectral mechanisms of solid/liquid interfacial heat transfer in the presence of a meniscus**
@@ -78,7 +78,7 @@ El-Rifai A, Klochko L, Mandrolko V, Perumanath S, Lacroix D, <u>Pillai R</u>, Is
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/18-bubble-nucleation-surface.png" alt="">
+<img class="pub-thumb" src="images/papers/18-bubble-nucleation-surface.png" alt="Nanoscale surface effects on heterogeneous vapor bubble nucleation">
 <div class="pub-text">
 
 [18] **Nanoscale surface effects on heterogeneous vapor bubble nucleation**
@@ -89,7 +89,7 @@ Sullivan P, Dockar D, <u>Pillai R</u>
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/17-ice-nucleation-vibration.jpg" alt="">
+<img class="pub-thumb" src="images/papers/17-ice-nucleation-vibration.jpg" alt="Vibration-induced heterogeneous ice nucleation">
 <div class="pub-text">
 
 [17] **Nanoscale insights into vibration-induced heterogeneous ice nucleation**
@@ -102,7 +102,7 @@ Chen P, <u>Pillai R</u>, Datta S
 ### 2024
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/16-thermal-conductance.jpeg" alt="">
+<img class="pub-thumb" src="images/papers/16-thermal-conductance.jpeg" alt="Regimes of interfacial thermal conductance at a solid-liquid interface">
 <div class="pub-text">
 
 [16] **Unraveling the Regimes of Interfacial Thermal Conductance at a Solid/Liquid Interface**
@@ -115,7 +115,7 @@ El-Rifai A, Perumanath S, Borg MK, <u>Pillai R</u>
 ### 2023
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/15-bubble-wettability.jpg" alt="">
+<img class="pub-thumb" src="images/papers/15-bubble-wettability.jpg" alt="Surface wettability and the growth of vapour bubbles">
 <div class="pub-text">
 
 [15] **The role of surface wettability on the growth of vapour bubbles**
@@ -126,7 +126,7 @@ Sullivan P, Dockar D, Enright R, Borg MK, <u>Pillai R</u>
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/14-rolling-sliding.png" alt="">
+<img class="pub-thumb" src="images/papers/14-rolling-sliding.png" alt="Rolling and sliding modes of nanodroplet spreading">
 <div class="pub-text">
 
 [14] **Rolling and Sliding Modes of Nanodroplet Spreading: Molecular Simulations and a Continuum Approach**
@@ -137,7 +137,7 @@ Perumanath S, Chubynsky MV, <u>Pillai R</u>, Borg MK, Sprittles JE
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/13-self-cleaning.jpg" alt="">
+<img class="pub-thumb" src="images/papers/13-self-cleaning.jpg" alt="Contaminant removal from self-cleaning surfaces">
 <div class="pub-text">
 
 [13] **Contaminant Removal from Nature's Self-Cleaning Surfaces**
@@ -150,7 +150,7 @@ Perumanath S, <u>Pillai R</u>, Borg MK
 ### 2022
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/12-inertio-thermal-bubble.png" alt="">
+<img class="pub-thumb" src="images/papers/12-inertio-thermal-bubble.png" alt="Inertio-thermal vapour bubble growth">
 <div class="pub-text">
 
 [12] **Inertio-thermal vapour bubble growth**
@@ -163,7 +163,7 @@ Sullivan P, Dockar D, Borg MK, Enright R, <u>Pillai R</u>
 ### 2021
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/11-nanobubble-acoustothermal.jpeg" alt="">
+<img class="pub-thumb" src="images/papers/11-nanobubble-acoustothermal.jpeg" alt="Acoustothermal nucleation of surface nanobubbles">
 <div class="pub-text">
 
 [11] **Acoustothermal Nucleation of Surface Nanobubbles**
@@ -174,7 +174,7 @@ Datta S, <u>Pillai R</u>, Borg MK, Sefiane K
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/10-bnnt-water.png" alt="">
+<img class="pub-thumb" src="images/papers/10-bnnt-water.png" alt="Water transport in boron nitride nanotubes">
 <div class="pub-text">
 
 [10] **Untangling the physics of water transport in boron nitride nanotubes**
@@ -185,7 +185,7 @@ Mistry S, <u>Pillai R</u>, Mattia D, Borg MK
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/09-ice-nanostructure.jpg" alt="">
+<img class="pub-thumb" src="images/papers/09-ice-nanostructure.jpg" alt="Surface nanostructure and wettability effects on interfacial ice physics">
 <div class="pub-text">
 
 [9] **Impact of surface nanostructure and wettability on interfacial ice physics**
@@ -198,7 +198,7 @@ Nikiforidis V-M, Datta S, Borg MK, <u>Pillai R</u>
 ### 2020
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/08-md-dsmc-coupling.png" alt="">
+<img class="pub-thumb" src="images/papers/08-md-dsmc-coupling.png" alt="Coupling Molecular Dynamics and Direct Simulation Monte Carlo">
 <div class="pub-text">
 
 [8] **Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library**
@@ -211,7 +211,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 ### 2018
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/07-nanodroplet-vibrating.png" alt="">
+<img class="pub-thumb" src="images/papers/07-nanodroplet-vibrating.png" alt="Dynamics of nanodroplets on vibrating surfaces">
 <div class="pub-text">
 
 [7] **Dynamics of Nanodroplets on Vibrating Surfaces**
@@ -222,7 +222,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/06-acoustothermal-prl.png" alt="">
+<img class="pub-thumb" src="images/papers/06-acoustothermal-prl.png" alt="Acoustothermal atomization of water nanofilms">
 <div class="pub-text">
 
 [6] **Acoustothermal Atomization of Water Nanofilms**
@@ -235,7 +235,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 ### 2017
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/05-chem-eng-sci-cover.jpg" alt="">
+<img class="pub-thumb" src="images/papers/05-chem-eng-sci-cover.jpg" alt="Electrophoretically mediated partial coalescence of a charged microdrop">
 <div class="pub-text">
 
 [5] **Electrophoretically mediated partial coalescence of a charged microdrop**
@@ -248,7 +248,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 ### 2016
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/04-ijcmem-cover.jpg" alt="">
+<img class="pub-thumb" src="images/papers/04-ijcmem-cover.jpg" alt="Electrohydrodynamic deformation and interaction of microscale drop pairs">
 <div class="pub-text">
 
 [4] **Electrohydrodynamic Deformation and Interaction of Microscale Drop Pairs**
@@ -259,7 +259,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/03-applied-math-modelling-cover.jpg" alt="">
+<img class="pub-thumb" src="images/papers/03-applied-math-modelling-cover.jpg" alt="Two-fluid flow of electrolyte solution with charged deforming interfaces">
 <div class="pub-text">
 
 [3] **Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces**
@@ -270,7 +270,7 @@ Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
 </div>
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/02-soft-matter-cover.jpg" alt="">
+<img class="pub-thumb" src="images/papers/02-soft-matter-cover.jpg" alt="Electrokinetics of isolated electrified drops">
 <div class="pub-text">
 
 [2] **Electrokinetics of isolated electrified drops**
@@ -283,7 +283,7 @@ Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
 ### 2015
 
 <div class="pub-card">
-<img class="pub-thumb" src="images/papers/01-electrolytic-drops.jpg" alt="">
+<img class="pub-thumb" src="images/papers/01-electrolytic-drops.jpg" alt="Electrolytic drops in an electric field: drop deformation and breakup">
 <div class="pub-text">
 
 [1] **Electrolytic drops in an electric field: A numerical study of drop deformation and breakup**

@@ -26,7 +26,7 @@
     // ===== Research themes =====
     var themes = [
       { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
-        desc: 'Supercooled water \u2014 ice nucleation on surfaces, vibration effects, icephobic design',
+        desc: 'Supercooled water: ice nucleation on surfaces, vibration effects, icephobic design',
         boundary: 'fusion',
         narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
         papers: [
@@ -36,9 +36,9 @@
         ]
       },
       { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140,
-        desc: 'Interfacial thermal conductance \u2014 spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
+        desc: 'Interfacial thermal conductance: spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
         boundary: 'fusion',
-        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies \u2014 the core focus of our ERC-funded NANO-COOL programme.',
+        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies, the core focus of our ERC-funded NANO-COOL programme.',
         papers: [
           { num: 19, title: 'Spectral heat transfer with a meniscus', journal: 'Phys. Chem. Chem. Phys.', year: 2025, img: 'images/papers/19-spectral-meniscus.jpg', doi: 'https://doi.org/10.1039/D4CP04768K' },
           { num: 16, title: 'Regimes of interfacial thermal conductance', journal: 'J. Phys. Chem. C', year: 2024, img: 'images/papers/16-thermal-conductance.jpeg', doi: 'https://doi.org/10.1021/acs.jpcc.4c00536' },
@@ -46,9 +46,9 @@
         ]
       },
       { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
-        desc: 'Superheated liquid \u2014 vapour bubble nucleation, wettability effects, acoustothermal dynamics',
+        desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
         boundary: 'vapor',
-        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation \u2014 bridging atomistic simulations with continuum theory.',
+        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
         papers: [
           { num: 18, title: 'Surface effects on bubble nucleation', journal: 'J. Chem. Phys.', year: 2025, img: 'images/papers/18-bubble-nucleation-surface.png', doi: 'https://doi.org/10.1063/5.0259208' },
           { num: 15, title: 'Wettability and vapour bubble growth', journal: 'Int. J. Heat Mass Transf.', year: 2023, img: 'images/papers/15-bubble-wettability.jpg', doi: 'https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657' },
@@ -76,6 +76,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive phase diagram, click research themes to explore, Tab for keyboard navigation');
 
     var defs = document.createElementNS(NS, 'defs');
 
@@ -157,24 +158,24 @@
     svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
 
     // ===== Phase labels =====
-    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.08)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
     var xAx = document.createElementNS(NS, 'line');
     xAx.setAttribute('x1', 80); xAx.setAttribute('y1', 460);
     xAx.setAttribute('x2', 750); xAx.setAttribute('y2', 460);
-    xAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); xAx.setAttribute('stroke-width', '1');
+    xAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); xAx.setAttribute('stroke-width', '1');
     axG.appendChild(xAx);
     var yAx = document.createElementNS(NS, 'line');
     yAx.setAttribute('x1', 80); yAx.setAttribute('y1', 460);
     yAx.setAttribute('x2', 80); yAx.setAttribute('y2', 40);
-    yAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); yAx.setAttribute('stroke-width', '1');
+    yAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); yAx.setAttribute('stroke-width', '1');
     axG.appendChild(yAx);
-    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500' }));
-    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
+    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500' }));
+    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
     svg.appendChild(axG);
 
     // ===== Boundary glows (hidden) =====
@@ -196,22 +197,22 @@
     var glowMap = { fusion: [glowFusion], vapor: [glowVapor] };
 
     // ===== Base boundary curves =====
-    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.25)', '2'));
-    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.3)', '2'));
-    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.3)', '2'));
+    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.4)', '2'));
+    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.45)', '2'));
+    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.45)', '2'));
 
     // ===== Triple & critical points =====
     var tpDot = document.createElementNS(NS, 'circle');
     tpDot.setAttribute('cx', TP.x); tpDot.setAttribute('cy', TP.y);
     tpDot.setAttribute('r', '4'); tpDot.setAttribute('fill', 'rgba(200,200,210,0.4)');
     svg.appendChild(tpDot);
-    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.25)' }));
+    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.45)' }));
 
     var cpDot = document.createElementNS(NS, 'circle');
     cpDot.setAttribute('cx', CP.x); cpDot.setAttribute('cy', CP.y);
     cpDot.setAttribute('r', '3'); cpDot.setAttribute('fill', 'rgba(200,200,210,0.3)');
     svg.appendChild(cpDot);
-    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.2)', anchor: 'start' }));
+    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.4)', anchor: 'start' }));
 
     // ===== Orbit bonds between themes =====
     var orbitGroup = document.createElementNS(NS, 'g');
@@ -334,6 +335,22 @@
         label.textContent = line;
         g.appendChild(label);
       });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', th.label.replace('\n', ' ') + ': ' + th.desc);
+      (function(th, g) {
+        g.addEventListener('focus', function() {
+          highlightTheme(th);
+          var r = g.getBoundingClientRect();
+          showTooltip(th, r.left + r.width / 2, r.top);
+        });
+        g.addEventListener('blur', function() { clearHighlight(); });
+        g.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(th); }
+        });
+      })(th, g);
 
       th.el = g;
       th.glowEl = glow;
