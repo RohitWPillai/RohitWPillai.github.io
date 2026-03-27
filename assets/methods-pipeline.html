@@ -22,6 +22,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Research methods pipeline: DFT, ML Potentials, Large-Scale MD, Continuum Coupling');
 
     var defs = document.createElementNS(NS, 'defs');
 
@@ -130,7 +131,7 @@
       var detail = document.createElementNS(NS, 'text');
       detail.setAttribute('y', NODE_R + 20 + lines.length * 14);
       detail.setAttribute('text-anchor', 'middle');
-      detail.setAttribute('fill', '#888898');
+      detail.setAttribute('fill', '#9898b0');
       detail.setAttribute('font-family', 'Inter, sans-serif');
       detail.setAttribute('font-size', '9');
       detail.textContent = st.detail;
@@ -167,6 +168,26 @@
         glow.setAttribute('opacity', '1');
         showMethodTip(st, te);
         setTimeout(function() { glow.setAttribute('opacity', '0'); tooltip.classList.remove('visible'); }, 3000);
+      });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'img');
+      g.setAttribute('aria-label', st.label.replace('\n', ' ') + ': ' + st.detail);
+      g.addEventListener('focus', function() {
+        hoveredStage = st;
+        glow.setAttribute('opacity', '1');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        var r = g.getBoundingClientRect();
+        showMethodTip(st, { clientX: r.left + r.width / 2, clientY: r.top });
+      });
+      g.addEventListener('blur', function() {
+        hoveredStage = null;
+        glow.setAttribute('opacity', '0');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        tooltip.classList.remove('visible');
       });
     });
 

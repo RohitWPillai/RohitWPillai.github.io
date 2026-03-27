@@ -39,22 +39,22 @@
 
       // --- Conference Organisation (top-right) ---
       { id: 'chair', label: 'NEMD Chair (2026)',    tier: 'lead', group: 1,
-        title: 'Conference Chair — NEMD 2026',
+        title: 'Conference Chair, NEMD 2026',
         body: '5th NEMD Conference, Edinburgh',
         desc: 'Chair of international conference on non-equilibrium molecular dynamics. 200+ delegates, 6 invited speakers.',
         period: 'July 2026' },
       { id: 'mnf',   label: 'MNF 2025',      tier: 'serv', group: 1,
-        title: 'Organising Committee — MNF 2025',
+        title: 'Organising Committee, MNF 2025',
         body: 'Micro & Nano Flows Conference',
         desc: 'Member of organising committee for biennial international conference.',
         period: '2025' },
       { id: 'sig',   label: 'NEMD 2024',      tier: 'serv', group: 1,
-        title: 'Organising Committee — 3rd NEMD Conference',
+        title: 'Organising Committee, 3rd NEMD Conference',
         body: '3rd NEMD Conference, London',
         desc: 'Member of organising committee for international conference on non-equilibrium molecular dynamics.',
         period: '2024' },
       { id: 'ecr',   label: 'UKFN ECR 2018',      tier: 'serv', group: 1,
-        title: 'Co-organiser — UKFN ECR 2018',
+        title: 'Co-organiser, UKFN ECR 2018',
         body: 'UK Fluids Network Early Career Researcher Event',
         desc: 'Co-organised networking and skills event for ECRs in fluid mechanics.',
         period: '2018' },
@@ -63,7 +63,7 @@
       { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'lead', group: 2,
         title: 'PDRA Champion',
         body: 'School of Engineering, University of Edinburgh',
-        desc: 'Advocate for postdoctoral researchers — welfare, career development, policy input at school level.',
+        desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.',
         period: '2022–present' },
       { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'serv', group: 2,
         title: 'Staff Development Co-chair',
@@ -142,6 +142,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Service roles constellation: review, conferences, and committee roles');
 
     // Defs
     var defs = document.createElementNS(NS, 'defs');
@@ -276,6 +277,43 @@
         tooltip.style.top = (e.clientY - cr.top - 60) + 'px';
       });
       g.addEventListener('mouseleave', function() {
+        circ.setAttribute('r', r.r);
+        spec.setAttribute('r', r.r);
+        bondEls.forEach(function(be) {
+          if (be.a === r || be.b === r) {
+            be.el.setAttribute('stroke', '#555568');
+            be.el.setAttribute('stroke-opacity', '0.2');
+            be.el.setAttribute('stroke-width', '1');
+          }
+        });
+        tooltip.classList.remove('visible');
+      });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'img');
+      g.setAttribute('aria-label', r.title + ', ' + r.body + ', ' + r.period);
+      g.addEventListener('focus', function() {
+        circ.setAttribute('r', r.r + 3);
+        spec.setAttribute('r', r.r + 3);
+        bondEls.forEach(function(be) {
+          if (be.a === r || be.b === r) {
+            be.el.setAttribute('stroke', COLORS[r.color].base);
+            be.el.setAttribute('stroke-opacity', '0.6');
+            be.el.setAttribute('stroke-width', '2');
+          }
+        });
+        ttTitle.textContent = r.title;
+        ttBody.textContent = r.body;
+        ttDesc.textContent = r.desc;
+        ttPeriod.textContent = r.period;
+        tooltip.classList.add('visible');
+        var cr = container.getBoundingClientRect();
+        var br = g.getBoundingClientRect();
+        tooltip.style.left = Math.min(br.left - cr.left + br.width / 2, cr.width - 280) + 'px';
+        tooltip.style.top = (br.top - cr.top - 60) + 'px';
+      });
+      g.addEventListener('blur', function() {
         circ.setAttribute('r', r.r);
         spec.setAttribute('r', r.r);
         bondEls.forEach(function(be) {

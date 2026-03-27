@@ -42,3 +42,36 @@ header-includes: |
   <link rel="stylesheet" href="assets/index.css">
   <link rel="stylesheet" href="assets/simulation.css">
 ---
+
+```{=html}
+<div id="homepage-intro" style="display:none">
+  <div class="intro-pitch">My group uses molecular simulations to study how freezing/boiling occurs, and how heat is transported at surfaces and interfaces, with applications from aircraft icing to designing next-generation cooling technologies.</div>
+  <div class="intro-explore">
+    <a href="projects.html" class="intro-explore-link">Explore research &rarr;</a>
+  </div>
+  <div class="intro-themes">
+    <div class="intro-card">
+      <span class="intro-card-title">Ice Nucleation</span>
+      <span class="intro-card-desc">How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings</span>
+    </div>
+    <div class="intro-card">
+      <span class="intro-card-title">Interfacial Heat Transfer</span>
+      <span class="intro-card-desc">Spectral thermal conductance at solid–liquid interfaces, surface chemistry, and nanomaterial-enhanced cooling</span>
+    </div>
+    <div class="intro-card">
+      <span class="intro-card-title">Phase Change &amp; Bubbles</span>
+      <span class="intro-card-desc">Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics</span>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var intro = document.getElementById('homepage-intro');
+  var solana = document.querySelector('.quarto-about-solana');
+  if (intro && solana && solana.parentNode) {
+    solana.parentNode.insertBefore(intro, solana.nextSibling);
+    intro.style.display = '';
+  }
+});
+</script>
+```

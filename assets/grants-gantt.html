@@ -10,7 +10,7 @@
     // Month M in year Y = Y + M/12 (Jan=1/12, Dec=12/12)
     var grants = [
       // PI grants
-      { title: 'ERC Starting Grant — NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
+      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
       { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#d4a03a' },
       { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#d4a03a' },
       { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#d4a03a' },
@@ -34,6 +34,7 @@
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Grants timeline showing PI and Co-I grants from 2019 to 2030');
 
     // Year axis
     for (var y = YEAR_MIN; y <= YEAR_MAX; y++) {
@@ -58,7 +59,7 @@
     }
 
     // "Now" indicator
-    var nowX = yearToX(2026.22); // March 2026
+    var d = new Date(); var nowX = yearToX(d.getFullYear() + d.getMonth() / 12);
     var nowLine = document.createElementNS(NS, 'line');
     nowLine.setAttribute('x1', nowX); nowLine.setAttribute('y1', HEADER_H);
     nowLine.setAttribute('x2', nowX); nowLine.setAttribute('y2', H - 10);
@@ -116,8 +117,8 @@
       // Role badge
       var badge = document.createElementNS(NS, 'text');
       badge.setAttribute('x', x1 + 6);
-      badge.setAttribute('y', by + BAR_H / 2 + 1);
-      badge.setAttribute('dominant-baseline', 'middle');
+      badge.setAttribute('y', by + BAR_H / 2);
+      badge.setAttribute('dy', '0.35em');
       badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
       badge.setAttribute('font-family', 'Inter, sans-serif');
       badge.setAttribute('font-size', '8');
@@ -129,8 +130,8 @@
       // Short label to the right of bar
       var titleEl = document.createElementNS(NS, 'text');
       titleEl.setAttribute('x', x2 + 6);
-      titleEl.setAttribute('y', by + BAR_H / 2 + 1);
-      titleEl.setAttribute('dominant-baseline', 'middle');
+      titleEl.setAttribute('y', by + BAR_H / 2);
+      titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
       titleEl.setAttribute('fill', g.role === 'PI' ? '#d4a03a' : '#9098a8');
       titleEl.setAttribute('font-family', 'Inter, sans-serif');
@@ -153,6 +154,26 @@
         tooltip.style.top = (e.clientY - cr.top - 50) + 'px';
       });
       group.addEventListener('mouseleave', function() {
+        rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
+        tooltip.classList.remove('visible');
+      });
+
+      // Keyboard accessibility
+      group.setAttribute('tabindex', '0');
+      group.setAttribute('role', 'img');
+      group.setAttribute('aria-label', g.title + ', ' + g.funder + ', ' + g.value + ', ' + g.role + ', ' + fracToDate(g.start) + ' to ' + fracToDate(g.end));
+      group.addEventListener('focus', function() {
+        rect.setAttribute('opacity', '1');
+        ttTitle.textContent = g.title;
+        ttFunder.textContent = g.funder + ' \u00b7 ' + fracToDate(g.start) + '\u2013' + fracToDate(g.end);
+        ttValue.textContent = g.value;
+        tooltip.classList.add('visible');
+        var cr = container.getBoundingClientRect();
+        var br = group.getBoundingClientRect();
+        tooltip.style.left = Math.min(br.left - cr.left + br.width / 2, cr.width - 260) + 'px';
+        tooltip.style.top = (br.top - cr.top - 50) + 'px';
+      });
+      group.addEventListener('blur', function() {
         rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
         tooltip.classList.remove('visible');
       });

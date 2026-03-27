@@ -182,6 +182,12 @@ document.addEventListener('DOMContentLoaded', function() {
   wrapper.appendChild(emailLink);
   wrapper.appendChild(svg);
 
+  // Frosted glass nameplate below photo
+  var nameplate = document.createElement('div');
+  nameplate.className = 'hero-nameplate';
+  nameplate.innerHTML = '<div class="hero-name">Rohit Pillai</div><div class="hero-title">Senior Lecturer, University of Edinburgh</div>';
+  wrapper.appendChild(nameplate);
+
   // Hide the original pill buttons
   aboutLinks.classList.add('halo-active');
 });
