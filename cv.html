@@ -43,7 +43,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f418161beb48e0141c760e455f12af2c.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-68f7dd7d174541da12b618b46a741a99.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-6966e6bf32ec7208aa9295b7243a4068.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,21 +71,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-
-
-<link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="CV – Rohit Pillai">
 <meta property="og:description" content="Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research in molecular dynamics, nanoscale heat transfer, and computational engineering.">
 <meta property="og:site_name" content="Rohit Pillai">
 <meta name="twitter:title" content="CV – Rohit Pillai">
 <meta name="twitter:description" content="Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research in molecular dynamics, nanoscale heat transfer, and computational engineering.">
 <meta name="twitter:card" content="summary">
-</head>
+</head><body class="nav-fixed quarto-light"><a class="visually-hidden-focusable" href="#quarto-content">Skip to content</a>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 
-<body class="nav-fixed quarto-light">
+
+<link rel="stylesheet" href="styles.css">
+
+
+
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -677,6 +678,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive team network, use Tab to navigate members, Enter to visit profiles');
 
     // Defs
     var defs = document.createElementNS(NS, 'defs');
@@ -884,10 +886,36 @@ main .level2.revealed {
 
       m.el = g;
       m.glowEl = glow;
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', m.url ? 'link' : 'img');
+      g.setAttribute('aria-label', m.name + ', ' + m.role + (m.now ? '. Now: ' + m.now : ''));
+      (function(m, g) {
+        g.addEventListener('focus', function() {
+          hoveredNode = m;
+          members.forEach(function(o) { o.glowEl.setAttribute('opacity', o === m ? '0.6' : '0'); });
+          var r = g.getBoundingClientRect();
+          showTooltip(m, r.left + r.width / 2, r.top);
+        });
+        g.addEventListener('blur', function() { hideTooltip(); });
+        g.addEventListener('keydown', function(e) {
+          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
+        });
+      })(m, g);
+
       nodeGroup.appendChild(g);
     });
 
     container.appendChild(svg);
+
+    // Hide text fallback only after SVG is confirmed in DOM
+    try {
+      if (container.querySelector('svg')) {
+        var textFallback = document.querySelector('.team-text-content');
+        if (textFallback) textFallback.classList.add('js-hidden');
+      }
+    } catch(e) { /* SVG failed — keep text fallback visible */ }
 
     // ===== Role color by year =====
     function getRoleColor(m, year) {
@@ -1257,7 +1285,7 @@ main .level2.revealed {
     // ===== Research themes =====
     var themes = [
       { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
-        desc: 'Supercooled water \u2014 ice nucleation on surfaces, vibration effects, icephobic design',
+        desc: 'Supercooled water: ice nucleation on surfaces, vibration effects, icephobic design',
         boundary: 'fusion',
         narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
         papers: [
@@ -1267,9 +1295,9 @@ main .level2.revealed {
         ]
       },
       { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140,
-        desc: 'Interfacial thermal conductance \u2014 spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
+        desc: 'Interfacial thermal conductance: spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
         boundary: 'fusion',
-        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies \u2014 the core focus of our ERC-funded NANO-COOL programme.',
+        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies, the core focus of our ERC-funded NANO-COOL programme.',
         papers: [
           { num: 19, title: 'Spectral heat transfer with a meniscus', journal: 'Phys. Chem. Chem. Phys.', year: 2025, img: 'images/papers/19-spectral-meniscus.jpg', doi: 'https://doi.org/10.1039/D4CP04768K' },
           { num: 16, title: 'Regimes of interfacial thermal conductance', journal: 'J. Phys. Chem. C', year: 2024, img: 'images/papers/16-thermal-conductance.jpeg', doi: 'https://doi.org/10.1021/acs.jpcc.4c00536' },
@@ -1277,9 +1305,9 @@ main .level2.revealed {
         ]
       },
       { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
-        desc: 'Superheated liquid \u2014 vapour bubble nucleation, wettability effects, acoustothermal dynamics',
+        desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
         boundary: 'vapor',
-        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation \u2014 bridging atomistic simulations with continuum theory.',
+        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
         papers: [
           { num: 18, title: 'Surface effects on bubble nucleation', journal: 'J. Chem. Phys.', year: 2025, img: 'images/papers/18-bubble-nucleation-surface.png', doi: 'https://doi.org/10.1063/5.0259208' },
           { num: 15, title: 'Wettability and vapour bubble growth', journal: 'Int. J. Heat Mass Transf.', year: 2023, img: 'images/papers/15-bubble-wettability.jpg', doi: 'https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657' },
@@ -1307,6 +1335,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive phase diagram, click research themes to explore, Tab for keyboard navigation');
 
     var defs = document.createElementNS(NS, 'defs');
 
@@ -1388,24 +1417,24 @@ main .level2.revealed {
     svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
 
     // ===== Phase labels =====
-    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.12)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.08)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
     var xAx = document.createElementNS(NS, 'line');
     xAx.setAttribute('x1', 80); xAx.setAttribute('y1', 460);
     xAx.setAttribute('x2', 750); xAx.setAttribute('y2', 460);
-    xAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); xAx.setAttribute('stroke-width', '1');
+    xAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); xAx.setAttribute('stroke-width', '1');
     axG.appendChild(xAx);
     var yAx = document.createElementNS(NS, 'line');
     yAx.setAttribute('x1', 80); yAx.setAttribute('y1', 460);
     yAx.setAttribute('x2', 80); yAx.setAttribute('y2', 40);
-    yAx.setAttribute('stroke', 'rgba(200,200,210,0.15)'); yAx.setAttribute('stroke-width', '1');
+    yAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); yAx.setAttribute('stroke-width', '1');
     axG.appendChild(yAx);
-    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500' }));
-    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.3)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
+    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500' }));
+    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
     svg.appendChild(axG);
 
     // ===== Boundary glows (hidden) =====
@@ -1427,22 +1456,22 @@ main .level2.revealed {
     var glowMap = { fusion: [glowFusion], vapor: [glowVapor] };
 
     // ===== Base boundary curves =====
-    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.25)', '2'));
-    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.3)', '2'));
-    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.3)', '2'));
+    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.4)', '2'));
+    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.45)', '2'));
+    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.45)', '2'));
 
     // ===== Triple & critical points =====
     var tpDot = document.createElementNS(NS, 'circle');
     tpDot.setAttribute('cx', TP.x); tpDot.setAttribute('cy', TP.y);
     tpDot.setAttribute('r', '4'); tpDot.setAttribute('fill', 'rgba(200,200,210,0.4)');
     svg.appendChild(tpDot);
-    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.25)' }));
+    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.45)' }));
 
     var cpDot = document.createElementNS(NS, 'circle');
     cpDot.setAttribute('cx', CP.x); cpDot.setAttribute('cy', CP.y);
     cpDot.setAttribute('r', '3'); cpDot.setAttribute('fill', 'rgba(200,200,210,0.3)');
     svg.appendChild(cpDot);
-    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.2)', anchor: 'start' }));
+    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.4)', anchor: 'start' }));
 
     // ===== Orbit bonds between themes =====
     var orbitGroup = document.createElementNS(NS, 'g');
@@ -1565,6 +1594,22 @@ main .level2.revealed {
         label.textContent = line;
         g.appendChild(label);
       });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', th.label.replace('\n', ' ') + ': ' + th.desc);
+      (function(th, g) {
+        g.addEventListener('focus', function() {
+          highlightTheme(th);
+          var r = g.getBoundingClientRect();
+          showTooltip(th, r.left + r.width / 2, r.top);
+        });
+        g.addEventListener('blur', function() { clearHighlight(); });
+        g.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(th); }
+        });
+      })(th, g);
 
       th.el = g;
       th.glowEl = glow;
@@ -1809,7 +1854,7 @@ main .level2.revealed {
       { yearFrac: 2021.17, side: -1, label: 'Nanobubble press', url: 'https://www.eurekalert.org/news-releases/691043',
         tip: 'Acoustothermal nanobubble nucleation paper covered by EurekAlert, ScienceDaily, Phys.org, February 2021.' },
       { yearFrac: 2022.75, side: 1,  label: 'PDRA Champion',
-        tip: 'Appointed PDRA Champion for the School of Engineering \u2014 advocate for postdoc welfare and career development, September 2022.' },
+        tip: 'Appointed PDRA Champion for the School of Engineering, advocate for postdoc welfare and career development, September 2022.' },
       { yearFrac: 2023.58, side: 1,  label: 'Cicada press', url: 'https://theconversation.com/cicadas-could-hold-the-secret-to-self-cleaning-surfaces-new-study-207435',
         tip: 'Self-cleaning cicada wing paper covered by The Conversation, Phys.org, TechXplore, July 2023.' },
       { yearFrac: 2024.08, side: -1, label: 'ERC Evaluator \u00b7 EPSRC College',
@@ -1884,6 +1929,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive career timeline from 2017 PhD to present, with milestones');
 
     var defs = document.createElementNS(NS, 'defs');
     Object.keys(COLORS).forEach(function(key) {
@@ -2012,7 +2058,7 @@ main .level2.revealed {
         roleText.setAttribute('x', '0');
         roleText.setAttribute('y', YEAR_R + 32);
         roleText.setAttribute('text-anchor', 'middle');
-        roleText.setAttribute('fill', '#8888a0');
+        roleText.setAttribute('fill', '#9898b0');
         roleText.setAttribute('font-family', 'Inter, sans-serif');
         roleText.setAttribute('font-size', '9');
         roleText.setAttribute('font-weight', '600');
@@ -2022,9 +2068,21 @@ main .level2.revealed {
       }
 
       (function(d, g) {
-        g.addEventListener('mouseenter', function() { showTip(d.year + (d.role ? ' \u2014 ' + d.role : ''), d.tip); });
+        g.addEventListener('mouseenter', function() { showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip); });
         g.addEventListener('mousemove', moveTip);
         g.addEventListener('mouseleave', hideTip);
+        // Keyboard accessibility
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', d.year + (d.role ? ', ' + d.role : '') + '. ' + d.tip);
+        g.addEventListener('focus', function() {
+          showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', hideTip);
       })(d, g);
 
       d.el = g;
@@ -2061,6 +2119,18 @@ main .level2.revealed {
         g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
         g.addEventListener('mousemove', moveTip);
         g.addEventListener('mouseleave', hideTip);
+        // Keyboard accessibility
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', t.label + '. ' + t.tip);
+        g.addEventListener('focus', function() {
+          showTip(t.label, t.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', hideTip);
       })(t, g);
 
       t.markerEl = g;
@@ -2105,6 +2175,26 @@ main .level2.revealed {
           g.addEventListener('mouseleave', hideTip);
         })(m, g);
       }
+
+      // Keyboard accessibility
+      (function(m, g) {
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', m.url ? 'link' : 'img');
+        g.setAttribute('aria-label', m.label + (m.tip ? '. ' + m.tip : ''));
+        g.addEventListener('focus', function() {
+          if (m.tip) {
+            showTip(m.label, m.tip);
+            var cr = container.getBoundingClientRect();
+            var r = g.getBoundingClientRect();
+            tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+            tooltip.style.top = (r.top - cr.top - 55) + 'px';
+          }
+        });
+        g.addEventListener('blur', hideTip);
+        g.addEventListener('keydown', function(e) {
+          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
+        });
+      })(m, g);
 
       m.el = g;
       nodeGroup.appendChild(g);
@@ -2207,7 +2297,7 @@ main .level2.revealed {
     // Month M in year Y = Y + M/12 (Jan=1/12, Dec=12/12)
     var grants = [
       // PI grants
-      { title: 'ERC Starting Grant — NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
+      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
       { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#d4a03a' },
       { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#d4a03a' },
       { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#d4a03a' },
@@ -2231,6 +2321,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Grants timeline showing PI and Co-I grants from 2019 to 2030');
 
     // Year axis
     for (var y = YEAR_MIN; y <= YEAR_MAX; y++) {
@@ -2255,7 +2346,7 @@ main .level2.revealed {
     }
 
     // "Now" indicator
-    var nowX = yearToX(2026.22); // March 2026
+    var d = new Date(); var nowX = yearToX(d.getFullYear() + d.getMonth() / 12);
     var nowLine = document.createElementNS(NS, 'line');
     nowLine.setAttribute('x1', nowX); nowLine.setAttribute('y1', HEADER_H);
     nowLine.setAttribute('x2', nowX); nowLine.setAttribute('y2', H - 10);
@@ -2313,8 +2404,8 @@ main .level2.revealed {
       // Role badge
       var badge = document.createElementNS(NS, 'text');
       badge.setAttribute('x', x1 + 6);
-      badge.setAttribute('y', by + BAR_H / 2 + 1);
-      badge.setAttribute('dominant-baseline', 'middle');
+      badge.setAttribute('y', by + BAR_H / 2);
+      badge.setAttribute('dy', '0.35em');
       badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
       badge.setAttribute('font-family', 'Inter, sans-serif');
       badge.setAttribute('font-size', '8');
@@ -2326,8 +2417,8 @@ main .level2.revealed {
       // Short label to the right of bar
       var titleEl = document.createElementNS(NS, 'text');
       titleEl.setAttribute('x', x2 + 6);
-      titleEl.setAttribute('y', by + BAR_H / 2 + 1);
-      titleEl.setAttribute('dominant-baseline', 'middle');
+      titleEl.setAttribute('y', by + BAR_H / 2);
+      titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
       titleEl.setAttribute('fill', g.role === 'PI' ? '#d4a03a' : '#9098a8');
       titleEl.setAttribute('font-family', 'Inter, sans-serif');
@@ -2350,6 +2441,26 @@ main .level2.revealed {
         tooltip.style.top = (e.clientY - cr.top - 50) + 'px';
       });
       group.addEventListener('mouseleave', function() {
+        rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
+        tooltip.classList.remove('visible');
+      });
+
+      // Keyboard accessibility
+      group.setAttribute('tabindex', '0');
+      group.setAttribute('role', 'img');
+      group.setAttribute('aria-label', g.title + ', ' + g.funder + ', ' + g.value + ', ' + g.role + ', ' + fracToDate(g.start) + ' to ' + fracToDate(g.end));
+      group.addEventListener('focus', function() {
+        rect.setAttribute('opacity', '1');
+        ttTitle.textContent = g.title;
+        ttFunder.textContent = g.funder + ' \u00b7 ' + fracToDate(g.start) + '\u2013' + fracToDate(g.end);
+        ttValue.textContent = g.value;
+        tooltip.classList.add('visible');
+        var cr = container.getBoundingClientRect();
+        var br = group.getBoundingClientRect();
+        tooltip.style.left = Math.min(br.left - cr.left + br.width / 2, cr.width - 260) + 'px';
+        tooltip.style.top = (br.top - cr.top - 50) + 'px';
+      });
+      group.addEventListener('blur', function() {
         rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
         tooltip.classList.remove('visible');
       });
@@ -2402,22 +2513,22 @@ main .level2.revealed {
 
       // --- Conference Organisation (top-right) ---
       { id: 'chair', label: 'NEMD Chair (2026)',    tier: 'lead', group: 1,
-        title: 'Conference Chair — NEMD 2026',
+        title: 'Conference Chair, NEMD 2026',
         body: '5th NEMD Conference, Edinburgh',
         desc: 'Chair of international conference on non-equilibrium molecular dynamics. 200+ delegates, 6 invited speakers.',
         period: 'July 2026' },
       { id: 'mnf',   label: 'MNF 2025',      tier: 'serv', group: 1,
-        title: 'Organising Committee — MNF 2025',
+        title: 'Organising Committee, MNF 2025',
         body: 'Micro & Nano Flows Conference',
         desc: 'Member of organising committee for biennial international conference.',
         period: '2025' },
       { id: 'sig',   label: 'NEMD 2024',      tier: 'serv', group: 1,
-        title: 'Organising Committee — 3rd NEMD Conference',
+        title: 'Organising Committee, 3rd NEMD Conference',
         body: '3rd NEMD Conference, London',
         desc: 'Member of organising committee for international conference on non-equilibrium molecular dynamics.',
         period: '2024' },
       { id: 'ecr',   label: 'UKFN ECR 2018',      tier: 'serv', group: 1,
-        title: 'Co-organiser — UKFN ECR 2018',
+        title: 'Co-organiser, UKFN ECR 2018',
         body: 'UK Fluids Network Early Career Researcher Event',
         desc: 'Co-organised networking and skills event for ECRs in fluid mechanics.',
         period: '2018' },
@@ -2426,7 +2537,7 @@ main .level2.revealed {
       { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'lead', group: 2,
         title: 'PDRA Champion',
         body: 'School of Engineering, University of Edinburgh',
-        desc: 'Advocate for postdoctoral researchers — welfare, career development, policy input at school level.',
+        desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.',
         period: '2022–present' },
       { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'serv', group: 2,
         title: 'Staff Development Co-chair',
@@ -2505,6 +2616,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Service roles constellation: review, conferences, and committee roles');
 
     // Defs
     var defs = document.createElementNS(NS, 'defs');
@@ -2639,6 +2751,43 @@ main .level2.revealed {
         tooltip.style.top = (e.clientY - cr.top - 60) + 'px';
       });
       g.addEventListener('mouseleave', function() {
+        circ.setAttribute('r', r.r);
+        spec.setAttribute('r', r.r);
+        bondEls.forEach(function(be) {
+          if (be.a === r || be.b === r) {
+            be.el.setAttribute('stroke', '#555568');
+            be.el.setAttribute('stroke-opacity', '0.2');
+            be.el.setAttribute('stroke-width', '1');
+          }
+        });
+        tooltip.classList.remove('visible');
+      });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'img');
+      g.setAttribute('aria-label', r.title + ', ' + r.body + ', ' + r.period);
+      g.addEventListener('focus', function() {
+        circ.setAttribute('r', r.r + 3);
+        spec.setAttribute('r', r.r + 3);
+        bondEls.forEach(function(be) {
+          if (be.a === r || be.b === r) {
+            be.el.setAttribute('stroke', COLORS[r.color].base);
+            be.el.setAttribute('stroke-opacity', '0.6');
+            be.el.setAttribute('stroke-width', '2');
+          }
+        });
+        ttTitle.textContent = r.title;
+        ttBody.textContent = r.body;
+        ttDesc.textContent = r.desc;
+        ttPeriod.textContent = r.period;
+        tooltip.classList.add('visible');
+        var cr = container.getBoundingClientRect();
+        var br = g.getBoundingClientRect();
+        tooltip.style.left = Math.min(br.left - cr.left + br.width / 2, cr.width - 280) + 'px';
+        tooltip.style.top = (br.top - cr.top - 60) + 'px';
+      });
+      g.addEventListener('blur', function() {
         circ.setAttribute('r', r.r);
         spec.setAttribute('r', r.r);
         bondEls.forEach(function(be) {
@@ -2915,6 +3064,7 @@ main .level2.revealed {
     svg.style.width = "100%";
     svg.style.height = "auto";
     svg.style.display = "block";
+    svg.setAttribute("aria-label", "World map of conference and invited talks with timeline scrubber");
 
     /* Radial gradients */
     var defs = document.createElementNS(NS, "defs");
@@ -3090,6 +3240,19 @@ main .level2.revealed {
         var te = e.changedTouches[0];
         glow.setAttribute("opacity", "1"); showTip(city, te);
         setTimeout(function() { glow.setAttribute("opacity", "0"); hideTip(); }, 3000);
+      });
+
+      // Keyboard accessibility
+      g.setAttribute("tabindex", "0");
+      g.setAttribute("role", "img");
+      g.setAttribute("aria-label", city.city + ": " + city.total + " talk" + (city.total > 1 ? "s" : ""));
+      g.addEventListener("focus", function() {
+        glow.setAttribute("opacity", "1");
+        var r = g.getBoundingClientRect();
+        showTip(city, { clientX: r.left + r.width / 2, clientY: r.top });
+      });
+      g.addEventListener("blur", function() {
+        glow.setAttribute("opacity", "0"); hideTip();
       });
 
       parent.appendChild(g);
@@ -3405,6 +3568,10 @@ main .level2.revealed {
         renderDots();
         addLegend();
         updateForYear(YEAR_MAX);
+        var msg = document.createElement("div");
+        msg.style.cssText = "text-align:center;color:#9898b0;font-size:0.75rem;padding:0.5rem;";
+        msg.textContent = "Map outline unavailable";
+        container.appendChild(msg);
       });
   });
 })();
@@ -3433,6 +3600,7 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Research methods pipeline: DFT, ML Potentials, Large-Scale MD, Continuum Coupling');
 
     var defs = document.createElementNS(NS, 'defs');
 
@@ -3541,7 +3709,7 @@ main .level2.revealed {
       var detail = document.createElementNS(NS, 'text');
       detail.setAttribute('y', NODE_R + 20 + lines.length * 14);
       detail.setAttribute('text-anchor', 'middle');
-      detail.setAttribute('fill', '#888898');
+      detail.setAttribute('fill', '#9898b0');
       detail.setAttribute('font-family', 'Inter, sans-serif');
       detail.setAttribute('font-size', '9');
       detail.textContent = st.detail;
@@ -3578,6 +3746,26 @@ main .level2.revealed {
         glow.setAttribute('opacity', '1');
         showMethodTip(st, te);
         setTimeout(function() { glow.setAttribute('opacity', '0'); tooltip.classList.remove('visible'); }, 3000);
+      });
+
+      // Keyboard accessibility
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'img');
+      g.setAttribute('aria-label', st.label.replace('\n', ' ') + ': ' + st.detail);
+      g.addEventListener('focus', function() {
+        hoveredStage = st;
+        glow.setAttribute('opacity', '1');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
+        var r = g.getBoundingClientRect();
+        showMethodTip(st, { clientX: r.left + r.width / 2, clientY: r.top });
+      });
+      g.addEventListener('blur', function() {
+        hoveredStage = null;
+        glow.setAttribute('opacity', '0');
+        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+        tooltip.classList.remove('visible');
       });
     });
 

@@ -129,6 +129,134 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   fill: #e8e8ec !important;
 }
 
+/* ===== Name/title glass card (centred over photo) ===== */
+.hero-nameplate {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  background: rgba(26, 26, 46, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 160, 58, 0.12);
+  border-radius: 10px;
+  padding: 0.35rem 0.9rem;
+  z-index: 5;
+  pointer-events: none;
+}
+.hero-nameplate .hero-name {
+  font-family: "Fraunces", serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #e8e8ec;
+  line-height: 1.3;
+  font-variation-settings: 'opsz' 48;
+}
+.hero-nameplate .hero-title {
+  font-family: Inter, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #b0b0b8;
+  letter-spacing: 0.04em;
+  margin-top: 0.15rem;
+}
+/* ===== Below-fold intro section ===== */
+#homepage-intro {
+  grid-column: 1 / -1;
+  margin-top: -4rem;
+  padding: 4rem 2rem 5rem;
+  position: relative;
+  z-index: 2;
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#homepage-intro > * {
+  max-width: 900px;
+  width: 100%;
+}
+
+.intro-pitch {
+  font-family: "Fraunces", serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #c9cad4;
+  line-height: 1.7;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  font-variation-settings: 'opsz' 24;
+  text-wrap: balance;
+}
+
+.intro-themes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+}
+
+.intro-card {
+  background: #252538;
+  border-radius: 10px;
+  padding: 1.5rem;
+  border: 1px solid rgba(200, 200, 216, 0.06);
+}
+
+.intro-explore {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 0.5rem 0;
+}
+
+#homepage-intro .intro-explore a {
+  color: #d4a03a;
+  display: inline-block;
+  font-family: Inter, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+#homepage-intro .intro-explore a:hover {
+  color: #e8b94d;
+}
+
+.intro-explore-link {
+  font-family: Inter, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #d4a03a;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+
+.intro-explore-link:hover {
+  color: #e8b94d;
+}
+
+.intro-card-title {
+  display: block;
+  font-family: "Fraunces", serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #d4a03a;
+  margin-bottom: 0.6rem;
+  font-variation-settings: 'opsz' 24;
+}
+
+.intro-card-desc {
+  display: block;
+  font-family: Inter, sans-serif;
+  font-size: 0.85rem;
+  color: #b0b0b8;
+  line-height: 1.55;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 991.98px) {
   div.quarto-about-solana {
@@ -153,5 +281,27 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
     width: 200px;
     max-width: 200px;
     margin: 0 auto 2rem auto;
+  }
+
+  #homepage-intro {
+    padding: 3rem 1.5rem 4rem;
+  }
+  .intro-pitch {
+    font-size: 1.1rem;
+  }
+  .intro-themes {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .hero-nameplate {
+    bottom: 12%;
+    padding: 0.35rem 1rem;
+  }
+  .hero-nameplate .hero-name {
+    font-size: 1.15rem;
+  }
+  .hero-nameplate .hero-title {
+    font-size: 0.7rem;
   }
 }

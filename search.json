@@ -105,11 +105,18 @@
     "text": "Welcome to my website\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJan 7, 2025\n\n\nRohit Pillai\n\n\n\n\n\nNo matching items"
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Rohit Pillai",
+    "section": "",
+    "text": "My group uses molecular simulations to study how freezing/boiling occurs, and how heat is transported at surfaces and interfaces, with applications from aircraft icing to designing next-generation cooling technologies.\n  \n    Explore research →\n  \n  \n    \n      Ice Nucleation\n      How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings\n    \n    \n      Interfacial Heat Transfer\n      Spectral thermal conductance at solid–liquid interfaces, surface chemistry, and nanomaterial-enhanced cooling\n    \n    \n      Phase Change & Bubbles\n      Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics"
+  },
+  {
     "objectID": "projects.html",
     "href": "projects.html",
     "title": "Research",
     "section": "",
-    "text": "My research uses molecular simulation to understand interfacial phenomena that govern ice formation, heat flow, and phase change at the nanoscale. I lead a group at the University of Edinburgh funded by an ERC Starting Grant (NANO-COOL, 2024-2029). Our work falls into three themes, mapped on the phase diagram below. Click a marker to explore.\nIce Nucleation and Surface Engineering. We study how ice forms on nanostructured surfaces, how surface vibrations influence ice nucleation, and the design principles behind icephobic coatings.\nInterfacial Heat Transfer. Thermal transport across solid-liquid interfaces depends on atomic-scale structure. We investigate spectral mechanisms of interfacial thermal conductance and how surface chemistry governs conductance regimes.\nPhase Change and Bubble Dynamics. We study heterogeneous bubble nucleation in superheated liquids, how wettability shapes bubble growth, inertio-thermal growth dynamics from molecular to continuum scales, acoustothermal nanobubble nucleation, and acoustothermal atomization of water nanofilms."
+    "text": "My research uses molecular simulation to understand interfacial phenomena that govern ice formation, heat flow, and phase change at the nanoscale. I lead a group at the University of Edinburgh funded by an ERC Starting Grant (NANO-COOL, 2024-2029). Our work falls into three themes, mapped on the phase diagram below."
   },
   {
     "objectID": "projects.html#methods",

@@ -13,6 +13,7 @@
   --amber-dark: #b8892f;
   --bg-dark: #1a1a2e;
   --text-light: #e0e0e0;
+  --surface: #252538;
 }
 
 /* ===== Global Typography ===== */
@@ -67,7 +68,7 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-  color: var(--amber-dark) !important;
+  color: #e8b94d !important;
 }
 
 /* Navbar icons */
@@ -127,7 +128,7 @@ a:hover {
 .card {
   border: none;
   border-radius: 12px;
-  background: #252538;
+  background: var(--surface);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
@@ -298,7 +299,7 @@ html {
 #journal-articles .level3 > p,
 #book-chapters > p,
 #thesis > p {
-  background: #252538;
+  background: var(--surface);
   border-radius: 10px;
   padding: 1.2rem 1.4rem;
   margin-bottom: 1rem;
@@ -318,7 +319,7 @@ html {
 .pub-card {
   display: flex;
   gap: 1.5rem;
-  background: #252538;
+  background: var(--surface);
   border-radius: 10px;
   padding: 1.2rem;
   margin-bottom: 1rem;
@@ -329,10 +330,22 @@ html {
   cursor: pointer;
 }
 
+.pub-card::after {
+  content: "\2197";
+  position: absolute;
+  top: 0.7rem;
+  right: 0.8rem;
+  font-size: 0.85rem;
+  color: rgba(200,200,216,0.2);
+  transition: color 0.2s;
+}
 .pub-card:hover {
   transform: translateX(4px);
   border-left-color: var(--amber);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.pub-card:hover::after {
+  color: var(--amber);
 }
 
 .pub-thumb {
@@ -568,16 +581,36 @@ html {
   flex-shrink: 0;
 }
 
-.team-tooltip {
+/* ===== Shared tooltip base ===== */
+.team-tooltip,
+.career-tooltip,
+.grants-tooltip,
+.service-tooltip,
+.talks-tooltip,
+.research-tooltip,
+.methods-tooltip {
   position: absolute;
-  background: #252538;
+  background: var(--surface);
   border: 1px solid rgba(212, 160, 58, 0.3);
   border-radius: 10px;
-  padding: 0.8rem 1rem;
+  padding: 0.75rem 1rem;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
   z-index: 20;
+}
+
+.team-tooltip.visible,
+.career-tooltip.visible,
+.grants-tooltip.visible,
+.service-tooltip.visible,
+.talks-tooltip.visible,
+.research-tooltip.visible,
+.methods-tooltip.visible {
+  opacity: 1;
+}
+
+.team-tooltip {
   max-width: 280px;
 }
 
@@ -646,7 +679,7 @@ html {
   justify-content: center;
   margin-top: 8px;
   font-size: 0.72rem;
-  color: #8888a0;
+  color: #9898b0;
   font-family: Inter, sans-serif;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -682,19 +715,8 @@ html {
 }
 
 .career-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 10px;
-  padding: 0.65rem 0.9rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 20;
   max-width: 260px;
 }
-
-.career-tooltip.visible { opacity: 1; }
 
 .career-tooltip .ct-title {
   font-family: "Fraunces", serif;
@@ -721,19 +743,8 @@ html {
 }
 
 .grants-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 10px;
-  padding: 0.7rem 0.9rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 20;
   max-width: 250px;
 }
-
-.grants-tooltip.visible { opacity: 1; }
 
 .grants-tooltip .gt-title {
   font-family: "Fraunces", serif;
@@ -769,19 +780,8 @@ html {
 }
 
 .service-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 10px;
-  padding: 0.75rem 1rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 20;
   max-width: 280px;
 }
-
-.service-tooltip.visible { opacity: 1; }
 
 .service-tooltip .st-title {
   font-family: "Fraunces", serif;
@@ -824,19 +824,9 @@ html {
 }
 
 .talks-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212,160,58,0.25);
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-  z-index: 20;
   max-width: 320px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.4);
 }
-.talks-tooltip.visible { opacity: 1; }
 
 .talks-tooltip .tt-city {
   font-family: "Fraunces", serif;
@@ -850,7 +840,7 @@ html {
   color: #c0c0c8;
 }
 .talks-tooltip .tt-year {
-  color: #888898;
+  color: #9898b0;
   font-weight: 600;
   margin-right: 0.2em;
 }
@@ -876,7 +866,7 @@ html {
 }
 .talks-tooltip .tt-count {
   font-size: 0.7rem;
-  color: #888898;
+  color: #9898b0;
   font-weight: 400;
 }
 
@@ -907,7 +897,7 @@ html {
   text-align: center;
   font-family: Inter, sans-serif;
   font-size: 0.78rem;
-  color: #888898;
+  color: #9898b0;
   margin-top: 0.5rem;
   letter-spacing: 0.02em;
 }
@@ -1002,7 +992,7 @@ html {
 }
 
 .service-category {
-  background: #252538;
+  background: var(--surface);
   border-radius: 10px;
   padding: 0.9rem 1rem;
 }
@@ -1043,7 +1033,7 @@ html {
 }
 
 .press-card {
-  background: #252538;
+  background: var(--surface);
   border-radius: 10px;
   padding: 1rem 1.2rem;
   border-left: 3px solid var(--amber);
@@ -1085,7 +1075,7 @@ html {
 
 .press-topic {
   font-size: 0.85rem;
-  color: #8888a0;
+  color: #9898b0;
   font-style: italic;
 }
 
@@ -1101,21 +1091,9 @@ html {
 }
 
 .research-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 20;
   max-width: 270px;
 }
 
-.research-tooltip.visible {
-  opacity: 1;
-}
 
 .research-tooltip .rt-title {
   font-family: "Fraunces", serif;
@@ -1136,7 +1114,7 @@ html {
   overflow: hidden;
   opacity: 0;
   transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.4s ease;
-  background: #252538;
+  background: var(--surface);
   border-top: 1px solid rgba(212, 160, 58, 0.2);
   border-radius: 0 0 8px 8px;
   padding: 0 1.5rem;
@@ -1153,7 +1131,7 @@ html {
   right: 0.8rem;
   background: none;
   border: none;
-  color: #888898;
+  color: #9898b0;
   font-size: 1.4rem;
   cursor: pointer;
   line-height: 1;
@@ -1220,7 +1198,7 @@ html {
 }
 .research-panel .rp-paper-meta {
   font-size: 0.65rem;
-  color: #888898;
+  color: #9898b0;
 }
 
 /* ===== Methods Pipeline ===== */
@@ -1234,18 +1212,8 @@ html {
   z-index: 12;
 }
 .methods-tooltip {
-  position: absolute;
-  background: #252538;
-  border: 1px solid rgba(212, 160, 58, 0.3);
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 20;
   max-width: 270px;
 }
-.methods-tooltip.visible { opacity: 1; }
 .methods-tooltip .mt-title {
   font-family: "Fraunces", serif;
   font-size: 1.05rem;
@@ -1258,8 +1226,8 @@ html {
   line-height: 1.4;
 }
 
-/* Text list hidden when network is active (all viewports) */
-.team-text-content { display: none; }
+/* Text list shown by default as fallback; hidden once JS network renders */
+.team-text-content.js-hidden { display: none; }
 
 /* ===== Selection color ===== */
 ::selection {
