@@ -140,7 +140,7 @@ ul.task-list li input[type="checkbox"] {
    
   <ul>
   <li><a href="#research-funding" id="toc-research-funding" class="nav-link active" data-scroll-target="#research-funding">Research Funding</a></li>
-  <li><a href="#talks-presentations" id="toc-talks-presentations" class="nav-link" data-scroll-target="#talks-presentations">Talks &amp; Presentations</a></li>
+  <li><a href="#talks" id="toc-talks" class="nav-link" data-scroll-target="#talks">Talks</a></li>
   <li><a href="#service-leadership" id="toc-service-leadership" class="nav-link" data-scroll-target="#service-leadership">Service &amp; Leadership</a></li>
   <li><a href="#in-the-press" id="toc-in-the-press" class="nav-link" data-scroll-target="#in-the-press">In the Press</a></li>
   </ul>
@@ -214,18 +214,15 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 <hr>
 </section>
-<section id="talks-presentations" class="level2">
-<h2 class="anchored" data-anchor-id="talks-presentations">Talks &amp; Presentations</h2>
+<section id="talks" class="level2">
+<h2 class="anchored" data-anchor-id="talks">Talks</h2>
 <div id="talks-map-wrap">
 <div id="talks-map">
 
 </div>
 <div class="talks-controls">
 <div class="talks-timeline">
-<button id="talks-play-btn" class="talks-play-btn" aria-label="Replay timeline">
-▶
-</button>
-<input type="range" id="talks-year-slider" class="talks-slider" min="2014" max="2027" value="2014" step="0.5"><span id="talks-year-display" class="talks-year-display">2014</span>
+<input type="range" id="talks-year-slider" class="talks-slider" min="2014" max="2027" value="2027" step="0.5"><span id="talks-year-display" class="talks-year-display">2027</span>
 </div>
 </div>
 </div>
@@ -580,1197 +577,6 @@ main .level2.revealed {
         observer.observe(sections[i]);
       }
     }
-  });
-})();
-</script>
-<script>
-(function() {
-  'use strict';
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var container = document.getElementById('team-network');
-    if (!container) return;
-
-    // ===== Configuration =====
-    var CX = 400, CY = 270;
-    var INNER_R = 160, OUTER_R = 240;
-    var PI_R = 30, POSTDOC_R = 22, PHD_R = 22;
-    var SPRING_K = 0.012, BROWNIAN = 0.25, DAMPING = 0.90;
-    var OPACITY_LERP = 0.08;
-    var ACTIVE_OPACITY = 1.0, FADED_OPACITY = 0.45;
-    var ACTIVE_BOND = 0.35, FADED_BOND = 0.10;
-    var BOND_WIDTH_ACTIVE = 2.5, BOND_WIDTH_MIN = 1.2;
-    var YEAR_MIN = 2018, YEAR_MAX = 2026;
-    var AUTOPLAY_DURATION = 16000;
-    var AUTOPLAY_DELAY = 800;
-
-    var COLORS = {
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18', glow: 'rgba(212,160,58,0.3)' },
-      blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590', glow: 'rgba(74,135,215,0.3)' },
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' },
-      teal:  { light: '#80d0b0', base: '#4daa88', dark: '#2a7060', glow: 'rgba(77,170,136,0.3)' }
-    };
-
-    // ===== Member data (sorted by startYear for clockwise chronological layout) =====
-    var members = [
-      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, url: 'https://multiscaleflowx.github.io/team/rohit-pillai/', photo: 'images/profile.jpg', color: 'amber', r: PI_R },
-      // Ring members — sorted by start year
-      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Multiscale fluid dynamics', startYear: 2019, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', photo: 'images/team/sp.jpg', color: 'slate', r: POSTDOC_R, roles: [{ from: 2019, to: 2019, color: 'slate' }, { from: 2020, to: 2023, color: 'blue' }, { from: 2024, to: null, color: 'amber' }] },
-      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', url: 'https://multiscaleflowx.github.io/team/martin-nikiforidis/', photo: 'images/team/vn.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2017, to: 2021, color: 'slate' }, { from: 2022, to: null, color: 'blue' }] },
-      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', photo: 'images/team/sd.jpg', color: 'blue', r: POSTDOC_R, roles: [{ from: 2018, to: 2024, color: 'blue' }, { from: 2025, to: null, color: 'amber' }] },
-      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', url: 'https://multiscaleflowx.github.io/team/mistry-sritay/', photo: 'images/team/sm.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2018, to: 2022, color: 'slate' }, { from: 2023, to: null, color: 'blue' }] },
-      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', url: 'https://www.durham.ac.uk/staff/patrick-j-sullivan/', photo: 'images/team/ps.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2019, to: 2023, color: 'slate' }, { from: 2024, to: null, color: 'blue' }] },
-      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', url: 'https://uk.linkedin.com/in/abdullahelrifai', photo: 'images/team/ae.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2020, to: 2024, color: 'slate' }, { from: 2025, to: null, color: 'teal' }] },
-      { id: 'pc', name: 'Pengxu Chen', role: 'PhD Student', topic: 'Nanoscale vibrations to reduce surface icing', startYear: 2022, endYear: null, url: 'https://multiscaleflowx.github.io/team/chen-pengxu/', photo: 'images/team/pc.jpg', color: 'slate', r: PHD_R },
-      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, url: 'https://multiscaleflowx.github.io/team/thejas-hulikal-chakrapani/', photo: 'images/team/tc.png', color: 'blue', r: POSTDOC_R },
-      { id: 'zl', name: 'Zhaolun Li', role: 'PhD Student', topic: 'Machine learning potentials for solid-liquid interfaces', startYear: 2025, endYear: null, url: 'https://multiscaleflowx.github.io/team/zhaolun-li/', photo: 'images/team/zl.jpg', color: 'slate', r: PHD_R }
-    ];
-
-    // ===== Dynamic layout: positions computed per-year in updateForYear =====
-    var ANGLE_LERP = 0.06;
-    var RADIUS_LERP = 0.06;
-
-    members[0].ex = CX; members[0].ey = CY;
-    members.forEach(function(m) {
-      m.x = CX; m.y = CY;
-      m.ex = CX; m.ey = CY;
-      m.vx = 0; m.vy = 0;
-      m.opacity = 0; m.targetOpacity = 0;
-      m.bondOpacity = 0; m.targetBondOpacity = 0;
-      m.bondWidth = 0; m.targetBondWidth = 0;
-      m.dashed = false;
-      m.state = 'unborn';
-      m._prevState = 'unborn';
-      m.eAngle = -Math.PI / 2;
-      m.eRadius = 0;
-      m.targetAngle = -Math.PI / 2;
-      m.targetRadius = 0;
-    });
-    members[0].opacity = 1; members[0].targetOpacity = 1;
-    members[0].state = 'active';
-
-    function angleDiff(from, to) {
-      var d = to - from;
-      while (d > Math.PI) d -= 2 * Math.PI;
-      while (d < -Math.PI) d += 2 * Math.PI;
-      return d;
-    }
-
-    function distributeOnRing(list, radius, angularOffset) {
-      var n = list.length;
-      if (n === 0) return;
-      var step = 2 * Math.PI / n;
-      var start = -Math.PI / 2 + (angularOffset || 0);
-      for (var i = 0; i < n; i++) {
-        var angle = start + i * step;
-        list[i].targetAngle = angle;
-        list[i].targetRadius = radius;
-      }
-    }
-
-    // ===== SVG creation =====
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 800 580');
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    svg.style.width = '100%';
-    svg.style.height = 'auto';
-    svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Interactive team network, use Tab to navigate members, Enter to visit profiles');
-
-    // Defs
-    var defs = document.createElementNS(NS, 'defs');
-    Object.keys(COLORS).forEach(function(key) {
-      var c = COLORS[key];
-      var g = document.createElementNS(NS, 'radialGradient');
-      g.id = 'sphere-' + key;
-      g.setAttribute('cx', '0.35'); g.setAttribute('cy', '0.35');
-      g.setAttribute('r', '0.65');
-      [{ o: '0%', c: c.light }, { o: '45%', c: c.base }, { o: '100%', c: c.dark }].forEach(function(s) {
-        var st = document.createElementNS(NS, 'stop');
-        st.setAttribute('offset', s.o);
-        st.setAttribute('stop-color', s.c);
-        g.appendChild(st);
-      });
-      defs.appendChild(g);
-    });
-
-    // Specular highlight
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'specular';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30');
-    hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.70' }, { o: '30%', a: '0.25' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o);
-      st.setAttribute('stop-color', 'white');
-      st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
-
-    // Glow filter
-    var filt = document.createElementNS(NS, 'filter');
-    filt.id = 'node-glow';
-    filt.setAttribute('x', '-50%'); filt.setAttribute('y', '-50%');
-    filt.setAttribute('width', '200%'); filt.setAttribute('height', '200%');
-    var blur = document.createElementNS(NS, 'feGaussianBlur');
-    blur.setAttribute('in', 'SourceGraphic'); blur.setAttribute('stdDeviation', '4');
-    blur.setAttribute('result', 'blur');
-    filt.appendChild(blur);
-    var merge = document.createElementNS(NS, 'feMerge');
-    var mn1 = document.createElementNS(NS, 'feMergeNode'); mn1.setAttribute('in', 'blur');
-    merge.appendChild(mn1);
-    var mn2 = document.createElementNS(NS, 'feMergeNode'); mn2.setAttribute('in', 'SourceGraphic');
-    merge.appendChild(mn2);
-    filt.appendChild(merge);
-    defs.appendChild(filt);
-    svg.appendChild(defs);
-
-    // Orbital guide circles with labels
-    var orbitGroup = document.createElementNS(NS, 'g');
-    [{ r: INNER_R, label: 'TEAM' }, { r: OUTER_R, label: 'ALUMNI' }].forEach(function(o) {
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('cx', CX); circ.setAttribute('cy', CY);
-      circ.setAttribute('r', o.r);
-      circ.setAttribute('fill', 'none');
-      circ.setAttribute('stroke', 'rgba(200,200,216,0.15)');
-      circ.setAttribute('stroke-width', '1.5');
-      circ.setAttribute('stroke-dasharray', '6 8');
-      orbitGroup.appendChild(circ);
-
-      /* Horizontal label at top of orbit with background pill */
-      var lx = CX, ly = CY - o.r;
-      var bg = document.createElementNS(NS, 'rect');
-      bg.setAttribute('x', lx - 30); bg.setAttribute('y', ly - 8);
-      bg.setAttribute('width', 60); bg.setAttribute('height', 16);
-      bg.setAttribute('rx', 8);
-      bg.setAttribute('fill', '#1a1a2e');
-      orbitGroup.appendChild(bg);
-
-      var txt = document.createElementNS(NS, 'text');
-      txt.setAttribute('x', lx); txt.setAttribute('y', ly + 1);
-      txt.setAttribute('text-anchor', 'middle');
-      txt.setAttribute('dy', '0.35em');
-      txt.setAttribute('fill', 'rgba(200,200,216,0.50)');
-      txt.setAttribute('font-family', 'Inter, sans-serif');
-      txt.setAttribute('font-size', '9');
-      txt.setAttribute('font-weight', '700');
-      txt.setAttribute('letter-spacing', '0.2em');
-      txt.textContent = o.label;
-      orbitGroup.appendChild(txt);
-    });
-    svg.appendChild(orbitGroup);
-
-    // Bond layer
-    var bondGroup = document.createElementNS(NS, 'g');
-    svg.appendChild(bondGroup);
-
-    // Node layer
-    var nodeGroup = document.createElementNS(NS, 'g');
-    svg.appendChild(nodeGroup);
-
-    // Create bonds (PI to everyone else)
-    var pi = members[0];
-    var bonds = [];
-    for (var i = 1; i < members.length; i++) {
-      var line = document.createElementNS(NS, 'line');
-      line.setAttribute('stroke', COLORS[members[i].color].base);
-      line.setAttribute('stroke-width', '2');
-      line.setAttribute('stroke-opacity', ACTIVE_BOND);
-      bondGroup.appendChild(line);
-      bonds.push({ el: line, to: members[i] });
-      members[i].bondEl = line;
-    }
-
-    // Create nodes
-    var shortNames = { 'vn': 'Martin', 'sp': 'Sree Hari' };
-    members.forEach(function(m) {
-      var g = document.createElementNS(NS, 'g');
-      g.style.cursor = m.url ? 'pointer' : 'default';
-
-      // Glow (hover)
-      var glow = document.createElementNS(NS, 'circle');
-      glow.setAttribute('r', m.r + 6);
-      glow.setAttribute('fill', COLORS[m.color].glow);
-      glow.setAttribute('filter', 'url(#node-glow)');
-      glow.setAttribute('opacity', '0');
-      g.appendChild(glow);
-
-      // Spawn pulse ring
-      var pulse = document.createElementNS(NS, 'circle');
-      pulse.setAttribute('r', m.r);
-      pulse.setAttribute('fill', 'none');
-      pulse.setAttribute('stroke', COLORS[m.color].base);
-      pulse.setAttribute('stroke-width', '3');
-      pulse.setAttribute('opacity', '0');
-      g.appendChild(pulse);
-      m.pulseEl = pulse;
-
-      if (m.photo) {
-        // Photo node: circular-clipped image + border ring + specular overlay
-        var d = m.r * 2;
-        var clipId = 'clip-' + m.id;
-        var clip = document.createElementNS(NS, 'clipPath');
-        clip.id = clipId;
-        var clipCirc = document.createElementNS(NS, 'circle');
-        clipCirc.setAttribute('r', m.r);
-        clip.appendChild(clipCirc);
-        defs.appendChild(clip);
-
-        var img = document.createElementNS(NS, 'image');
-        img.setAttribute('href', m.photo);
-        img.setAttribute('x', -m.r);
-        img.setAttribute('y', -m.r);
-        img.setAttribute('width', d);
-        img.setAttribute('height', d);
-        img.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-        img.setAttribute('clip-path', 'url(#' + clipId + ')');
-        g.appendChild(img);
-
-        // Role-colored border ring
-        var border = document.createElementNS(NS, 'circle');
-        border.setAttribute('r', m.r);
-        border.setAttribute('fill', 'none');
-        border.setAttribute('stroke', COLORS[m.color].base);
-        border.setAttribute('stroke-width', m.id === 'rp' ? '3' : '2');
-        g.appendChild(border);
-        m.borderEl = border;
-
-        // Subtle specular overlay for glass effect
-        var spec = document.createElementNS(NS, 'circle');
-        spec.setAttribute('r', m.r);
-        spec.setAttribute('fill', 'url(#specular)');
-        spec.setAttribute('opacity', '0.25');
-        g.appendChild(spec);
-      } else {
-        // Fallback: Phong sphere (for members without photos)
-        var circ = document.createElementNS(NS, 'circle');
-        circ.setAttribute('r', m.r);
-        circ.setAttribute('fill', 'url(#sphere-' + m.color + ')');
-        g.appendChild(circ);
-
-        var spec = document.createElementNS(NS, 'circle');
-        spec.setAttribute('r', m.r);
-        spec.setAttribute('fill', 'url(#specular)');
-        g.appendChild(spec);
-      }
-
-      // Name label
-      var text = document.createElementNS(NS, 'text');
-      text.setAttribute('y', m.r + 16);
-      text.setAttribute('text-anchor', 'middle');
-      text.setAttribute('fill', '#c0c0c8');
-      text.setAttribute('font-family', 'Inter, sans-serif');
-      text.setAttribute('font-size', m.id === 'rp' ? '13' : '11');
-      text.setAttribute('font-weight', m.id === 'rp' ? '600' : '400');
-      if (m.id === 'rp') text.setAttribute('fill', '#e8e8ec');
-      text.textContent = m.id === 'rp' ? m.name : (shortNames[m.id] || m.name.split(' ')[0]);
-      g.appendChild(text);
-
-      // PI sub-label
-      if (m.id === 'rp') {
-        var sub = document.createElementNS(NS, 'text');
-        sub.setAttribute('y', m.r + 30);
-        sub.setAttribute('text-anchor', 'middle');
-        sub.setAttribute('fill', COLORS.amber.base);
-        sub.setAttribute('font-family', 'Inter, sans-serif');
-        sub.setAttribute('font-size', '9');
-        sub.setAttribute('font-weight', '600');
-        sub.setAttribute('letter-spacing', '0.1em');
-        sub.textContent = 'PI';
-        g.appendChild(sub);
-      }
-
-      m.el = g;
-      m.glowEl = glow;
-
-      // Keyboard accessibility
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', m.url ? 'link' : 'img');
-      g.setAttribute('aria-label', m.name + ', ' + m.role + (m.now ? '. Now: ' + m.now : ''));
-      (function(m, g) {
-        g.addEventListener('focus', function() {
-          hoveredNode = m;
-          members.forEach(function(o) { o.glowEl.setAttribute('opacity', o === m ? '0.6' : '0'); });
-          var r = g.getBoundingClientRect();
-          showTooltip(m, r.left + r.width / 2, r.top);
-        });
-        g.addEventListener('blur', function() { hideTooltip(); });
-        g.addEventListener('keydown', function(e) {
-          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
-        });
-      })(m, g);
-
-      nodeGroup.appendChild(g);
-    });
-
-    container.appendChild(svg);
-
-    // Hide text fallback only after SVG is confirmed in DOM
-    try {
-      if (container.querySelector('svg')) {
-        var textFallback = document.querySelector('.team-text-content');
-        if (textFallback) textFallback.classList.add('js-hidden');
-      }
-    } catch(e) { /* SVG failed — keep text fallback visible */ }
-
-    // ===== Role color by year =====
-    function getRoleColor(m, year) {
-      if (!m.roles) return m.color;
-      for (var i = m.roles.length - 1; i >= 0; i--) {
-        if (year >= m.roles[i].from && (m.roles[i].to === null || year <= m.roles[i].to)) return m.roles[i].color;
-      }
-      return m.color;
-    }
-
-    // ===== Spawn pulse animation =====
-    function triggerSpawnPulse(m) {
-      var start = performance.now();
-      var duration = 600;
-      function animPulse(now) {
-        var t = Math.min(1, (now - start) / duration);
-        var r = m.r + 20 * t;
-        var op = 0.6 * (1 - t * t);
-        m.pulseEl.setAttribute('r', r.toFixed(1));
-        m.pulseEl.setAttribute('opacity', op.toFixed(3));
-        if (t < 1) requestAnimationFrame(animPulse);
-        else m.pulseEl.setAttribute('opacity', '0');
-      }
-      requestAnimationFrame(animPulse);
-    }
-
-    // ===== Year state =====
-    var countDisplay = document.getElementById('team-member-count');
-
-    function updateForYear(year) {
-      var innerList = [], outerList = [];
-
-      members.forEach(function(m) {
-        if (m.id === 'rp') return;
-
-        // Classify state
-        if (year < m.startYear) {
-          m.state = 'unborn';
-        } else if (m.endYear === null || year <= m.endYear) {
-          m.state = 'active';
-          innerList.push(m);
-        } else {
-          m.state = 'alumni';
-          outerList.push(m);
-        }
-
-        // Detect spawn: unborn → active
-        if (m.state === 'active' && m._prevState === 'unborn') {
-          triggerSpawnPulse(m);
-        }
-        m._prevState = m.state;
-
-        // Set targets per state
-        if (m.state === 'unborn') {
-          m.targetOpacity = 0;
-          m.targetBondOpacity = 0;
-          m.targetBondWidth = 0;
-          m.dashed = false;
-          m.targetRadius = 0;
-        } else if (m.state === 'active') {
-          m.targetOpacity = ACTIVE_OPACITY;
-          m.targetBondOpacity = ACTIVE_BOND;
-          m.targetBondWidth = BOND_WIDTH_ACTIVE;
-          m.dashed = false;
-        } else {
-          m.targetOpacity = FADED_OPACITY;
-          m.targetBondOpacity = FADED_BOND;
-          m.targetBondWidth = BOND_WIDTH_MIN;
-          m.dashed = true;
-        }
-
-        // Dynamic role color
-        var colorKey = getRoleColor(m, year);
-        if (colorKey !== m._currentColor) {
-          m._currentColor = colorKey;
-          var c = COLORS[colorKey];
-          if (m.borderEl) m.borderEl.setAttribute('stroke', c.base);
-          if (m.bondEl) m.bondEl.setAttribute('stroke', c.base);
-          m.glowEl.setAttribute('fill', c.glow);
-          m.pulseEl.setAttribute('stroke', c.base);
-        }
-      });
-
-      // Sort each list by startYear for stable chronological ordering
-      innerList.sort(function(a, b) { return a.startYear - b.startYear; });
-      outerList.sort(function(a, b) { return a.startYear - b.startYear; });
-
-      // Equidistant distribution on two rings
-      // Offset outer ring by half the denser ring's step for maximum misalignment
-      distributeOnRing(innerList, INNER_R);
-      var maxN = Math.max(innerList.length, outerList.length, 1);
-      distributeOnRing(outerList, OUTER_R, Math.PI / maxN);
-
-      // Snap newly spawned members to their ring position
-      members.forEach(function(m) {
-        if (m.state !== 'unborn' && m._prevState === 'unborn' || (m.state === 'active' && m.opacity < 0.01)) {
-          m.eAngle = m.targetAngle;
-          m.eRadius = m.targetRadius;
-          m.ex = CX + m.eRadius * Math.cos(m.eAngle);
-          m.ey = CY + m.eRadius * Math.sin(m.eAngle);
-          m.x = m.ex; m.y = m.ey;
-        }
-      });
-
-      // Reorder SVG: alumni behind, active in front, PI on top
-      outerList.forEach(function(m) { nodeGroup.appendChild(m.el); });
-      innerList.forEach(function(m) { nodeGroup.appendChild(m.el); });
-      nodeGroup.appendChild(members[0].el);
-
-      // Update active member count
-      var activeCount = 1 + innerList.length;
-      if (countDisplay) countDisplay.textContent = activeCount + (activeCount === 1 ? ' member' : ' members');
-    }
-
-    // ===== Tooltip =====
-    var tooltip = document.getElementById('team-tooltip');
-    var ttName = tooltip.querySelector('.tt-name');
-    var ttRole = tooltip.querySelector('.tt-role');
-    var ttTopic = tooltip.querySelector('.tt-topic');
-    var ttNow = tooltip.querySelector('.tt-now');
-    var hoveredNode = null;
-
-    function showTooltip(m, screenX, screenY) {
-      var years = m.startYear + '\u2013' + (m.endYear || 'present');
-      ttName.textContent = m.id !== 'rp' ? m.name + ' (' + years + ')' : m.name;
-      ttRole.textContent = m.role;
-      ttTopic.textContent = m.topic;
-      if (m.now) {
-        ttNow.textContent = 'Now: ' + m.now;
-        ttNow.style.display = 'block';
-      } else {
-        ttNow.style.display = 'none';
-      }
-      var rect = container.getBoundingClientRect();
-      var tx = screenX - rect.left + 15;
-      var ty = screenY - rect.top - 10;
-      tooltip.style.left = Math.min(tx, rect.width - 290) + 'px';
-      tooltip.style.top = ty + 'px';
-      tooltip.classList.add('visible');
-    }
-
-    function hideTooltip() {
-      tooltip.classList.remove('visible');
-      hoveredNode = null;
-      members.forEach(function(m) { m.glowEl.setAttribute('opacity', '0'); });
-    }
-
-    function hitTest(svgX, svgY) {
-      for (var i = members.length - 1; i >= 0; i--) {
-        var m = members[i];
-        if (m.state === 'unborn') continue;
-        var dx = svgX - m.x, dy = svgY - m.y;
-        if (dx * dx + dy * dy < (m.r + 8) * (m.r + 8)) return m;
-      }
-      return null;
-    }
-
-    svg.addEventListener('mousemove', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (580 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        if (hoveredNode !== hit) {
-          hoveredNode = hit;
-          members.forEach(function(m) { m.glowEl.setAttribute('opacity', m === hit ? '0.6' : '0'); });
-        }
-        showTooltip(hit, e.clientX, e.clientY);
-        svg.style.cursor = hit.url ? 'pointer' : 'default';
-      } else {
-        if (hoveredNode) hideTooltip();
-        svg.style.cursor = 'default';
-      }
-    });
-
-    svg.addEventListener('mouseleave', hideTooltip);
-
-    svg.addEventListener('click', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (580 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit && hit.url) window.open(hit.url, '_blank', 'noopener');
-    });
-
-    // Touch support: tap to show tooltip, tap elsewhere to dismiss
-    svg.addEventListener('touchend', function(e) {
-      var touch = e.changedTouches[0];
-      var rect = svg.getBoundingClientRect();
-      var svgX = (touch.clientX - rect.left) * (800 / rect.width);
-      var svgY = (touch.clientY - rect.top) * (580 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        e.preventDefault();
-        hoveredNode = hit;
-        members.forEach(function(m) { m.glowEl.setAttribute('opacity', m === hit ? '0.6' : '0'); });
-        showTooltip(hit, touch.clientX, touch.clientY);
-      } else {
-        hideTooltip();
-      }
-    });
-
-    // ===== Slider =====
-    var slider = document.getElementById('team-year-slider');
-    var yearDisplay = document.getElementById('team-year-display');
-
-    function formatYear(y) {
-      return String(Math.floor(y));
-    }
-
-    if (slider) {
-      slider.setAttribute('step', '0.5');
-      slider.addEventListener('input', function() {
-        var year = parseFloat(this.value);
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
-      });
-    }
-
-    // ===== Animation loop =====
-    var running = true;
-
-    function physics() {
-      for (var i = 1; i < members.length; i++) {
-        var m = members[i];
-
-        // Smooth opacity (always, so unborn members stay at 0)
-        m.opacity += (m.targetOpacity - m.opacity) * OPACITY_LERP;
-        m.bondOpacity += (m.targetBondOpacity - m.bondOpacity) * OPACITY_LERP;
-        m.bondWidth += (m.targetBondWidth - m.bondWidth) * OPACITY_LERP;
-
-        // Skip physics for invisible members
-        if (m.state === 'unborn') continue;
-
-        // Smoothly interpolate equilibrium via shortest angular path
-        m.eAngle += angleDiff(m.eAngle, m.targetAngle) * ANGLE_LERP;
-        m.eRadius += (m.targetRadius - m.eRadius) * RADIUS_LERP;
-        m.ex = CX + m.eRadius * Math.cos(m.eAngle);
-        m.ey = CY + m.eRadius * Math.sin(m.eAngle);
-
-        // Spring to equilibrium
-        m.vx += -SPRING_K * (m.x - m.ex);
-        m.vy += -SPRING_K * (m.y - m.ey);
-
-        // Brownian kick
-        m.vx += (Math.random() - 0.5) * BROWNIAN;
-        m.vy += (Math.random() - 0.5) * BROWNIAN;
-
-        m.vx *= DAMPING;
-        m.vy *= DAMPING;
-        m.x += m.vx;
-        m.y += m.vy;
-      }
-    }
-
-    function render() {
-      members.forEach(function(m) {
-        m.el.setAttribute('transform', 'translate(' + m.x.toFixed(1) + ',' + m.y.toFixed(1) + ')');
-        m.el.style.opacity = m.opacity.toFixed(3);
-      });
-      bonds.forEach(function(b) {
-        b.el.setAttribute('x1', pi.x.toFixed(1));
-        b.el.setAttribute('y1', pi.y.toFixed(1));
-        b.el.setAttribute('x2', b.to.x.toFixed(1));
-        b.el.setAttribute('y2', b.to.y.toFixed(1));
-        b.el.setAttribute('stroke-width', b.to.bondWidth.toFixed(2));
-        b.el.setAttribute('stroke-opacity', b.to.bondOpacity.toFixed(3));
-        b.el.setAttribute('stroke-dasharray', b.to.dashed ? '6 4' : 'none');
-      });
-    }
-
-    function loop() {
-      if (!running) return;
-      physics();
-      render();
-      requestAnimationFrame(loop);
-    }
-
-    document.addEventListener('visibilitychange', function() {
-      if (document.hidden) { running = false; }
-      else { running = true; requestAnimationFrame(loop); }
-    });
-
-    // ===== Init: start at YEAR_MIN for auto-play =====
-    updateForYear(YEAR_MIN);
-    if (slider) slider.value = YEAR_MIN;
-    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
-    render();
-    requestAnimationFrame(loop);
-
-    // ===== Auto-play: scrub from YEAR_MIN to YEAR_MAX =====
-    var autoPlaying = true;
-    var playBtn = document.getElementById('team-play-btn');
-
-    function runTimeline(fromYear) {
-      var startY = fromYear != null ? fromYear : YEAR_MIN;
-      autoPlaying = true;
-      updateForYear(startY);
-      if (slider) slider.value = startY;
-      if (yearDisplay) yearDisplay.textContent = formatYear(startY);
-      if (playBtn) playBtn.classList.add('playing');
-      var span = YEAR_MAX - startY;
-      if (span <= 0) { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); return; }
-      var duration = AUTOPLAY_DURATION * (span / (YEAR_MAX - YEAR_MIN));
-      var autoStart = null;
-      function autoStep(timestamp) {
-        if (!autoPlaying) { if (playBtn) playBtn.classList.remove('playing'); return; }
-        if (!autoStart) autoStart = timestamp;
-        var t = Math.min(1, (timestamp - autoStart) / duration);
-        var eased = 1 - Math.pow(1 - t, 2);
-        var year = Math.round((startY + eased * span) * 2) / 2;
-        if (slider) slider.value = year;
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
-        if (t < 1) requestAnimationFrame(autoStep);
-        else { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); }
-      }
-      requestAnimationFrame(autoStep);
-    }
-
-    // Stop auto-play if user touches slider
-    if (slider) {
-      slider.addEventListener('pointerdown', function() {
-        autoPlaying = false;
-        if (playBtn) playBtn.classList.remove('playing');
-      });
-    }
-
-    // Play button replays the timeline
-    if (playBtn) {
-      playBtn.addEventListener('click', function() {
-        if (autoPlaying) { autoPlaying = false; playBtn.classList.remove('playing'); return; }
-        var cur = slider ? parseInt(slider.value, 10) : YEAR_MIN;
-        runTimeline(cur >= YEAR_MAX ? YEAR_MIN : cur);
-      });
-    }
-
-    setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
-  });
-})();
-</script>
-<script>
-(function() {
-  'use strict';
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var container = document.getElementById('research-diagram');
-    if (!container) return;
-
-    var NS = 'http://www.w3.org/2000/svg';
-
-    // ===== Key coordinates =====
-    var TP = { x: 300, y: 330 };
-    var CP = { x: 620, y: 130 };
-    var FT = { x: 280, y: 45 };
-
-    var SUBLIMATION  = 'M 80 450 Q 190 400 ' + TP.x + ' ' + TP.y;
-    var FUSION       = 'M ' + TP.x + ' ' + TP.y + ' Q 290 180 ' + FT.x + ' ' + FT.y;
-    var VAPORIZATION = 'M ' + TP.x + ' ' + TP.y + ' C 380 290 500 200 ' + CP.x + ' ' + CP.y;
-
-    var SOLID_FILL  = 'M 80 40 L ' + FT.x + ' ' + FT.y + ' Q 290 180 ' + TP.x + ' ' + TP.y + ' Q 190 400 80 450 Z';
-    var LIQUID_FILL = 'M ' + FT.x + ' ' + FT.y + ' L 750 40 L 750 130 L ' + CP.x + ' ' + CP.y + ' C 500 200 380 290 ' + TP.x + ' ' + TP.y + ' Q 290 180 ' + FT.x + ' ' + FT.y + ' Z';
-    var VAPOR_FILL  = 'M 80 460 L 80 450 Q 190 400 ' + TP.x + ' ' + TP.y + ' C 380 290 500 200 ' + CP.x + ' ' + CP.y + ' L 750 130 L 750 460 Z';
-
-    // ===== Research themes =====
-    var themes = [
-      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
-        desc: 'Supercooled water: ice nucleation on surfaces, vibration effects, icephobic design',
-        boundary: 'fusion',
-        narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
-        papers: [
-          { num: 17, title: 'Vibration-induced ice nucleation', journal: 'Nanoscale', year: 2025, img: 'images/papers/17-ice-nucleation-vibration.jpg', doi: 'https://doi.org/10.1039/D5NR00326A' },
-          { num: 9, title: 'Ice physics on nanostructured surfaces', journal: 'J. Chem. Phys.', year: 2021, img: 'images/papers/09-ice-nanostructure.jpg', doi: 'https://doi.org/10.1063/5.0069896' },
-          { num: 20, title: 'Contaminant removal via vibrating surfaces', journal: 'Nano Lett.', year: 2025, img: 'images/papers/20-contaminant-vibrating.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.4c05973' }
-        ]
-      },
-      { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140,
-        desc: 'Interfacial thermal conductance: spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
-        boundary: 'fusion',
-        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies, the core focus of our ERC-funded NANO-COOL programme.',
-        papers: [
-          { num: 19, title: 'Spectral heat transfer with a meniscus', journal: 'Phys. Chem. Chem. Phys.', year: 2025, img: 'images/papers/19-spectral-meniscus.jpg', doi: 'https://doi.org/10.1039/D4CP04768K' },
-          { num: 16, title: 'Regimes of interfacial thermal conductance', journal: 'J. Phys. Chem. C', year: 2024, img: 'images/papers/16-thermal-conductance.jpeg', doi: 'https://doi.org/10.1021/acs.jpcc.4c00536' },
-          { num: 13, title: 'Self-cleaning surfaces', journal: 'Nano Lett.', year: 2023, img: 'images/papers/13-self-cleaning.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.3c00257' }
-        ]
-      },
-      { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
-        desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
-        boundary: 'vapor',
-        narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
-        papers: [
-          { num: 18, title: 'Surface effects on bubble nucleation', journal: 'J. Chem. Phys.', year: 2025, img: 'images/papers/18-bubble-nucleation-surface.png', doi: 'https://doi.org/10.1063/5.0259208' },
-          { num: 15, title: 'Wettability and vapour bubble growth', journal: 'Int. J. Heat Mass Transf.', year: 2023, img: 'images/papers/15-bubble-wettability.jpg', doi: 'https://doi.org/10.1016/j.ijheatmasstransfer.2023.124657' },
-          { num: 12, title: 'Inertio-thermal bubble growth', journal: 'J. Fluid Mech.', year: 2022, img: 'images/papers/12-inertio-thermal-bubble.png', doi: 'https://doi.org/10.1017/jfm.2022.734' },
-          { num: 11, title: 'Acoustothermal nanobubbles', journal: 'Nano Lett.', year: 2021, img: 'images/papers/11-nanobubble-acoustothermal.jpeg', doi: 'https://doi.org/10.1021/acs.nanolett.0c03895' },
-          { num: 6, title: 'Acoustothermal atomization', journal: 'Phys. Rev. Lett.', year: 2018, img: 'images/papers/06-acoustothermal-prl.png', doi: 'https://doi.org/10.1103/PhysRevLett.121.104502' }
-        ]
-      }
-    ];
-
-    // ===== Orbit bonds (cross-cutting connections) =====
-    var orbits = [
-      { from: 0, to: 1, label: 'Surface chemistry controls both ice adhesion and thermal conductance',
-        path: 'M 175 220 C 250 120 380 100 470 140' },
-      { from: 1, to: 2, label: 'Boiling heat transfer depends on interfacial thermal resistance',
-        path: 'M 470 140 C 530 220 540 300 510 370' },
-      { from: 2, to: 0, label: 'Nucleation kinetics unify freezing and boiling',
-        path: 'M 510 370 C 420 380 250 340 175 220' }
-    ];
-
-    // ===== Build SVG =====
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 800 500');
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    svg.style.width = '100%';
-    svg.style.height = 'auto';
-    svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Interactive phase diagram, click research themes to explore, Tab for keyboard navigation');
-
-    var defs = document.createElementNS(NS, 'defs');
-
-    // Amber sphere gradient
-    var sgA = document.createElementNS(NS, 'radialGradient');
-    sgA.id = 'pd-amber';
-    sgA.setAttribute('cx', '0.35'); sgA.setAttribute('cy', '0.35'); sgA.setAttribute('r', '0.65');
-    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-      sgA.appendChild(st);
-    });
-    defs.appendChild(sgA);
-
-    // Specular highlight
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'pd-spec';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.65' }, { o: '30%', a: '0.20' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
-
-    // Glow filters
-    var gf = document.createElementNS(NS, 'filter');
-    gf.id = 'boundary-glow';
-    gf.setAttribute('x', '-20%'); gf.setAttribute('y', '-20%');
-    gf.setAttribute('width', '140%'); gf.setAttribute('height', '140%');
-    var gb = document.createElementNS(NS, 'feGaussianBlur');
-    gb.setAttribute('in', 'SourceGraphic'); gb.setAttribute('stdDeviation', '6');
-    gf.appendChild(gb);
-    defs.appendChild(gf);
-
-    var mf = document.createElementNS(NS, 'filter');
-    mf.id = 'marker-glow';
-    mf.setAttribute('x', '-50%'); mf.setAttribute('y', '-50%');
-    mf.setAttribute('width', '200%'); mf.setAttribute('height', '200%');
-    var mb = document.createElementNS(NS, 'feGaussianBlur');
-    mb.setAttribute('in', 'SourceGraphic'); mb.setAttribute('stdDeviation', '4');
-    mb.setAttribute('result', 'blur');
-    mf.appendChild(mb);
-    var mm = document.createElementNS(NS, 'feMerge');
-    var mm1 = document.createElementNS(NS, 'feMergeNode'); mm1.setAttribute('in', 'blur'); mm.appendChild(mm1);
-    var mm2 = document.createElementNS(NS, 'feMergeNode'); mm2.setAttribute('in', 'SourceGraphic'); mm.appendChild(mm2);
-    mf.appendChild(mm);
-    defs.appendChild(mf);
-    svg.appendChild(defs);
-
-    // Helpers
-    function makePath(d, fill, stroke, sw, opacity) {
-      var p = document.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      p.setAttribute('fill', fill || 'none');
-      if (stroke) p.setAttribute('stroke', stroke);
-      if (sw) p.setAttribute('stroke-width', sw);
-      if (opacity !== undefined) p.setAttribute('opacity', opacity);
-      return p;
-    }
-
-    function makeText(x, y, text, opts) {
-      var t = document.createElementNS(NS, 'text');
-      t.setAttribute('x', x); t.setAttribute('y', y);
-      t.setAttribute('text-anchor', opts.anchor || 'middle');
-      t.setAttribute('fill', opts.fill || '#c0c0c8');
-      t.setAttribute('font-family', opts.font || 'Inter, sans-serif');
-      t.setAttribute('font-size', opts.size || '12');
-      if (opts.weight) t.setAttribute('font-weight', opts.weight);
-      if (opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
-      if (opts.transform) t.setAttribute('transform', opts.transform);
-      t.textContent = text;
-      return t;
-    }
-
-    // ===== Phase fills =====
-    svg.appendChild(makePath(SOLID_FILL, 'rgba(70,135,215,0.06)'));
-    svg.appendChild(makePath(LIQUID_FILL, 'rgba(100,190,170,0.05)'));
-    svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
-
-    // ===== Phase labels =====
-    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
-
-    // ===== Axes =====
-    var axG = document.createElementNS(NS, 'g');
-    var xAx = document.createElementNS(NS, 'line');
-    xAx.setAttribute('x1', 80); xAx.setAttribute('y1', 460);
-    xAx.setAttribute('x2', 750); xAx.setAttribute('y2', 460);
-    xAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); xAx.setAttribute('stroke-width', '1');
-    axG.appendChild(xAx);
-    var yAx = document.createElementNS(NS, 'line');
-    yAx.setAttribute('x1', 80); yAx.setAttribute('y1', 460);
-    yAx.setAttribute('x2', 80); yAx.setAttribute('y2', 40);
-    yAx.setAttribute('stroke', 'rgba(200,200,210,0.3)'); yAx.setAttribute('stroke-width', '1');
-    axG.appendChild(yAx);
-    axG.appendChild(makeText(420, 490, 'Temperature \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500' }));
-    axG.appendChild(makeText(40, 250, 'Pressure \u2192', { size: '11', fill: 'rgba(200,200,210,0.55)', spacing: '0.08em', weight: '500', transform: 'rotate(-90 40 250)' }));
-    svg.appendChild(axG);
-
-    // ===== Boundary glows (hidden) =====
-    var glowFusion = makePath(FUSION, 'none', '#d4a03a', '12', 0);
-    glowFusion.setAttribute('filter', 'url(#boundary-glow)');
-    glowFusion.style.transition = 'opacity 0.3s ease';
-    svg.appendChild(glowFusion);
-
-    var glowVapor = makePath(VAPORIZATION, 'none', '#d4a03a', '12', 0);
-    glowVapor.setAttribute('filter', 'url(#boundary-glow)');
-    glowVapor.style.transition = 'opacity 0.3s ease';
-    svg.appendChild(glowVapor);
-
-    var glowSublim = makePath(SUBLIMATION, 'none', '#d4a03a', '8', 0);
-    glowSublim.setAttribute('filter', 'url(#boundary-glow)');
-    glowSublim.style.transition = 'opacity 0.3s ease';
-    svg.appendChild(glowSublim);
-
-    var glowMap = { fusion: [glowFusion], vapor: [glowVapor] };
-
-    // ===== Base boundary curves =====
-    svg.appendChild(makePath(SUBLIMATION, 'none', 'rgba(200,200,210,0.4)', '2'));
-    svg.appendChild(makePath(FUSION, 'none', 'rgba(200,200,210,0.45)', '2'));
-    svg.appendChild(makePath(VAPORIZATION, 'none', 'rgba(200,200,210,0.45)', '2'));
-
-    // ===== Triple & critical points =====
-    var tpDot = document.createElementNS(NS, 'circle');
-    tpDot.setAttribute('cx', TP.x); tpDot.setAttribute('cy', TP.y);
-    tpDot.setAttribute('r', '4'); tpDot.setAttribute('fill', 'rgba(200,200,210,0.4)');
-    svg.appendChild(tpDot);
-    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.45)' }));
-
-    var cpDot = document.createElementNS(NS, 'circle');
-    cpDot.setAttribute('cx', CP.x); cpDot.setAttribute('cy', CP.y);
-    cpDot.setAttribute('r', '3'); cpDot.setAttribute('fill', 'rgba(200,200,210,0.3)');
-    svg.appendChild(cpDot);
-    svg.appendChild(makeText(CP.x + 10, CP.y - 6, 'critical point', { size: '9', fill: 'rgba(200,200,210,0.4)', anchor: 'start' }));
-
-    // ===== Orbit bonds between themes =====
-    var orbitGroup = document.createElementNS(NS, 'g');
-    svg.appendChild(orbitGroup);
-
-    var orbitData = [];
-    orbits.forEach(function(orb) {
-      // Visible arc
-      var arc = document.createElementNS(NS, 'path');
-      arc.setAttribute('d', orb.path);
-      arc.setAttribute('fill', 'none');
-      arc.setAttribute('stroke', 'rgba(212,160,58,0.12)');
-      arc.setAttribute('stroke-width', '1.5');
-      arc.setAttribute('stroke-dasharray', '6 4');
-      arc.style.transition = 'stroke 0.3s, stroke-width 0.3s';
-      orbitGroup.appendChild(arc);
-
-      // Wide invisible hit area for hover
-      var hitArc = document.createElementNS(NS, 'path');
-      hitArc.setAttribute('d', orb.path);
-      hitArc.setAttribute('fill', 'none');
-      hitArc.setAttribute('stroke', 'transparent');
-      hitArc.setAttribute('stroke-width', '20');
-      hitArc.style.cursor = 'pointer';
-      orbitGroup.appendChild(hitArc);
-
-      // Drifting particle
-      var particle = document.createElementNS(NS, 'circle');
-      particle.setAttribute('r', '2.5');
-      particle.setAttribute('fill', '#d4a03a');
-      particle.setAttribute('opacity', '0.5');
-      orbitGroup.appendChild(particle);
-
-      var entry = { arc: arc, hitArc: hitArc, particle: particle, pathEl: arc, orb: orb, t: Math.random() };
-      orbitData.push(entry);
-
-      hitArc.addEventListener('mouseenter', function(e) {
-        arc.setAttribute('stroke', 'rgba(212,160,58,0.35)');
-        arc.setAttribute('stroke-width', '2');
-        particle.setAttribute('opacity', '0.9');
-        showOrbitTip(orb, e);
-      });
-      hitArc.addEventListener('mousemove', function(e) { showOrbitTip(orb, e); });
-      hitArc.addEventListener('mouseleave', function() {
-        arc.setAttribute('stroke', 'rgba(212,160,58,0.12)');
-        arc.setAttribute('stroke-width', '1.5');
-        particle.setAttribute('opacity', '0.5');
-        hideTooltip();
-      });
-    });
-
-    // Orbit tooltip (reuses the research-tooltip element)
-    var tooltip = document.getElementById('research-tooltip');
-    var ttTitle = tooltip.querySelector('.rt-title');
-    var ttDesc = tooltip.querySelector('.rt-desc');
-
-    function showOrbitTip(orb, evt) {
-      var from = themes[orb.from], to = themes[orb.to];
-      ttTitle.textContent = from.label.replace('\n', ' ') + ' \u2194 ' + to.label.replace('\n', ' ');
-      ttDesc.textContent = orb.label;
-      var rect = container.getBoundingClientRect();
-      var tx = evt.clientX - rect.left + 15;
-      var ty = evt.clientY - rect.top - 10;
-      tooltip.style.left = Math.min(tx, rect.width - 280) + 'px';
-      tooltip.style.top = ty + 'px';
-      tooltip.classList.add('visible');
-    }
-
-    // Animate orbit particles
-    function animateParticles() {
-      orbitData.forEach(function(entry) {
-        entry.t += 0.0008;
-        if (entry.t > 1) entry.t -= 1;
-        var len = entry.pathEl.getTotalLength();
-        var pt = entry.pathEl.getPointAtLength(entry.t * len);
-        entry.particle.setAttribute('cx', pt.x.toFixed(1));
-        entry.particle.setAttribute('cy', pt.y.toFixed(1));
-      });
-      requestAnimationFrame(animateParticles);
-    }
-
-    // ===== Research markers =====
-    var MARKER_R = 14;
-    var markerGroup = document.createElementNS(NS, 'g');
-
-    themes.forEach(function(th) {
-      var g = document.createElementNS(NS, 'g');
-      g.setAttribute('transform', 'translate(' + th.x + ',' + th.y + ')');
-      g.style.cursor = 'pointer';
-
-      var glow = document.createElementNS(NS, 'circle');
-      glow.setAttribute('r', MARKER_R + 6);
-      glow.setAttribute('fill', 'rgba(212,160,58,0.3)');
-      glow.setAttribute('filter', 'url(#marker-glow)');
-      glow.setAttribute('opacity', '0');
-      glow.style.transition = 'opacity 0.3s ease';
-      g.appendChild(glow);
-
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', MARKER_R);
-      circ.setAttribute('fill', 'url(#pd-amber)');
-      g.appendChild(circ);
-
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', MARKER_R);
-      spec.setAttribute('fill', 'url(#pd-spec)');
-      g.appendChild(spec);
-
-      // Multi-line label support
-      var lines = th.label.split('\n');
-      lines.forEach(function(line, i) {
-        var label = document.createElementNS(NS, 'text');
-        label.setAttribute('y', MARKER_R + 18 + i * 14);
-        label.setAttribute('text-anchor', 'middle');
-        label.setAttribute('fill', '#c0c0c8');
-        label.setAttribute('font-family', 'Inter, sans-serif');
-        label.setAttribute('font-size', '10');
-        label.setAttribute('font-weight', '600');
-        label.setAttribute('letter-spacing', '0.03em');
-        label.textContent = line;
-        g.appendChild(label);
-      });
-
-      // Keyboard accessibility
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', 'button');
-      g.setAttribute('aria-label', th.label.replace('\n', ' ') + ': ' + th.desc);
-      (function(th, g) {
-        g.addEventListener('focus', function() {
-          highlightTheme(th);
-          var r = g.getBoundingClientRect();
-          showTooltip(th, r.left + r.width / 2, r.top);
-        });
-        g.addEventListener('blur', function() { clearHighlight(); });
-        g.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(th); }
-        });
-      })(th, g);
-
-      th.el = g;
-      th.glowEl = glow;
-      markerGroup.appendChild(g);
-    });
-    svg.appendChild(markerGroup);
-    container.appendChild(svg);
-
-    // ===== Tooltip (hover) =====
-    var hoveredTheme = null;
-
-    function showTooltip(th, screenX, screenY) {
-      var displayLabel = th.label.replace('\n', ' ');
-      ttTitle.textContent = displayLabel;
-      ttDesc.textContent = th.desc;
-      var rect = container.getBoundingClientRect();
-      var tx = screenX - rect.left + 15;
-      var ty = screenY - rect.top - 10;
-      tooltip.style.left = Math.min(tx, rect.width - 280) + 'px';
-      tooltip.style.top = ty + 'px';
-      tooltip.classList.add('visible');
-    }
-
-    function hideTooltip() { tooltip.classList.remove('visible'); }
-
-    function highlightTheme(th) {
-      if (hoveredTheme === th) return;
-      clearHighlight();
-      hoveredTheme = th;
-      th.glowEl.setAttribute('opacity', '0.7');
-      var glows = glowMap[th.boundary];
-      if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0.4'); });
-    }
-
-    function clearHighlight() {
-      if (!hoveredTheme) return;
-      hoveredTheme.glowEl.setAttribute('opacity', '0');
-      var glows = glowMap[hoveredTheme.boundary];
-      if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0'); });
-      hoveredTheme = null;
-      hideTooltip();
-    }
-
-    function hitTest(svgX, svgY) {
-      for (var i = 0; i < themes.length; i++) {
-        var th = themes[i];
-        var dx = svgX - th.x, dy = svgY - th.y;
-        if (dx * dx + dy * dy < (MARKER_R + 12) * (MARKER_R + 12)) return th;
-      }
-      return null;
-    }
-
-    svg.addEventListener('mousemove', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (500 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        highlightTheme(hit);
-        showTooltip(hit, e.clientX, e.clientY);
-        svg.style.cursor = 'pointer';
-      } else {
-        clearHighlight();
-        svg.style.cursor = 'default';
-      }
-    });
-
-    svg.addEventListener('mouseleave', clearHighlight);
-
-    // Touch: tap highlights + opens panel, tap elsewhere dismisses
-    svg.addEventListener('touchend', function(e) {
-      var touch = e.changedTouches[0];
-      var rect = svg.getBoundingClientRect();
-      var svgX = (touch.clientX - rect.left) * (800 / rect.width);
-      var svgY = (touch.clientY - rect.top) * (500 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        e.preventDefault();
-        highlightTheme(hit);
-        openPanel(hit);
-      } else {
-        clearHighlight();
-        if (panelOpen) closePanel();
-      }
-    });
-
-    // ===== Theme panel (click) =====
-    var panel = document.getElementById('research-panel');
-    var rpTitle = panel.querySelector('.rp-title');
-    var rpNarrative = panel.querySelector('.rp-narrative');
-    var rpPapers = panel.querySelector('.rp-papers');
-    var rpClose = panel.querySelector('.rp-close');
-    var panelOpen = false;
-
-    function openPanel(th) {
-      rpTitle.textContent = th.label.replace('\n', ' ');
-      rpNarrative.textContent = th.narrative;
-
-      rpPapers.innerHTML = '';
-      th.papers.forEach(function(p) {
-        var card = document.createElement('a');
-        card.className = 'rp-paper';
-        card.href = p.doi;
-        card.target = '_blank';
-        card.rel = 'noopener';
-
-        var img = document.createElement('img');
-        img.className = 'rp-thumb';
-        img.src = p.img;
-        img.alt = '';
-        card.appendChild(img);
-
-        var info = document.createElement('div');
-        info.className = 'rp-paper-info';
-
-        var title = document.createElement('div');
-        title.className = 'rp-paper-title';
-        title.textContent = '[' + p.num + '] ' + p.title;
-        info.appendChild(title);
-
-        var meta = document.createElement('div');
-        meta.className = 'rp-paper-meta';
-        meta.textContent = p.journal + ' (' + p.year + ')';
-        info.appendChild(meta);
-
-        card.appendChild(info);
-        rpPapers.appendChild(card);
-      });
-
-      panel.classList.add('visible');
-      panelOpen = true;
-    }
-
-    function closePanel() {
-      panel.classList.remove('visible');
-      panelOpen = false;
-    }
-
-    svg.addEventListener('click', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (500 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        openPanel(hit);
-      } else if (panelOpen) {
-        closePanel();
-      }
-    });
-
-    rpClose.addEventListener('click', function(e) {
-      e.stopPropagation();
-      closePanel();
-    });
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && panelOpen) closePanel();
-    });
-
-    // Start particle animation
-    requestAnimationFrame(animateParticles);
   });
 })();
 </script>
@@ -2888,8 +1694,8 @@ main .level2.revealed {
 
     /* ── Colours ── */
     var C = {
-      land: "rgba(120,136,168,0.07)",
-      landStroke: "rgba(120,136,168,0.15)",
+      land: "rgba(120,136,168,0.10)",
+      landStroke: "rgba(180,190,210,0.50)",
       amber: "#d4a03a",   amberL: "#f0d080",   amberD: "#7a5a18",
       teal:  "#4daa88",   tealL:  "#80d0b0",   tealD:  "#2a7060",
       neutral: "#7888a8", neutralL: "#a0aec0",  neutralD: "#4a5a6e",
@@ -3054,8 +1860,6 @@ main .level2.revealed {
     });
 
     var currentYear = YEAR_MAX;
-    var AUTOPLAY_DURATION = 12000;
-    var AUTOPLAY_DELAY = 800;
 
     /* ── SVG setup ── */
     var svg = document.createElementNS(NS, "svg");
@@ -3163,63 +1967,69 @@ main .level2.revealed {
 
     function hideTip() { tip.classList.remove("visible"); }
 
+    /* ── Pin path: teardrop pointing down, origin at tip ── */
+    function pinPath(h) {
+      // h = total pin height; head radius = h * 0.38
+      var rh = h * 0.38;
+      var cy = -h + rh; // centre of circular head
+      // Arc from bottom tip up around the head
+      return "M0,0 C" + (-rh * 0.6) + "," + (-h * 0.35) + " " + (-rh) + "," + (cy + rh * 0.3) +
+        " " + (-rh) + "," + cy +
+        " A" + rh + "," + rh + " 0 1,1 " + rh + "," + cy +
+        " C" + rh + "," + (cy + rh * 0.3) + " " + (rh * 0.6) + "," + (-h * 0.35) + " 0,0Z";
+    }
+
+    /* Track all dot groups for counter-scaling on zoom */
+    var allDots = [];
+
     /* ── Shared dot builder (returns group element, starts hidden) ── */
     function makeDot(parent, city, x, y, baseR, showLabel) {
       var g = document.createElementNS(NS, "g");
+      g._dotX = x; g._dotY = y;
       g.setAttribute("transform", "translate(" + x.toFixed(1) + "," + y.toFixed(1) + ")");
       g.style.cursor = "pointer";
       g.style.opacity = "0";
       g.style.transition = "opacity 0.4s";
+      allDots.push(g);
 
       var tier = cityTier(city);
       var fillId = tier === "keynote" ? "url(#tm-amber)" : tier === "invited" ? "url(#tm-teal)" : "url(#tm-neutral)";
       var glowColor = tier === "keynote" ? C.amberGlow : tier === "invited" ? C.tealGlow : C.neutralGlow;
+      var solidColor = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
 
-      /* Scale radius with talk count (hub keeps fixed size) */
-      var r = city.hub ? baseR : baseR * (0.65 + 0.35 * Math.sqrt(city.total));
+      /* Scale pin height with talk count (hub keeps fixed size) */
+      var pinH = city.hub ? baseR * 3.2 : baseR * 2.6 * (0.7 + 0.3 * Math.sqrt(city.total));
 
-      /* Outer ring for 3+ talks */
-      if (city.total >= 3) {
-        var ring = document.createElementNS(NS, "circle");
-        ring.setAttribute("r", String(r * 2.0));
-        ring.setAttribute("fill", "none");
-        var ringStroke = tier === "keynote" ? "rgba(212,160,58,0.20)" : tier === "invited" ? "rgba(77,170,136,0.20)" : "rgba(122,138,158,0.20)";
-        ring.setAttribute("stroke", ringStroke);
-        ring.setAttribute("stroke-width", "0.7");
-        ring.setAttribute("stroke-dasharray", "2 2");
-        g.appendChild(ring);
-      }
-
-      /* Glow */
-      var glow = document.createElementNS(NS, "circle");
-      glow.setAttribute("r", String(r * 2.5));
+      /* Glow (ellipse behind pin) */
+      var glow = document.createElementNS(NS, "ellipse");
+      glow.setAttribute("cx", "0"); glow.setAttribute("cy", String(-pinH * 0.45));
+      glow.setAttribute("rx", String(pinH * 0.7)); glow.setAttribute("ry", String(pinH * 0.8));
       glow.setAttribute("fill", glowColor);
       glow.setAttribute("opacity", "0");
       glow.style.transition = "opacity 0.2s";
       g.appendChild(glow);
 
-      /* Sphere */
-      var c = document.createElementNS(NS, "circle");
-      c.setAttribute("r", String(r));
-      c.setAttribute("fill", fillId);
-      g.appendChild(c);
+      /* Pin shape */
+      var pin = document.createElementNS(NS, "path");
+      pin.setAttribute("d", pinPath(pinH));
+      pin.setAttribute("fill", fillId);
+      pin.setAttribute("stroke", solidColor);
+      pin.setAttribute("stroke-width", "0.5");
+      g.appendChild(pin);
 
-      /* Specular */
-      var sp = document.createElementNS(NS, "circle");
-      sp.setAttribute("r", String(r));
-      sp.setAttribute("fill", "url(#tm-spec)");
-      g.appendChild(sp);
-
-      /* Hit area */
-      var hit = document.createElementNS(NS, "circle");
-      hit.setAttribute("r", String(Math.max(r * 2.5, 10)));
-      hit.setAttribute("fill", "transparent");
-      g.appendChild(hit);
+      /* Specular highlight on the head */
+      var rh = pinH * 0.38;
+      var cy2 = -pinH + rh;
+      var spec = document.createElementNS(NS, "circle");
+      spec.setAttribute("cx", "0"); spec.setAttribute("cy", String(cy2));
+      spec.setAttribute("r", String(rh * 0.85));
+      spec.setAttribute("fill", "url(#tm-spec)");
+      g.appendChild(spec);
 
       /* Label */
       if (showLabel) {
         var lbl = document.createElementNS(NS, "text");
-        lbl.setAttribute("x", String(r + 5)); lbl.setAttribute("y", "4");
+        lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
         lbl.setAttribute("fill", C.amber);
         lbl.setAttribute("font-family", '"Fraunces", serif');
@@ -3228,33 +2038,19 @@ main .level2.revealed {
         g.appendChild(lbl);
       }
 
-      hit.addEventListener("mouseenter", function(e) {
-        glow.setAttribute("opacity", "1"); showTip(city, e);
-      });
-      hit.addEventListener("mousemove", function(e) { showTip(city, e); });
-      hit.addEventListener("mouseleave", function() {
-        glow.setAttribute("opacity", "0"); hideTip();
-      });
-      hit.addEventListener("touchend", function(e) {
-        e.preventDefault();
-        var te = e.changedTouches[0];
-        glow.setAttribute("opacity", "1"); showTip(city, te);
-        setTimeout(function() { glow.setAttribute("opacity", "0"); hideTip(); }, 3000);
-      });
-
       // Keyboard accessibility
       g.setAttribute("tabindex", "0");
       g.setAttribute("role", "img");
       g.setAttribute("aria-label", city.city + ": " + city.total + " talk" + (city.total > 1 ? "s" : ""));
       g.addEventListener("focus", function() {
-        glow.setAttribute("opacity", "1");
+        highlightCity(city, g);
         var r = g.getBoundingClientRect();
         showTip(city, { clientX: r.left + r.width / 2, clientY: r.top });
       });
-      g.addEventListener("blur", function() {
-        glow.setAttribute("opacity", "0"); hideTip();
-      });
+      g.addEventListener("blur", function() { clearCityHighlight(); });
 
+      city._glowEl = glow;
+      city._dotX = x; city._dotY = y;
       parent.appendChild(g);
       return g;
     }
@@ -3319,14 +2115,14 @@ main .level2.revealed {
       path.setAttribute("d", ringsToPath(rings, px, py));
       path.setAttribute("fill", C.land);
       path.setAttribute("stroke", C.landStroke);
-      path.setAttribute("stroke-width", "0.5");
+      path.setAttribute("stroke-width", "0.7");
       landGroup.appendChild(path);
     }
 
     /* ── Draw main dots (store references) ── */
     function renderDots() {
       cities.forEach(function(city) {
-        var baseR = city.hub ? 6 : 3.5;
+        var baseR = city.hub ? 7 : 4.5;
         city.mainDot = makeDot(dotsGroup, city, px(city.lon), py(city.lat), baseR, false);
       });
     }
@@ -3345,9 +2141,9 @@ main .level2.revealed {
       clipped.setAttribute("clip-path", "url(#inset-clip)");
       var lp = document.createElementNS(NS, "path");
       lp.setAttribute("d", ringsToPath(rings, ipx, ipy));
-      lp.setAttribute("fill", "rgba(120,136,168,0.10)");
-      lp.setAttribute("stroke", "rgba(120,136,168,0.20)");
-      lp.setAttribute("stroke-width", "0.5");
+      lp.setAttribute("fill", "rgba(120,136,168,0.12)");
+      lp.setAttribute("stroke", "rgba(180,190,210,0.50)");
+      lp.setAttribute("stroke-width", "0.7");
       clipped.appendChild(lp);
       insetGroup.appendChild(clipped);
 
@@ -3357,8 +2153,8 @@ main .level2.revealed {
       cities.forEach(function(city) {
         if (city.lat < ILAT0 || city.lat > ILAT1 ||
             city.lon < ILON0 || city.lon > ILON1) return;
-        var baseR = city.hub ? 6 : 3.5;
-        city.insetDot = makeDot(insetDots, city, ipx(city.lon), ipy(city.lat), baseR, city.hub);
+        var baseR = city.hub ? 7 : 4.5;
+        city.insetDot = makeDot(insetDots, city, ipx(city.lon), ipy(city.lat), baseR, false);
       });
       insetGroup.appendChild(insetDots);
 
@@ -3367,8 +2163,8 @@ main .level2.revealed {
       border.setAttribute("x", IX); border.setAttribute("y", IY);
       border.setAttribute("width", IW); border.setAttribute("height", IH);
       border.setAttribute("fill", "none");
-      border.setAttribute("stroke", "rgba(212,160,58,0.25)");
-      border.setAttribute("stroke-width", "1");
+      border.setAttribute("stroke", "rgba(212,160,58,0.45)");
+      border.setAttribute("stroke-width", "1.2");
       border.setAttribute("rx", "6");
       insetGroup.appendChild(border);
 
@@ -3388,8 +2184,8 @@ main .level2.revealed {
       src.setAttribute("width", (sx2 - sx1).toFixed(1));
       src.setAttribute("height", (sy2 - sy1).toFixed(1));
       src.setAttribute("fill", "none");
-      src.setAttribute("stroke", "rgba(212,160,58,0.12)");
-      src.setAttribute("stroke-width", "0.5");
+      src.setAttribute("stroke", "rgba(212,160,58,0.45)");
+      src.setAttribute("stroke-width", "1.2");
       src.setAttribute("stroke-dasharray", "3 2");
       landGroup.appendChild(src);
 
@@ -3398,8 +2194,8 @@ main .level2.revealed {
         var ln = document.createElementNS(NS, "line");
         ln.setAttribute("x1", p[0].toFixed(1)); ln.setAttribute("y1", p[1].toFixed(1));
         ln.setAttribute("x2", String(p[2])); ln.setAttribute("y2", String(p[3]));
-        ln.setAttribute("stroke", "rgba(212,160,58,0.10)");
-        ln.setAttribute("stroke-width", "0.5");
+        ln.setAttribute("stroke", "rgba(212,160,58,0.30)");
+        ln.setAttribute("stroke-width", "0.7");
         ln.setAttribute("stroke-dasharray", "4 3");
         landGroup.appendChild(ln);
       });
@@ -3487,7 +2283,6 @@ main .level2.revealed {
     /* ── Controls ── */
     var slider = document.getElementById("talks-year-slider");
     var yearDisplay = document.getElementById("talks-year-display");
-    var playBtn = document.getElementById("talks-play-btn");
 
     function formatYear(y) {
       return String(Math.floor(y));
@@ -3496,7 +2291,7 @@ main .level2.revealed {
     if (slider) {
       slider.min = YEAR_MIN;
       slider.max = YEAR_MAX;
-      slider.value = YEAR_MIN;
+      slider.value = YEAR_MAX;
       slider.setAttribute("step", "0.5");
       slider.addEventListener("input", function() {
         var year = parseFloat(this.value);
@@ -3504,51 +2299,206 @@ main .level2.revealed {
         updateForYear(year);
       });
     }
-    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
+    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MAX);
 
-    /* ── Auto-play ── */
-    var autoPlaying = false;
+    /* ── Global nearest-city hit test (handles overlapping pins) ── */
+    var hoveredCity = null;
+    var MAX_HIT_DIST = 25; // max SVG-space px to snap to a pin
 
-    function runTimeline(fromYear) {
-      var startY = fromYear != null ? fromYear : YEAR_MIN;
-      autoPlaying = true;
-      updateForYear(startY);
-      if (slider) slider.value = startY;
-      if (yearDisplay) yearDisplay.textContent = formatYear(startY);
-      if (playBtn) playBtn.classList.add("playing");
-      var span = YEAR_MAX - startY;
-      if (span <= 0) { autoPlaying = false; if (playBtn) playBtn.classList.remove("playing"); return; }
-      var duration = AUTOPLAY_DURATION * (span / (YEAR_MAX - YEAR_MIN));
-      var autoStart = null;
-      function autoStep(timestamp) {
-        if (!autoPlaying) { if (playBtn) playBtn.classList.remove("playing"); return; }
-        if (!autoStart) autoStart = timestamp;
-        var t = Math.min(1, (timestamp - autoStart) / duration);
-        var eased = 1 - Math.pow(1 - t, 2);
-        var year = Math.round((startY + eased * span) * 2) / 2;
-        if (slider) slider.value = year;
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
-        if (t < 1) requestAnimationFrame(autoStep);
-        else { autoPlaying = false; if (playBtn) playBtn.classList.remove("playing"); }
+    function highlightCity(city) {
+      if (hoveredCity === city) return;
+      clearCityHighlight();
+      hoveredCity = city;
+      if (city._glowEl) city._glowEl.setAttribute("opacity", "1");
+    }
+
+    function clearCityHighlight() {
+      if (hoveredCity && hoveredCity._glowEl) hoveredCity._glowEl.setAttribute("opacity", "0");
+      hoveredCity = null;
+      hideTip();
+    }
+
+    function nearestCity(svgX, svgY) {
+      var best = null, bestD = Infinity;
+      cities.forEach(function(city) {
+        if (!city.mainDot && !city.insetDot) return;
+        // Check if any dot for this city is visible
+        var visible = (city.mainDot && city.mainDot.style.opacity !== "0") ||
+                      (city.insetDot && city.insetDot.style.opacity !== "0");
+        if (!visible) return;
+
+        // Check against main dot position
+        if (city.mainDot && city.mainDot.style.opacity !== "0") {
+          var mx = px(city.lon), my = py(city.lat);
+          var d = Math.sqrt((svgX - mx) * (svgX - mx) + (svgY - my) * (svgY - my));
+          if (d < bestD) { bestD = d; best = city; }
+        }
+        // Check against inset dot position
+        if (city.insetDot && city.insetDot.style.opacity !== "0" &&
+            svgX >= IX && svgX <= IX + IW && svgY >= IY && svgY <= IY + IH) {
+          var ix = ipx(city.lon), iy = ipy(city.lat);
+          var d2 = Math.sqrt((svgX - ix) * (svgX - ix) + (svgY - iy) * (svgY - iy));
+          if (d2 < bestD) { bestD = d2; best = city; }
+        }
+      });
+      return bestD <= MAX_HIT_DIST ? best : null;
+    }
+
+    function clientToSvg(clientX, clientY) {
+      var rect = svg.getBoundingClientRect();
+      return {
+        x: vb.x + (clientX - rect.left) / rect.width * vb.w,
+        y: vb.y + (clientY - rect.top) / rect.height * vb.h
+      };
+    }
+
+    svg.addEventListener("mousemove", function(e) {
+      if (dragging) return;
+      var pt = clientToSvg(e.clientX, e.clientY);
+      var hit = nearestCity(pt.x, pt.y);
+      if (hit) {
+        highlightCity(hit);
+        showTip(hit, e);
+        svg.style.cursor = "pointer";
+      } else {
+        clearCityHighlight();
+        svg.style.cursor = currentZoom > 1 ? "grab" : "default";
       }
-      requestAnimationFrame(autoStep);
-    }
+    });
 
-    if (slider) {
-      slider.addEventListener("pointerdown", function() {
-        autoPlaying = false;
-        if (playBtn) playBtn.classList.remove("playing");
+    svg.addEventListener("mouseleave", function() { clearCityHighlight(); });
+
+    svg.addEventListener("touchend", function(e) {
+      var touch = e.changedTouches[0];
+      var pt = clientToSvg(touch.clientX, touch.clientY);
+      var hit = nearestCity(pt.x, pt.y);
+      if (hit) {
+        e.preventDefault();
+        highlightCity(hit);
+        showTip(hit, touch);
+        setTimeout(function() { clearCityHighlight(); }, 3000);
+      } else {
+        clearCityHighlight();
+      }
+    });
+
+    /* ── Zoom & pan via viewBox manipulation ── */
+    var vb = { x: 0, y: 0, w: W, h: H };
+    var MIN_ZOOM = 1, MAX_ZOOM = 5;
+    var currentZoom = 1;
+
+    function setViewBox() {
+      svg.setAttribute("viewBox", vb.x.toFixed(1) + " " + vb.y.toFixed(1) + " " + vb.w.toFixed(1) + " " + vb.h.toFixed(1));
+      // Counter-scale pins so they stay constant screen size
+      var s = (1 / currentZoom).toFixed(4);
+      allDots.forEach(function(g) {
+        g.setAttribute("transform", "translate(" + g._dotX.toFixed(1) + "," + g._dotY.toFixed(1) + ") scale(" + s + ")");
       });
     }
 
-    if (playBtn) {
-      playBtn.addEventListener("click", function() {
-        if (autoPlaying) { autoPlaying = false; playBtn.classList.remove("playing"); return; }
-        var cur = slider ? parseInt(slider.value, 10) : YEAR_MIN;
-        runTimeline(cur >= YEAR_MAX ? YEAR_MIN : cur);
-      });
+    function clampViewBox() {
+      if (vb.x < 0) vb.x = 0;
+      if (vb.y < 0) vb.y = 0;
+      if (vb.x + vb.w > W) vb.x = W - vb.w;
+      if (vb.y + vb.h > H) vb.y = H - vb.h;
     }
+
+    function zoomBy(factor) {
+      var newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentZoom * factor));
+      if (newZoom < 1) newZoom = 1;
+      var newW = W / newZoom, newH = H / newZoom;
+      // Zoom toward centre of current view
+      var cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2;
+      vb.x = cx - newW / 2;
+      vb.y = cy - newH / 2;
+      vb.w = newW; vb.h = newH;
+      currentZoom = newZoom;
+      clampViewBox();
+      setViewBox();
+    }
+
+    /* +/- zoom buttons */
+    container.style.position = "relative";
+    var zoomCtrl = document.createElement("div");
+    zoomCtrl.style.cssText = "position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:2px;z-index:5;";
+    [{ label: "+", factor: 1.5 }, { label: "\u2212", factor: 1 / 1.5 }].forEach(function(b) {
+      var btn = document.createElement("button");
+      btn.textContent = b.label;
+      btn.setAttribute("aria-label", b.label === "+" ? "Zoom in" : "Zoom out");
+      btn.style.cssText = "width:28px;height:28px;border:1px solid rgba(212,160,58,0.35);border-radius:4px;background:rgba(26,26,46,0.85);color:#d4a03a;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background 0.15s,border-color 0.15s;";
+      btn.addEventListener("mouseenter", function() { btn.style.background = "rgba(212,160,58,0.15)"; btn.style.borderColor = "rgba(212,160,58,0.6)"; });
+      btn.addEventListener("mouseleave", function() { btn.style.background = "rgba(26,26,46,0.85)"; btn.style.borderColor = "rgba(212,160,58,0.35)"; });
+      btn.addEventListener("click", function(e) { e.stopPropagation(); zoomBy(b.factor); });
+      zoomCtrl.appendChild(btn);
+    });
+    container.appendChild(zoomCtrl);
+
+    // Pinch-to-zoom (ctrlKey wheel on Mac trackpad) and Cmd+scroll
+    svg.addEventListener("wheel", function(e) {
+      if (!e.ctrlKey && !e.metaKey) return; // let normal scroll pass through
+      e.preventDefault();
+
+      var rect = svg.getBoundingClientRect();
+      // Cursor position in current viewBox coordinates
+      var cx = vb.x + (e.clientX - rect.left) / rect.width * vb.w;
+      var cy = vb.y + (e.clientY - rect.top) / rect.height * vb.h;
+
+      var factor = e.deltaY > 0 ? 1.08 : 0.92;
+      var newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentZoom / factor));
+      // Don't zoom out past 1:1
+      if (newZoom < 1) newZoom = 1;
+
+      var newW = W / newZoom;
+      var newH = H / newZoom;
+
+      // Zoom toward cursor
+      vb.x = cx - (cx - vb.x) * (newW / vb.w);
+      vb.y = cy - (cy - vb.y) * (newH / vb.h);
+      vb.w = newW;
+      vb.h = newH;
+      currentZoom = newZoom;
+
+      clampViewBox();
+      setViewBox();
+    }, { passive: false });
+
+    // Pan when zoomed in (click-drag)
+    var dragging = false, dragStartX = 0, dragStartY = 0, vbStartX = 0, vbStartY = 0;
+
+    svg.addEventListener("mousedown", function(e) {
+      if (currentZoom <= 1) return;
+      dragging = true;
+      dragStartX = e.clientX; dragStartY = e.clientY;
+      vbStartX = vb.x; vbStartY = vb.y;
+      svg.style.cursor = "grabbing";
+      e.preventDefault();
+    });
+
+    window.addEventListener("mousemove", function(e) {
+      if (!dragging) return;
+      var rect = svg.getBoundingClientRect();
+      var dx = (e.clientX - dragStartX) / rect.width * vb.w;
+      var dy = (e.clientY - dragStartY) / rect.height * vb.h;
+      vb.x = vbStartX - dx;
+      vb.y = vbStartY - dy;
+      clampViewBox();
+      setViewBox();
+    });
+
+    window.addEventListener("mouseup", function() {
+      if (!dragging) return;
+      dragging = false;
+      svg.style.cursor = currentZoom > 1 ? "grab" : "default";
+    });
+
+    // Double-click to reset zoom
+    svg.addEventListener("dblclick", function(e) {
+      e.preventDefault();
+      vb.x = 0; vb.y = 0; vb.w = W; vb.h = H;
+      currentZoom = 1;
+      setViewBox();
+      svg.style.cursor = "default";
+    });
 
     /* ── Init ── */
     container.appendChild(svg);
@@ -3561,8 +2511,24 @@ main .level2.revealed {
         renderDots();
         drawInset(rings);
         addLegend();
-        updateForYear(YEAR_MIN);
-        setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
+        updateForYear(YEAR_MAX);
+        /* Snap all visible dots to full opacity immediately (no fade-in on load) */
+        cities.forEach(function(city) {
+          var visible = city.firstYear <= YEAR_MAX;
+          if (city.mainDot) city.mainDot.style.transition = "none";
+          if (city.insetDot) city.insetDot.style.transition = "none";
+          if (city.mainDot) city.mainDot.style.opacity = visible ? "1" : "0";
+          if (city.insetDot) city.insetDot.style.opacity = visible ? "1" : "0";
+        });
+        /* Re-enable transitions after a frame so manual scrubbing animates smoothly */
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            cities.forEach(function(city) {
+              if (city.mainDot) city.mainDot.style.transition = "opacity 0.4s";
+              if (city.insetDot) city.insetDot.style.transition = "opacity 0.4s";
+            });
+          });
+        });
       })
       .catch(function() {
         renderDots();
@@ -3573,236 +2539,6 @@ main .level2.revealed {
         msg.textContent = "Map outline unavailable";
         container.appendChild(msg);
       });
-  });
-})();
-</script>
-<script>
-(function() {
-  'use strict';
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var container = document.getElementById('methods-pipeline');
-    if (!container) return;
-
-    var NS = 'http://www.w3.org/2000/svg';
-    var W = 800, H = 200;
-
-    var stages = [
-      { id: 'dft', label: 'DFT / AIMD', x: 100, detail: 'Ab initio training data', desc: 'Ab initio calculations generate training data with quantum-level accuracy for atomic interactions at solid\u2013liquid interfaces.' },
-      { id: 'mlp', label: 'ML Potentials', x: 300, detail: 'Near-DFT accuracy, classical cost', desc: 'Machine-learning interatomic potentials achieve near-DFT accuracy at classical MD cost, enabling large-scale simulations with quantum-level fidelity.' },
-      { id: 'md',  label: 'Large-Scale MD', x: 500, detail: 'Millions of atoms, nanoseconds', desc: 'Classical and MLP-driven molecular dynamics simulations of millions of atoms over nanosecond timescales resolve interfacial phenomena.' },
-      { id: 'cont', label: 'Continuum\nCoupling', x: 700, detail: 'Molecular to macroscale', desc: 'Multiscale methods couple molecular simulations with continuum solvers, bridging nanoscale physics to macroscale engineering problems.' }
-    ];
-
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    svg.style.width = '100%';
-    svg.style.height = 'auto';
-    svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Research methods pipeline: DFT, ML Potentials, Large-Scale MD, Continuum Coupling');
-
-    var defs = document.createElementNS(NS, 'defs');
-
-    // Amber gradient (small sphere)
-    var sg = document.createElementNS(NS, 'radialGradient');
-    sg.id = 'mp-amber';
-    sg.setAttribute('cx', '0.35'); sg.setAttribute('cy', '0.35'); sg.setAttribute('r', '0.65');
-    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-      sg.appendChild(st);
-    });
-    defs.appendChild(sg);
-
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'mp-spec';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.50' }, { o: '30%', a: '0.15' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
-
-    // Arrow marker
-    var marker = document.createElementNS(NS, 'marker');
-    marker.id = 'mp-arrow';
-    marker.setAttribute('viewBox', '0 0 10 6');
-    marker.setAttribute('refX', '10'); marker.setAttribute('refY', '3');
-    marker.setAttribute('markerWidth', '8'); marker.setAttribute('markerHeight', '6');
-    marker.setAttribute('orient', 'auto');
-    var arrowPath = document.createElementNS(NS, 'path');
-    arrowPath.setAttribute('d', 'M 0 0 L 10 3 L 0 6 Z');
-    arrowPath.setAttribute('fill', 'rgba(212,160,58,0.35)');
-    marker.appendChild(arrowPath);
-    defs.appendChild(marker);
-
-    svg.appendChild(defs);
-
-    var CY = 80;
-    var NODE_R = 14;
-
-    // ===== Conduit lines between stages =====
-    for (var i = 0; i < stages.length - 1; i++) {
-      var fromX = stages[i].x + NODE_R + 4;
-      var toX = stages[i + 1].x - NODE_R - 12;
-      var line = document.createElementNS(NS, 'line');
-      line.setAttribute('x1', fromX); line.setAttribute('y1', CY);
-      line.setAttribute('x2', toX); line.setAttribute('y2', CY);
-      line.setAttribute('stroke', 'rgba(212,160,58,0.25)');
-      line.setAttribute('stroke-width', '2');
-      line.setAttribute('stroke-dasharray', '6 4');
-      line.setAttribute('marker-end', 'url(#mp-arrow)');
-      line.style.transition = 'stroke 0.3s';
-      stages[i].lineOut = line;
-      stages[i + 1].lineIn = line;
-      svg.appendChild(line);
-    }
-
-    // ===== Stage nodes =====
-    var tooltip = document.getElementById('methods-tooltip');
-    var mtTitle = tooltip.querySelector('.mt-title');
-    var mtDesc = tooltip.querySelector('.mt-desc');
-    var hoveredStage = null;
-
-    stages.forEach(function(st) {
-      var g = document.createElementNS(NS, 'g');
-      g.setAttribute('transform', 'translate(' + st.x + ',' + CY + ')');
-      g.style.cursor = 'pointer';
-
-      // Glow
-      var glow = document.createElementNS(NS, 'circle');
-      glow.setAttribute('r', NODE_R + 5);
-      glow.setAttribute('fill', 'rgba(212,160,58,0.25)');
-      glow.setAttribute('opacity', '0');
-      glow.style.transition = 'opacity 0.3s';
-      g.appendChild(glow);
-
-      // Sphere
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', NODE_R);
-      circ.setAttribute('fill', 'url(#mp-amber)');
-      g.appendChild(circ);
-
-      // Specular
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', NODE_R);
-      spec.setAttribute('fill', 'url(#mp-spec)');
-      g.appendChild(spec);
-
-      // Label (multi-line support)
-      var lines = st.label.split('\n');
-      lines.forEach(function(line, i) {
-        var lbl = document.createElementNS(NS, 'text');
-        lbl.setAttribute('y', NODE_R + 20 + i * 14);
-        lbl.setAttribute('text-anchor', 'middle');
-        lbl.setAttribute('fill', '#e0e0e0');
-        lbl.setAttribute('font-family', 'Inter, sans-serif');
-        lbl.setAttribute('font-size', '11');
-        lbl.setAttribute('font-weight', '600');
-        lbl.textContent = line;
-        g.appendChild(lbl);
-      });
-
-      // Detail line
-      var detail = document.createElementNS(NS, 'text');
-      detail.setAttribute('y', NODE_R + 20 + lines.length * 14);
-      detail.setAttribute('text-anchor', 'middle');
-      detail.setAttribute('fill', '#9898b0');
-      detail.setAttribute('font-family', 'Inter, sans-serif');
-      detail.setAttribute('font-size', '9');
-      detail.textContent = st.detail;
-      g.appendChild(detail);
-
-      // Hit area
-      var hit = document.createElementNS(NS, 'circle');
-      hit.setAttribute('r', NODE_R + 10);
-      hit.setAttribute('fill', 'transparent');
-      g.appendChild(hit);
-
-      st.el = g;
-      st.glowEl = glow;
-      svg.appendChild(g);
-
-      hit.addEventListener('mouseenter', function(e) {
-        hoveredStage = st;
-        glow.setAttribute('opacity', '1');
-        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
-        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
-        showMethodTip(st, e);
-      });
-      hit.addEventListener('mousemove', function(e) { showMethodTip(st, e); });
-      hit.addEventListener('mouseleave', function() {
-        hoveredStage = null;
-        glow.setAttribute('opacity', '0');
-        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
-        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
-        tooltip.classList.remove('visible');
-      });
-      hit.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        var te = e.changedTouches[0];
-        glow.setAttribute('opacity', '1');
-        showMethodTip(st, te);
-        setTimeout(function() { glow.setAttribute('opacity', '0'); tooltip.classList.remove('visible'); }, 3000);
-      });
-
-      // Keyboard accessibility
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', 'img');
-      g.setAttribute('aria-label', st.label.replace('\n', ' ') + ': ' + st.detail);
-      g.addEventListener('focus', function() {
-        hoveredStage = st;
-        glow.setAttribute('opacity', '1');
-        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
-        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
-        var r = g.getBoundingClientRect();
-        showMethodTip(st, { clientX: r.left + r.width / 2, clientY: r.top });
-      });
-      g.addEventListener('blur', function() {
-        hoveredStage = null;
-        glow.setAttribute('opacity', '0');
-        if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
-        if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
-        tooltip.classList.remove('visible');
-      });
-    });
-
-    // HPC underpinning badge
-    var hpcText = document.createElementNS(NS, 'text');
-    hpcText.setAttribute('x', W / 2); hpcText.setAttribute('y', H - 12);
-    hpcText.setAttribute('text-anchor', 'middle');
-    hpcText.setAttribute('fill', 'rgba(200,200,210,0.3)');
-    hpcText.setAttribute('font-family', 'Inter, sans-serif');
-    hpcText.setAttribute('font-size', '9');
-    hpcText.setAttribute('letter-spacing', '0.08em');
-    hpcText.textContent = 'ARCHER2 \u00b7 CIRRUS \u00b7 LOCAL GPU';
-    svg.appendChild(hpcText);
-
-    // Subtle underline for HPC
-    var hpcLine = document.createElementNS(NS, 'line');
-    hpcLine.setAttribute('x1', 200); hpcLine.setAttribute('y1', H - 24);
-    hpcLine.setAttribute('x2', 600); hpcLine.setAttribute('y2', H - 24);
-    hpcLine.setAttribute('stroke', 'rgba(200,200,210,0.08)');
-    hpcLine.setAttribute('stroke-width', '1');
-    hpcLine.setAttribute('stroke-dasharray', '4 6');
-    svg.appendChild(hpcLine);
-
-    container.appendChild(svg);
-
-    function showMethodTip(st, evt) {
-      mtTitle.textContent = st.label.replace('\n', ' ');
-      mtDesc.textContent = st.desc;
-      var rect = container.getBoundingClientRect();
-      var tx = evt.clientX - rect.left + 15;
-      var ty = evt.clientY - rect.top - 10;
-      var tw = tooltip.offsetWidth || 250;
-      if (tx + tw > rect.width - 8) tx = evt.clientX - rect.left - tw - 15;
-      tooltip.style.left = tx + 'px';
-      tooltip.style.top = ty + 'px';
-      tooltip.classList.add('visible');
-    }
   });
 })();
 </script>
