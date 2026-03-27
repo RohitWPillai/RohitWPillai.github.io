@@ -143,7 +143,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#journal-articles" id="toc-journal-articles" class="nav-link active" data-scroll-target="#journal-articles">Journal Articles</a>
+  <li><a href="#preprints" id="toc-preprints" class="nav-link active" data-scroll-target="#preprints">Preprints</a></li>
+  <li><a href="#journal-articles" id="toc-journal-articles" class="nav-link" data-scroll-target="#journal-articles">Journal Articles</a>
   <ul class="collapse">
   <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">2025</a></li>
   <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2024</a></li>
@@ -226,12 +227,22 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('.pub-card').forEach(function(card) {
     card.addEventListener('click', function(e) {
       if (e.target.closest('a')) return;
-      var doi = card.querySelector('a[href*="doi.org"]');
-      if (doi) window.open(doi.href, '_blank');
+      var link = card.querySelector('a[href*="doi.org"]') || card.querySelector('a[href*="ssrn.com"]') || card.querySelector('.pub-text a[href]');
+      if (link) window.open(link.href, '_blank');
     });
   });
 });
 </script>
+<section id="preprints" class="level2">
+<h2 class="anchored" data-anchor-id="preprints">Preprints</h2>
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/preprint-liquid-utilisation.jpg" alt="The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance">
+<div class="pub-text">
+<p><strong>The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance at Metal/Water Interfaces</strong> El-Rifai A, Merabia S, Hulikal Chakrapani T, <u>Pillai R</u> Submitted to <a href="https://www.sciencedirect.com/journal/international-journal-of-heat-and-mass-transfer"><em>International Journal of Heat and Mass Transfer</em></a> (2026) | <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6479492">Preprint</a></p>
+</div>
+</div>
+<hr>
+</section>
 <section id="journal-articles" class="level2">
 <h2 class="anchored" data-anchor-id="journal-articles">Journal Articles</h2>
 <section id="section" class="level3">
@@ -388,7 +399,12 @@ document.addEventListener('DOMContentLoaded', function() {
 </section>
 <section id="book-chapters" class="level2">
 <h2 class="anchored" data-anchor-id="book-chapters">Book Chapters</h2>
-<p><strong>On the Development of Icephobic Surfaces: Bridging Experiments and Simulations</strong> Tagliaro I, Cerpelloni A, Nikiforidis VM, <u>Pillai R</u>, Antonini C In: Marengo M, De Coninck J (eds) <em>The Surface Wettability Effect on Phase Change</em>, Springer, Cham, pp.&nbsp;235–272 (2022) | <a href="https://doi.org/10.1007/978-3-030-82992-6_8">DOI</a></p>
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/book-icephobic-surfaces.jpg" alt="On the Development of Icephobic Surfaces">
+<div class="pub-text">
+<p><strong>On the Development of Icephobic Surfaces: Bridging Experiments and Simulations</strong> Tagliaro I, Cerpelloni A, Nikiforidis VM, <u>Pillai R</u>, Antonini C In: Marengo M, De Coninck J (eds) <a href="https://www.springer.com/gp/book/9783030829919"><em>The Surface Wettability Effect on Phase Change</em></a>, Springer, Cham, pp.&nbsp;235–272 (2022) | <a href="https://doi.org/10.1007/978-3-030-82992-6_8">DOI</a></p>
+</div>
+</div>
 <hr>
 </section>
 <section id="thesis" class="level2">
