@@ -1,5 +1,8 @@
 ---
 title: "Research"
+include-after-body:
+  - assets/research-diagram.html
+  - assets/methods-pipeline.html
 ---
 
 My research uses molecular simulation to understand interfacial phenomena that govern ice formation, heat flow, and phase change at the nanoscale. I lead a group at the **University of Edinburgh** funded by an **ERC Starting Grant** ([NANO-COOL](https://gtr.ukri.org/projects?ref=EP%2FY036107%2F1), 2024-2029). Our work falls into three themes, mapped on the phase diagram below.

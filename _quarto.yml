@@ -50,10 +50,3 @@ format:
     include-after-body:
       - assets/ambient-dust.html
       - assets/scroll-reveal.html
-      - assets/team-network.html
-      - assets/research-diagram.html
-      - assets/career-timeline.html
-      - assets/grants-gantt.html
-      - assets/service-timeline.html
-      - assets/talks-map.html
-      - assets/methods-pipeline.html

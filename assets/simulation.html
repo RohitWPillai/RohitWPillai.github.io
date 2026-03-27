@@ -24,8 +24,8 @@
     lvFrac: 0.19,              // vapour region ≈ same thickness as solid
     vaporBrownMul: 1.08,        // vapor gets 1.08x Brownian kick
     vaporDamp: 0.96,            // vapor: low friction
-    vaporTargetFrac: 0.09,     // target 9% particles in vapor
-    vaporMinFrac: 0.06,        // force evaporation below this
+    vaporTargetFrac: 0.045,    // target ~4.5% particles in vapor
+    vaporMinFrac: 0.03,        // force evaporation below this
     evapKick: 0.9,             // upward velocity for evaporation
 
     // --- Nanoparticles (disabled — disrupt liquid structure) ---
@@ -403,7 +403,7 @@
     initWallAtoms();
 
     var count = fluidTarget();
-    var liquidCount = Math.round(count * 0.88);
+    var liquidCount = Math.round(count * (1 - CFG.vaporTargetFrac));
     var vaporCount = count - liquidCount;
 
     // --- Dense liquid slab (lvInterface to interfaceY) ---

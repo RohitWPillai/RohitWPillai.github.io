@@ -26,8 +26,8 @@
 
     /* ── Colours ── */
     var C = {
-      land: "rgba(120,136,168,0.07)",
-      landStroke: "rgba(120,136,168,0.15)",
+      land: "rgba(120,136,168,0.10)",
+      landStroke: "rgba(180,190,210,0.50)",
       amber: "#d4a03a",   amberL: "#f0d080",   amberD: "#7a5a18",
       teal:  "#4daa88",   tealL:  "#80d0b0",   tealD:  "#2a7060",
       neutral: "#7888a8", neutralL: "#a0aec0",  neutralD: "#4a5a6e",
@@ -192,8 +192,6 @@
     });
 
     var currentYear = YEAR_MAX;
-    var AUTOPLAY_DURATION = 12000;
-    var AUTOPLAY_DELAY = 800;
 
     /* ── SVG setup ── */
     var svg = document.createElementNS(NS, "svg");
@@ -301,63 +299,69 @@
 
     function hideTip() { tip.classList.remove("visible"); }
 
+    /* ── Pin path: teardrop pointing down, origin at tip ── */
+    function pinPath(h) {
+      // h = total pin height; head radius = h * 0.38
+      var rh = h * 0.38;
+      var cy = -h + rh; // centre of circular head
+      // Arc from bottom tip up around the head
+      return "M0,0 C" + (-rh * 0.6) + "," + (-h * 0.35) + " " + (-rh) + "," + (cy + rh * 0.3) +
+        " " + (-rh) + "," + cy +
+        " A" + rh + "," + rh + " 0 1,1 " + rh + "," + cy +
+        " C" + rh + "," + (cy + rh * 0.3) + " " + (rh * 0.6) + "," + (-h * 0.35) + " 0,0Z";
+    }
+
+    /* Track all dot groups for counter-scaling on zoom */
+    var allDots = [];
+
     /* ── Shared dot builder (returns group element, starts hidden) ── */
     function makeDot(parent, city, x, y, baseR, showLabel) {
       var g = document.createElementNS(NS, "g");
+      g._dotX = x; g._dotY = y;
       g.setAttribute("transform", "translate(" + x.toFixed(1) + "," + y.toFixed(1) + ")");
       g.style.cursor = "pointer";
       g.style.opacity = "0";
       g.style.transition = "opacity 0.4s";
+      allDots.push(g);
 
       var tier = cityTier(city);
       var fillId = tier === "keynote" ? "url(#tm-amber)" : tier === "invited" ? "url(#tm-teal)" : "url(#tm-neutral)";
       var glowColor = tier === "keynote" ? C.amberGlow : tier === "invited" ? C.tealGlow : C.neutralGlow;
+      var solidColor = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
 
-      /* Scale radius with talk count (hub keeps fixed size) */
-      var r = city.hub ? baseR : baseR * (0.65 + 0.35 * Math.sqrt(city.total));
+      /* Scale pin height with talk count (hub keeps fixed size) */
+      var pinH = city.hub ? baseR * 3.2 : baseR * 2.6 * (0.7 + 0.3 * Math.sqrt(city.total));
 
-      /* Outer ring for 3+ talks */
-      if (city.total >= 3) {
-        var ring = document.createElementNS(NS, "circle");
-        ring.setAttribute("r", String(r * 2.0));
-        ring.setAttribute("fill", "none");
-        var ringStroke = tier === "keynote" ? "rgba(212,160,58,0.20)" : tier === "invited" ? "rgba(77,170,136,0.20)" : "rgba(122,138,158,0.20)";
-        ring.setAttribute("stroke", ringStroke);
-        ring.setAttribute("stroke-width", "0.7");
-        ring.setAttribute("stroke-dasharray", "2 2");
-        g.appendChild(ring);
-      }
-
-      /* Glow */
-      var glow = document.createElementNS(NS, "circle");
-      glow.setAttribute("r", String(r * 2.5));
+      /* Glow (ellipse behind pin) */
+      var glow = document.createElementNS(NS, "ellipse");
+      glow.setAttribute("cx", "0"); glow.setAttribute("cy", String(-pinH * 0.45));
+      glow.setAttribute("rx", String(pinH * 0.7)); glow.setAttribute("ry", String(pinH * 0.8));
       glow.setAttribute("fill", glowColor);
       glow.setAttribute("opacity", "0");
       glow.style.transition = "opacity 0.2s";
       g.appendChild(glow);
 
-      /* Sphere */
-      var c = document.createElementNS(NS, "circle");
-      c.setAttribute("r", String(r));
-      c.setAttribute("fill", fillId);
-      g.appendChild(c);
+      /* Pin shape */
+      var pin = document.createElementNS(NS, "path");
+      pin.setAttribute("d", pinPath(pinH));
+      pin.setAttribute("fill", fillId);
+      pin.setAttribute("stroke", solidColor);
+      pin.setAttribute("stroke-width", "0.5");
+      g.appendChild(pin);
 
-      /* Specular */
-      var sp = document.createElementNS(NS, "circle");
-      sp.setAttribute("r", String(r));
-      sp.setAttribute("fill", "url(#tm-spec)");
-      g.appendChild(sp);
-
-      /* Hit area */
-      var hit = document.createElementNS(NS, "circle");
-      hit.setAttribute("r", String(Math.max(r * 2.5, 10)));
-      hit.setAttribute("fill", "transparent");
-      g.appendChild(hit);
+      /* Specular highlight on the head */
+      var rh = pinH * 0.38;
+      var cy2 = -pinH + rh;
+      var spec = document.createElementNS(NS, "circle");
+      spec.setAttribute("cx", "0"); spec.setAttribute("cy", String(cy2));
+      spec.setAttribute("r", String(rh * 0.85));
+      spec.setAttribute("fill", "url(#tm-spec)");
+      g.appendChild(spec);
 
       /* Label */
       if (showLabel) {
         var lbl = document.createElementNS(NS, "text");
-        lbl.setAttribute("x", String(r + 5)); lbl.setAttribute("y", "4");
+        lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
         lbl.setAttribute("fill", C.amber);
         lbl.setAttribute("font-family", '"Fraunces", serif');
@@ -366,33 +370,19 @@
         g.appendChild(lbl);
       }
 
-      hit.addEventListener("mouseenter", function(e) {
-        glow.setAttribute("opacity", "1"); showTip(city, e);
-      });
-      hit.addEventListener("mousemove", function(e) { showTip(city, e); });
-      hit.addEventListener("mouseleave", function() {
-        glow.setAttribute("opacity", "0"); hideTip();
-      });
-      hit.addEventListener("touchend", function(e) {
-        e.preventDefault();
-        var te = e.changedTouches[0];
-        glow.setAttribute("opacity", "1"); showTip(city, te);
-        setTimeout(function() { glow.setAttribute("opacity", "0"); hideTip(); }, 3000);
-      });
-
       // Keyboard accessibility
       g.setAttribute("tabindex", "0");
       g.setAttribute("role", "img");
       g.setAttribute("aria-label", city.city + ": " + city.total + " talk" + (city.total > 1 ? "s" : ""));
       g.addEventListener("focus", function() {
-        glow.setAttribute("opacity", "1");
+        highlightCity(city, g);
         var r = g.getBoundingClientRect();
         showTip(city, { clientX: r.left + r.width / 2, clientY: r.top });
       });
-      g.addEventListener("blur", function() {
-        glow.setAttribute("opacity", "0"); hideTip();
-      });
+      g.addEventListener("blur", function() { clearCityHighlight(); });
 
+      city._glowEl = glow;
+      city._dotX = x; city._dotY = y;
       parent.appendChild(g);
       return g;
     }
@@ -457,14 +447,14 @@
       path.setAttribute("d", ringsToPath(rings, px, py));
       path.setAttribute("fill", C.land);
       path.setAttribute("stroke", C.landStroke);
-      path.setAttribute("stroke-width", "0.5");
+      path.setAttribute("stroke-width", "0.7");
       landGroup.appendChild(path);
     }
 
     /* ── Draw main dots (store references) ── */
     function renderDots() {
       cities.forEach(function(city) {
-        var baseR = city.hub ? 6 : 3.5;
+        var baseR = city.hub ? 7 : 4.5;
         city.mainDot = makeDot(dotsGroup, city, px(city.lon), py(city.lat), baseR, false);
       });
     }
@@ -483,9 +473,9 @@
       clipped.setAttribute("clip-path", "url(#inset-clip)");
       var lp = document.createElementNS(NS, "path");
       lp.setAttribute("d", ringsToPath(rings, ipx, ipy));
-      lp.setAttribute("fill", "rgba(120,136,168,0.10)");
-      lp.setAttribute("stroke", "rgba(120,136,168,0.20)");
-      lp.setAttribute("stroke-width", "0.5");
+      lp.setAttribute("fill", "rgba(120,136,168,0.12)");
+      lp.setAttribute("stroke", "rgba(180,190,210,0.50)");
+      lp.setAttribute("stroke-width", "0.7");
       clipped.appendChild(lp);
       insetGroup.appendChild(clipped);
 
@@ -495,8 +485,8 @@
       cities.forEach(function(city) {
         if (city.lat < ILAT0 || city.lat > ILAT1 ||
             city.lon < ILON0 || city.lon > ILON1) return;
-        var baseR = city.hub ? 6 : 3.5;
-        city.insetDot = makeDot(insetDots, city, ipx(city.lon), ipy(city.lat), baseR, city.hub);
+        var baseR = city.hub ? 7 : 4.5;
+        city.insetDot = makeDot(insetDots, city, ipx(city.lon), ipy(city.lat), baseR, false);
       });
       insetGroup.appendChild(insetDots);
 
@@ -505,8 +495,8 @@
       border.setAttribute("x", IX); border.setAttribute("y", IY);
       border.setAttribute("width", IW); border.setAttribute("height", IH);
       border.setAttribute("fill", "none");
-      border.setAttribute("stroke", "rgba(212,160,58,0.25)");
-      border.setAttribute("stroke-width", "1");
+      border.setAttribute("stroke", "rgba(212,160,58,0.45)");
+      border.setAttribute("stroke-width", "1.2");
       border.setAttribute("rx", "6");
       insetGroup.appendChild(border);
 
@@ -526,8 +516,8 @@
       src.setAttribute("width", (sx2 - sx1).toFixed(1));
       src.setAttribute("height", (sy2 - sy1).toFixed(1));
       src.setAttribute("fill", "none");
-      src.setAttribute("stroke", "rgba(212,160,58,0.12)");
-      src.setAttribute("stroke-width", "0.5");
+      src.setAttribute("stroke", "rgba(212,160,58,0.45)");
+      src.setAttribute("stroke-width", "1.2");
       src.setAttribute("stroke-dasharray", "3 2");
       landGroup.appendChild(src);
 
@@ -536,8 +526,8 @@
         var ln = document.createElementNS(NS, "line");
         ln.setAttribute("x1", p[0].toFixed(1)); ln.setAttribute("y1", p[1].toFixed(1));
         ln.setAttribute("x2", String(p[2])); ln.setAttribute("y2", String(p[3]));
-        ln.setAttribute("stroke", "rgba(212,160,58,0.10)");
-        ln.setAttribute("stroke-width", "0.5");
+        ln.setAttribute("stroke", "rgba(212,160,58,0.30)");
+        ln.setAttribute("stroke-width", "0.7");
         ln.setAttribute("stroke-dasharray", "4 3");
         landGroup.appendChild(ln);
       });
@@ -625,7 +615,6 @@
     /* ── Controls ── */
     var slider = document.getElementById("talks-year-slider");
     var yearDisplay = document.getElementById("talks-year-display");
-    var playBtn = document.getElementById("talks-play-btn");
 
     function formatYear(y) {
       return String(Math.floor(y));
@@ -634,7 +623,7 @@
     if (slider) {
       slider.min = YEAR_MIN;
       slider.max = YEAR_MAX;
-      slider.value = YEAR_MIN;
+      slider.value = YEAR_MAX;
       slider.setAttribute("step", "0.5");
       slider.addEventListener("input", function() {
         var year = parseFloat(this.value);
@@ -642,51 +631,206 @@
         updateForYear(year);
       });
     }
-    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
+    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MAX);
 
-    /* ── Auto-play ── */
-    var autoPlaying = false;
+    /* ── Global nearest-city hit test (handles overlapping pins) ── */
+    var hoveredCity = null;
+    var MAX_HIT_DIST = 25; // max SVG-space px to snap to a pin
 
-    function runTimeline(fromYear) {
-      var startY = fromYear != null ? fromYear : YEAR_MIN;
-      autoPlaying = true;
-      updateForYear(startY);
-      if (slider) slider.value = startY;
-      if (yearDisplay) yearDisplay.textContent = formatYear(startY);
-      if (playBtn) playBtn.classList.add("playing");
-      var span = YEAR_MAX - startY;
-      if (span <= 0) { autoPlaying = false; if (playBtn) playBtn.classList.remove("playing"); return; }
-      var duration = AUTOPLAY_DURATION * (span / (YEAR_MAX - YEAR_MIN));
-      var autoStart = null;
-      function autoStep(timestamp) {
-        if (!autoPlaying) { if (playBtn) playBtn.classList.remove("playing"); return; }
-        if (!autoStart) autoStart = timestamp;
-        var t = Math.min(1, (timestamp - autoStart) / duration);
-        var eased = 1 - Math.pow(1 - t, 2);
-        var year = Math.round((startY + eased * span) * 2) / 2;
-        if (slider) slider.value = year;
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
-        if (t < 1) requestAnimationFrame(autoStep);
-        else { autoPlaying = false; if (playBtn) playBtn.classList.remove("playing"); }
+    function highlightCity(city) {
+      if (hoveredCity === city) return;
+      clearCityHighlight();
+      hoveredCity = city;
+      if (city._glowEl) city._glowEl.setAttribute("opacity", "1");
+    }
+
+    function clearCityHighlight() {
+      if (hoveredCity && hoveredCity._glowEl) hoveredCity._glowEl.setAttribute("opacity", "0");
+      hoveredCity = null;
+      hideTip();
+    }
+
+    function nearestCity(svgX, svgY) {
+      var best = null, bestD = Infinity;
+      cities.forEach(function(city) {
+        if (!city.mainDot && !city.insetDot) return;
+        // Check if any dot for this city is visible
+        var visible = (city.mainDot && city.mainDot.style.opacity !== "0") ||
+                      (city.insetDot && city.insetDot.style.opacity !== "0");
+        if (!visible) return;
+
+        // Check against main dot position
+        if (city.mainDot && city.mainDot.style.opacity !== "0") {
+          var mx = px(city.lon), my = py(city.lat);
+          var d = Math.sqrt((svgX - mx) * (svgX - mx) + (svgY - my) * (svgY - my));
+          if (d < bestD) { bestD = d; best = city; }
+        }
+        // Check against inset dot position
+        if (city.insetDot && city.insetDot.style.opacity !== "0" &&
+            svgX >= IX && svgX <= IX + IW && svgY >= IY && svgY <= IY + IH) {
+          var ix = ipx(city.lon), iy = ipy(city.lat);
+          var d2 = Math.sqrt((svgX - ix) * (svgX - ix) + (svgY - iy) * (svgY - iy));
+          if (d2 < bestD) { bestD = d2; best = city; }
+        }
+      });
+      return bestD <= MAX_HIT_DIST ? best : null;
+    }
+
+    function clientToSvg(clientX, clientY) {
+      var rect = svg.getBoundingClientRect();
+      return {
+        x: vb.x + (clientX - rect.left) / rect.width * vb.w,
+        y: vb.y + (clientY - rect.top) / rect.height * vb.h
+      };
+    }
+
+    svg.addEventListener("mousemove", function(e) {
+      if (dragging) return;
+      var pt = clientToSvg(e.clientX, e.clientY);
+      var hit = nearestCity(pt.x, pt.y);
+      if (hit) {
+        highlightCity(hit);
+        showTip(hit, e);
+        svg.style.cursor = "pointer";
+      } else {
+        clearCityHighlight();
+        svg.style.cursor = currentZoom > 1 ? "grab" : "default";
       }
-      requestAnimationFrame(autoStep);
-    }
+    });
 
-    if (slider) {
-      slider.addEventListener("pointerdown", function() {
-        autoPlaying = false;
-        if (playBtn) playBtn.classList.remove("playing");
+    svg.addEventListener("mouseleave", function() { clearCityHighlight(); });
+
+    svg.addEventListener("touchend", function(e) {
+      var touch = e.changedTouches[0];
+      var pt = clientToSvg(touch.clientX, touch.clientY);
+      var hit = nearestCity(pt.x, pt.y);
+      if (hit) {
+        e.preventDefault();
+        highlightCity(hit);
+        showTip(hit, touch);
+        setTimeout(function() { clearCityHighlight(); }, 3000);
+      } else {
+        clearCityHighlight();
+      }
+    });
+
+    /* ── Zoom & pan via viewBox manipulation ── */
+    var vb = { x: 0, y: 0, w: W, h: H };
+    var MIN_ZOOM = 1, MAX_ZOOM = 5;
+    var currentZoom = 1;
+
+    function setViewBox() {
+      svg.setAttribute("viewBox", vb.x.toFixed(1) + " " + vb.y.toFixed(1) + " " + vb.w.toFixed(1) + " " + vb.h.toFixed(1));
+      // Counter-scale pins so they stay constant screen size
+      var s = (1 / currentZoom).toFixed(4);
+      allDots.forEach(function(g) {
+        g.setAttribute("transform", "translate(" + g._dotX.toFixed(1) + "," + g._dotY.toFixed(1) + ") scale(" + s + ")");
       });
     }
 
-    if (playBtn) {
-      playBtn.addEventListener("click", function() {
-        if (autoPlaying) { autoPlaying = false; playBtn.classList.remove("playing"); return; }
-        var cur = slider ? parseInt(slider.value, 10) : YEAR_MIN;
-        runTimeline(cur >= YEAR_MAX ? YEAR_MIN : cur);
-      });
+    function clampViewBox() {
+      if (vb.x < 0) vb.x = 0;
+      if (vb.y < 0) vb.y = 0;
+      if (vb.x + vb.w > W) vb.x = W - vb.w;
+      if (vb.y + vb.h > H) vb.y = H - vb.h;
     }
+
+    function zoomBy(factor) {
+      var newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentZoom * factor));
+      if (newZoom < 1) newZoom = 1;
+      var newW = W / newZoom, newH = H / newZoom;
+      // Zoom toward centre of current view
+      var cx = vb.x + vb.w / 2, cy = vb.y + vb.h / 2;
+      vb.x = cx - newW / 2;
+      vb.y = cy - newH / 2;
+      vb.w = newW; vb.h = newH;
+      currentZoom = newZoom;
+      clampViewBox();
+      setViewBox();
+    }
+
+    /* +/- zoom buttons */
+    container.style.position = "relative";
+    var zoomCtrl = document.createElement("div");
+    zoomCtrl.style.cssText = "position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:2px;z-index:5;";
+    [{ label: "+", factor: 1.5 }, { label: "\u2212", factor: 1 / 1.5 }].forEach(function(b) {
+      var btn = document.createElement("button");
+      btn.textContent = b.label;
+      btn.setAttribute("aria-label", b.label === "+" ? "Zoom in" : "Zoom out");
+      btn.style.cssText = "width:28px;height:28px;border:1px solid rgba(212,160,58,0.35);border-radius:4px;background:rgba(26,26,46,0.85);color:#d4a03a;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;line-height:1;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);transition:background 0.15s,border-color 0.15s;";
+      btn.addEventListener("mouseenter", function() { btn.style.background = "rgba(212,160,58,0.15)"; btn.style.borderColor = "rgba(212,160,58,0.6)"; });
+      btn.addEventListener("mouseleave", function() { btn.style.background = "rgba(26,26,46,0.85)"; btn.style.borderColor = "rgba(212,160,58,0.35)"; });
+      btn.addEventListener("click", function(e) { e.stopPropagation(); zoomBy(b.factor); });
+      zoomCtrl.appendChild(btn);
+    });
+    container.appendChild(zoomCtrl);
+
+    // Pinch-to-zoom (ctrlKey wheel on Mac trackpad) and Cmd+scroll
+    svg.addEventListener("wheel", function(e) {
+      if (!e.ctrlKey && !e.metaKey) return; // let normal scroll pass through
+      e.preventDefault();
+
+      var rect = svg.getBoundingClientRect();
+      // Cursor position in current viewBox coordinates
+      var cx = vb.x + (e.clientX - rect.left) / rect.width * vb.w;
+      var cy = vb.y + (e.clientY - rect.top) / rect.height * vb.h;
+
+      var factor = e.deltaY > 0 ? 1.08 : 0.92;
+      var newZoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, currentZoom / factor));
+      // Don't zoom out past 1:1
+      if (newZoom < 1) newZoom = 1;
+
+      var newW = W / newZoom;
+      var newH = H / newZoom;
+
+      // Zoom toward cursor
+      vb.x = cx - (cx - vb.x) * (newW / vb.w);
+      vb.y = cy - (cy - vb.y) * (newH / vb.h);
+      vb.w = newW;
+      vb.h = newH;
+      currentZoom = newZoom;
+
+      clampViewBox();
+      setViewBox();
+    }, { passive: false });
+
+    // Pan when zoomed in (click-drag)
+    var dragging = false, dragStartX = 0, dragStartY = 0, vbStartX = 0, vbStartY = 0;
+
+    svg.addEventListener("mousedown", function(e) {
+      if (currentZoom <= 1) return;
+      dragging = true;
+      dragStartX = e.clientX; dragStartY = e.clientY;
+      vbStartX = vb.x; vbStartY = vb.y;
+      svg.style.cursor = "grabbing";
+      e.preventDefault();
+    });
+
+    window.addEventListener("mousemove", function(e) {
+      if (!dragging) return;
+      var rect = svg.getBoundingClientRect();
+      var dx = (e.clientX - dragStartX) / rect.width * vb.w;
+      var dy = (e.clientY - dragStartY) / rect.height * vb.h;
+      vb.x = vbStartX - dx;
+      vb.y = vbStartY - dy;
+      clampViewBox();
+      setViewBox();
+    });
+
+    window.addEventListener("mouseup", function() {
+      if (!dragging) return;
+      dragging = false;
+      svg.style.cursor = currentZoom > 1 ? "grab" : "default";
+    });
+
+    // Double-click to reset zoom
+    svg.addEventListener("dblclick", function(e) {
+      e.preventDefault();
+      vb.x = 0; vb.y = 0; vb.w = W; vb.h = H;
+      currentZoom = 1;
+      setViewBox();
+      svg.style.cursor = "default";
+    });
 
     /* ── Init ── */
     container.appendChild(svg);
@@ -699,8 +843,24 @@
         renderDots();
         drawInset(rings);
         addLegend();
-        updateForYear(YEAR_MIN);
-        setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
+        updateForYear(YEAR_MAX);
+        /* Snap all visible dots to full opacity immediately (no fade-in on load) */
+        cities.forEach(function(city) {
+          var visible = city.firstYear <= YEAR_MAX;
+          if (city.mainDot) city.mainDot.style.transition = "none";
+          if (city.insetDot) city.insetDot.style.transition = "none";
+          if (city.mainDot) city.mainDot.style.opacity = visible ? "1" : "0";
+          if (city.insetDot) city.insetDot.style.opacity = visible ? "1" : "0";
+        });
+        /* Re-enable transitions after a frame so manual scrubbing animates smoothly */
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            cities.forEach(function(city) {
+              if (city.mainDot) city.mainDot.style.transition = "opacity 0.4s";
+              if (city.insetDot) city.insetDot.style.transition = "opacity 0.4s";
+            });
+          });
+        });
       })
       .catch(function() {
         renderDots();

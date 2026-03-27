@@ -12,14 +12,12 @@
     var CX = 400, CY = 270;
     var INNER_R = 160, OUTER_R = 240;
     var PI_R = 30, POSTDOC_R = 22, PHD_R = 22;
-    var SPRING_K = 0.012, BROWNIAN = 0.25, DAMPING = 0.90;
+    var SPRING_K = 0.015, BROWNIAN = 0.06, DAMPING = 0.94;
     var OPACITY_LERP = 0.08;
     var ACTIVE_OPACITY = 1.0, FADED_OPACITY = 0.45;
     var ACTIVE_BOND = 0.35, FADED_BOND = 0.10;
     var BOND_WIDTH_ACTIVE = 2.5, BOND_WIDTH_MIN = 1.2;
     var YEAR_MIN = 2018, YEAR_MAX = 2026;
-    var AUTOPLAY_DURATION = 16000;
-    var AUTOPLAY_DELAY = 800;
 
     var COLORS = {
       amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18', glow: 'rgba(212,160,58,0.3)' },
@@ -44,8 +42,8 @@
     ];
 
     // ===== Dynamic layout: positions computed per-year in updateForYear =====
-    var ANGLE_LERP = 0.06;
-    var RADIUS_LERP = 0.06;
+    var ANGLE_LERP = 0.10;
+    var RADIUS_LERP = 0.08;
 
     members[0].ex = CX; members[0].ey = CY;
     members.forEach(function(m) {
@@ -73,16 +71,74 @@
       return d;
     }
 
+    // Assign each non-PI member a fixed chronological index (never changes)
+    var ringMembers = members.slice(1);
+    ringMembers.sort(function(a, b) { return a.startYear - b.startYear; });
+    ringMembers.forEach(function(m, i) { m.chronoIndex = i; });
+    var totalRing = ringMembers.length;
+
     function distributeOnRing(list, radius, angularOffset) {
       var n = list.length;
       if (n === 0) return;
+      list.sort(function(a, b) { return a.chronoIndex - b.chronoIndex; });
       var step = 2 * Math.PI / n;
       var start = -Math.PI / 2 + (angularOffset || 0);
       for (var i = 0; i < n; i++) {
-        var angle = start + i * step;
-        list[i].targetAngle = angle;
+        list[i].targetAngle = start + i * step;
         list[i].targetRadius = radius;
       }
+    }
+
+    // ALUMNI label lives at angle -π/2 between rings — avoid placing nodes there
+    var LABEL_ANGLE = -Math.PI / 2;
+    var LABEL_EXCLUSION = 0.35; // radians (~20°) clearance either side
+
+    // Find outer ring offset that maximises minimum Euclidean distance
+    // to inner ring nodes AND avoids the ALUMNI label zone
+    function bestOuterOffset(innerList, outerList) {
+      var ni = innerList.length, no = outerList.length;
+      if (no === 0) return 0;
+      if (ni === 0) {
+        // No inner members — just avoid the label
+        var step = 2 * Math.PI / no;
+        // Offset so no outer member lands at -π/2
+        return step / 2;
+      }
+
+      // Precompute inner positions
+      var innerAngles = [];
+      for (var i = 0; i < ni; i++) innerAngles.push(innerList[i].targetAngle);
+
+      var outerStep = 2 * Math.PI / no;
+      var bestOff = 0, bestScore = -1;
+
+      // Sample 360 candidate offsets
+      for (var s = 0; s < 360; s++) {
+        var off = s * 2 * Math.PI / 360;
+        var minDist = Infinity;
+
+        for (var j = 0; j < no; j++) {
+          var oa = -Math.PI / 2 + off + j * outerStep;
+
+          // Distance to ALUMNI label (angular, on outer ring)
+          var labelDist = Math.abs(angleDiff(oa, LABEL_ANGLE));
+          if (labelDist < LABEL_EXCLUSION) { minDist = -1; break; }
+
+          // Euclidean distance to each inner node
+          var ox = CX + OUTER_R * Math.cos(oa);
+          var oy = CY + OUTER_R * Math.sin(oa);
+          for (var k = 0; k < ni; k++) {
+            var ix = CX + INNER_R * Math.cos(innerAngles[k]);
+            var iy = CY + INNER_R * Math.sin(innerAngles[k]);
+            var dx = ox - ix, dy = oy - iy;
+            var d = Math.sqrt(dx * dx + dy * dy);
+            if (d < minDist) minDist = d;
+          }
+        }
+
+        if (minDist > bestScore) { bestScore = minDist; bestOff = off; }
+      }
+      return bestOff;
     }
 
     // ===== SVG creation =====
@@ -146,7 +202,12 @@
 
     // Orbital guide circles with labels
     var orbitGroup = document.createElementNS(NS, 'g');
-    [{ r: INNER_R, label: 'TEAM' }, { r: OUTER_R, label: 'ALUMNI' }].forEach(function(o) {
+    // Label positions: TEAM inside inner circle, ALUMNI between the two rings
+    var labelPositions = [
+      { r: INNER_R, label: 'TEAM', ly: CY - INNER_R * 0.45 },
+      { r: OUTER_R, label: 'ALUMNI', ly: CY - (INNER_R + OUTER_R) / 2 }
+    ];
+    labelPositions.forEach(function(o) {
       var circ = document.createElementNS(NS, 'circle');
       circ.setAttribute('cx', CX); circ.setAttribute('cy', CY);
       circ.setAttribute('r', o.r);
@@ -156,8 +217,7 @@
       circ.setAttribute('stroke-dasharray', '6 8');
       orbitGroup.appendChild(circ);
 
-      /* Horizontal label at top of orbit with background pill */
-      var lx = CX, ly = CY - o.r;
+      var lx = CX, ly = o.ly;
       var bg = document.createElementNS(NS, 'rect');
       bg.setAttribute('x', lx - 30); bg.setAttribute('y', ly - 8);
       bg.setAttribute('width', 60); bg.setAttribute('height', 16);
@@ -414,15 +474,34 @@
         }
       });
 
-      // Sort each list by startYear for stable chronological ordering
-      innerList.sort(function(a, b) { return a.startYear - b.startYear; });
-      outerList.sort(function(a, b) { return a.startYear - b.startYear; });
-
-      // Equidistant distribution on two rings
-      // Offset outer ring by half the denser ring's step for maximum misalignment
+      // Equidistant distribution on two rings with stable chronological ordering
       distributeOnRing(innerList, INNER_R);
-      var maxN = Math.max(innerList.length, outerList.length, 1);
-      distributeOnRing(outerList, OUTER_R, Math.PI / maxN);
+      distributeOnRing(outerList, OUTER_R, bestOuterOffset(innerList, outerList));
+
+      // Overlap check: warn if any two visible nodes are too close
+      var MIN_SEP = 50; // minimum px between node centres
+      var visible = innerList.concat(outerList);
+      for (var i = 0; i < visible.length; i++) {
+        var a = visible[i];
+        var ax = CX + a.targetRadius * Math.cos(a.targetAngle);
+        var ay = CY + a.targetRadius * Math.sin(a.targetAngle);
+        for (var j = i + 1; j < visible.length; j++) {
+          var b = visible[j];
+          var bx = CX + b.targetRadius * Math.cos(b.targetAngle);
+          var by = CY + b.targetRadius * Math.sin(b.targetAngle);
+          var dx = ax - bx, dy = ay - by;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < MIN_SEP) {
+            console.warn('Overlap: ' + a.name + ' & ' + b.name + ' = ' + dist.toFixed(0) + 'px (min ' + MIN_SEP + ') at year ' + year);
+          }
+        }
+        // Check against ALUMNI label position
+        var lx = CX, ly = CY - (INNER_R + OUTER_R) / 2;
+        var dlx = ax - lx, dly = ay - ly;
+        if (Math.sqrt(dlx * dlx + dly * dly) < 40) {
+          console.warn('Label overlap: ' + a.name + ' too close to ALUMNI label at year ' + year);
+        }
+      }
 
       // Snap newly spawned members to their ring position
       members.forEach(function(m) {
@@ -614,61 +693,25 @@
       else { running = true; requestAnimationFrame(loop); }
     });
 
-    // ===== Init: start at YEAR_MIN for auto-play =====
-    updateForYear(YEAR_MIN);
-    if (slider) slider.value = YEAR_MIN;
-    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MIN);
+    // ===== Init: show current team =====
+    updateForYear(YEAR_MAX);
+    if (slider) slider.value = YEAR_MAX;
+    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MAX);
+    // Snap all visible members to their positions immediately (no animation on load)
+    members.forEach(function(m) {
+      if (m.state !== 'unborn') {
+        m.eAngle = m.targetAngle;
+        m.eRadius = m.targetRadius;
+        m.ex = CX + m.eRadius * Math.cos(m.eAngle);
+        m.ey = CY + m.eRadius * Math.sin(m.eAngle);
+        m.x = m.ex; m.y = m.ey;
+        m.opacity = m.targetOpacity;
+        m.bondOpacity = m.targetBondOpacity;
+        m.bondWidth = m.targetBondWidth;
+      }
+    });
     render();
     requestAnimationFrame(loop);
-
-    // ===== Auto-play: scrub from YEAR_MIN to YEAR_MAX =====
-    var autoPlaying = true;
-    var playBtn = document.getElementById('team-play-btn');
-
-    function runTimeline(fromYear) {
-      var startY = fromYear != null ? fromYear : YEAR_MIN;
-      autoPlaying = true;
-      updateForYear(startY);
-      if (slider) slider.value = startY;
-      if (yearDisplay) yearDisplay.textContent = formatYear(startY);
-      if (playBtn) playBtn.classList.add('playing');
-      var span = YEAR_MAX - startY;
-      if (span <= 0) { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); return; }
-      var duration = AUTOPLAY_DURATION * (span / (YEAR_MAX - YEAR_MIN));
-      var autoStart = null;
-      function autoStep(timestamp) {
-        if (!autoPlaying) { if (playBtn) playBtn.classList.remove('playing'); return; }
-        if (!autoStart) autoStart = timestamp;
-        var t = Math.min(1, (timestamp - autoStart) / duration);
-        var eased = 1 - Math.pow(1 - t, 2);
-        var year = Math.round((startY + eased * span) * 2) / 2;
-        if (slider) slider.value = year;
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
-        if (t < 1) requestAnimationFrame(autoStep);
-        else { autoPlaying = false; if (playBtn) playBtn.classList.remove('playing'); }
-      }
-      requestAnimationFrame(autoStep);
-    }
-
-    // Stop auto-play if user touches slider
-    if (slider) {
-      slider.addEventListener('pointerdown', function() {
-        autoPlaying = false;
-        if (playBtn) playBtn.classList.remove('playing');
-      });
-    }
-
-    // Play button replays the timeline
-    if (playBtn) {
-      playBtn.addEventListener('click', function() {
-        if (autoPlaying) { autoPlaying = false; playBtn.classList.remove('playing'); return; }
-        var cur = slider ? parseInt(slider.value, 10) : YEAR_MIN;
-        runTimeline(cur >= YEAR_MAX ? YEAR_MIN : cur);
-      });
-    }
-
-    setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
   });
 })();
 </script>

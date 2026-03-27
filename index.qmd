@@ -55,8 +55,8 @@ header-includes: |
       <span class="intro-card-desc">How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings</span>
     </div>
     <div class="intro-card">
-      <span class="intro-card-title">Interfacial Heat Transfer</span>
-      <span class="intro-card-desc">Spectral thermal conductance at solid–liquid interfaces, surface chemistry, and nanomaterial-enhanced cooling</span>
+      <span class="intro-card-title">Interfacial Thermofluids</span>
+      <span class="intro-card-desc">Thermal conductance at solid–liquid interfaces, surface wetting and self-cleaning, and nanomaterial-enhanced cooling</span>
     </div>
     <div class="intro-card">
       <span class="intro-card-title">Phase Change &amp; Bubbles</span>
