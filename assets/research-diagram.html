@@ -31,18 +31,21 @@
         narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
         papers: [
           { num: 17, title: 'Vibration-induced ice nucleation', journal: 'Nanoscale', year: 2025, img: 'images/papers/17-ice-nucleation-vibration.jpg', doi: 'https://doi.org/10.1039/D5NR00326A' },
-          { num: 9, title: 'Ice physics on nanostructured surfaces', journal: 'J. Chem. Phys.', year: 2021, img: 'images/papers/09-ice-nanostructure.jpg', doi: 'https://doi.org/10.1063/5.0069896' },
-          { num: 20, title: 'Contaminant removal via vibrating surfaces', journal: 'Nano Lett.', year: 2025, img: 'images/papers/20-contaminant-vibrating.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.4c05973' }
+          { num: 9, title: 'Ice physics on nanostructured surfaces', journal: 'J. Chem. Phys.', year: 2021, img: 'images/papers/09-ice-nanostructure.jpg', doi: 'https://doi.org/10.1063/5.0069896' }
         ]
       },
-      { id: 'heat', label: 'Interfacial Heat Transfer', x: 470, y: 140,
-        desc: 'Interfacial thermal conductance: spectral mechanisms, surface chemistry, nanomaterial-enhanced cooling',
+      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140,
+        desc: 'Thermal conductance at solid\u2013liquid interfaces, surface wetting and self-cleaning, nanomaterial-enhanced cooling',
         boundary: 'fusion',
-        narrative: 'Heat flow across solid\u2013liquid interfaces is governed by atomic-scale phenomena that determine macroscopic thermal performance. We investigate the spectral mechanisms of interfacial thermal conductance, the role of surface chemistry and liquid structure, and nanomaterial-enhanced cooling strategies, the core focus of our ERC-funded NANO-COOL programme.',
+        narrative: 'The behaviour of liquids at solid surfaces governs both heat transfer and fluid transport at the nanoscale. We investigate spectral mechanisms of interfacial thermal conductance and nanomaterial-enhanced cooling strategies through our ERC-funded NANO-COOL programme, alongside the interfacial fluid dynamics that drive phenomena like contaminant removal from nature\u2019s self-cleaning surfaces.',
         papers: [
+          { num: 20, title: 'Contaminant removal via vibrating surfaces', journal: 'Nano Lett.', year: 2025, img: 'images/papers/20-contaminant-vibrating.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.4c05973' },
           { num: 19, title: 'Spectral heat transfer with a meniscus', journal: 'Phys. Chem. Chem. Phys.', year: 2025, img: 'images/papers/19-spectral-meniscus.jpg', doi: 'https://doi.org/10.1039/D4CP04768K' },
           { num: 16, title: 'Regimes of interfacial thermal conductance', journal: 'J. Phys. Chem. C', year: 2024, img: 'images/papers/16-thermal-conductance.jpeg', doi: 'https://doi.org/10.1021/acs.jpcc.4c00536' },
-          { num: 13, title: 'Self-cleaning surfaces', journal: 'Nano Lett.', year: 2023, img: 'images/papers/13-self-cleaning.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.3c00257' }
+          { num: 14, title: 'Rolling and sliding nanodroplet spreading', journal: 'Phys. Rev. Lett.', year: 2023, img: 'images/papers/14-rolling-sliding.png', doi: 'https://doi.org/10.1103/PhysRevLett.131.164001' },
+          { num: 13, title: 'Contaminant removal from self-cleaning surfaces', journal: 'Nano Lett.', year: 2023, img: 'images/papers/13-self-cleaning.jpg', doi: 'https://doi.org/10.1021/acs.nanolett.3c00257' },
+          { num: 10, title: 'Water transport in boron nitride nanotubes', journal: 'Nanoscale', year: 2021, img: 'images/papers/10-bnnt-water.png', doi: 'https://doi.org/10.1039/D1NR04794A' },
+          { num: 7, title: 'Nanodroplets on vibrating surfaces', journal: 'Langmuir', year: 2018, img: 'images/papers/07-nanodroplet-vibrating.png', doi: 'https://doi.org/10.1021/acs.langmuir.8b02066' }
         ]
       },
       { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
@@ -298,10 +301,19 @@
     var MARKER_R = 14;
     var markerGroup = document.createElementNS(NS, 'g');
 
-    themes.forEach(function(th) {
+    themes.forEach(function(th, idx) {
       var g = document.createElementNS(NS, 'g');
       g.setAttribute('transform', 'translate(' + th.x + ',' + th.y + ')');
       g.style.cursor = 'pointer';
+
+      // Ring pulse element (fires once on load)
+      var ring = document.createElementNS(NS, 'circle');
+      ring.setAttribute('r', MARKER_R);
+      ring.setAttribute('fill', 'none');
+      ring.setAttribute('stroke', '#d4a03a');
+      ring.setAttribute('stroke-width', '2');
+      ring.setAttribute('opacity', '0');
+      g.appendChild(ring);
 
       var glow = document.createElementNS(NS, 'circle');
       glow.setAttribute('r', MARKER_R + 6);
@@ -320,6 +332,9 @@
       spec.setAttribute('r', MARKER_R);
       spec.setAttribute('fill', 'url(#pd-spec)');
       g.appendChild(spec);
+
+      th.ringEl = ring;
+      th.markerIdx = idx;
 
       // Multi-line label support
       var lines = th.label.split('\n');
@@ -343,13 +358,8 @@
       (function(th, g) {
         g.addEventListener('focus', function() {
           highlightTheme(th);
-          var r = g.getBoundingClientRect();
-          showTooltip(th, r.left + r.width / 2, r.top);
         });
         g.addEventListener('blur', function() { clearHighlight(); });
-        g.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(th); }
-        });
       })(th, g);
 
       th.el = g;
@@ -376,11 +386,30 @@
 
     function hideTooltip() { tooltip.classList.remove('visible'); }
 
+    function fireRing(th) {
+      var ring = th.ringEl;
+      var startR = MARKER_R;
+      var endR = MARKER_R + 22;
+      var duration = 800;
+      var t0 = performance.now();
+      function frame(now) {
+        var t = Math.min((now - t0) / duration, 1);
+        var ease = 1 - Math.pow(1 - t, 3);
+        ring.setAttribute('r', (startR + (endR - startR) * ease).toFixed(1));
+        ring.setAttribute('opacity', (0.7 * (1 - ease)).toFixed(3));
+        ring.setAttribute('stroke-width', (2 * (1 - ease * 0.6)).toFixed(2));
+        if (t < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+
     function highlightTheme(th) {
       if (hoveredTheme === th) return;
       clearHighlight();
       hoveredTheme = th;
       th.glowEl.setAttribute('opacity', '0.7');
+      fireRing(th);
+      openPanel(th);
       var glows = glowMap[th.boundary];
       if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0.4'); });
     }
@@ -391,7 +420,6 @@
       var glows = glowMap[hoveredTheme.boundary];
       if (glows) glows.forEach(function(g) { g.setAttribute('opacity', '0'); });
       hoveredTheme = null;
-      hideTooltip();
     }
 
     function hitTest(svgX, svgY) {
@@ -410,7 +438,6 @@
       var hit = hitTest(svgX, svgY);
       if (hit) {
         highlightTheme(hit);
-        showTooltip(hit, e.clientX, e.clientY);
         svg.style.cursor = 'pointer';
       } else {
         clearHighlight();
@@ -430,14 +457,12 @@
       if (hit) {
         e.preventDefault();
         highlightTheme(hit);
-        openPanel(hit);
       } else {
         clearHighlight();
-        if (panelOpen) closePanel();
       }
     });
 
-    // ===== Theme panel (click) =====
+    // ===== Theme panel =====
     var panel = document.getElementById('research-panel');
     var rpTitle = panel.querySelector('.rp-title');
     var rpNarrative = panel.querySelector('.rp-narrative');
@@ -489,18 +514,6 @@
       panelOpen = false;
     }
 
-    svg.addEventListener('click', function(e) {
-      var rect = svg.getBoundingClientRect();
-      var svgX = (e.clientX - rect.left) * (800 / rect.width);
-      var svgY = (e.clientY - rect.top) * (500 / rect.height);
-      var hit = hitTest(svgX, svgY);
-      if (hit) {
-        openPanel(hit);
-      } else if (panelOpen) {
-        closePanel();
-      }
-    });
-
     rpClose.addEventListener('click', function(e) {
       e.stopPropagation();
       closePanel();
@@ -512,6 +525,25 @@
 
     // Start particle animation
     requestAnimationFrame(animateParticles);
+
+    // ===== Ring pulse on load (staggered sonar ping) =====
+    themes.forEach(function(th) {
+      setTimeout(function() { fireRing(th); }, 600 + th.markerIdx * 400);
+    });
+
+    // ===== Idle breathing (subtle scale pulse) =====
+    var breathStart = performance.now();
+    function breathe(now) {
+      var elapsed = now - breathStart;
+      themes.forEach(function(th) {
+        // Offset each marker by 1.3s so they don't breathe in sync
+        var phase = (elapsed + th.markerIdx * 1300) / 4000;
+        var s = 1 + 0.06 * Math.sin(phase * 2 * Math.PI);
+        th.el.setAttribute('transform', 'translate(' + th.x + ',' + th.y + ') scale(' + s.toFixed(4) + ')');
+      });
+      requestAnimationFrame(breathe);
+    }
+    requestAnimationFrame(breathe);
   });
 })();
 </script>
