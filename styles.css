@@ -1030,6 +1030,21 @@ html {
   font-style: italic;
 }
 
+/* ===== CV SVG mobile: horizontal scroll for readability ===== */
+@media (max-width: 768px) {
+  #career-timeline-wrap,
+  #grants-gantt-wrap,
+  #service-timeline-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #career-timeline-wrap svg,
+  #grants-gantt-wrap svg,
+  #service-timeline-wrap svg {
+    min-width: 600px;
+  }
+}
+
 /* ===== Research Phase Diagram ===== */
 #research-diagram-wrap {
   position: relative;
