@@ -10,14 +10,14 @@
     // Month M in year Y = Y + M/12 (Jan=1/12, Dec=12/12)
     var grants = [
       // PI grants
-      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
-      { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#d4a03a' },
-      { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#d4a03a' },
-      { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#d4a03a' },
+      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#c07050' },
+      { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#c07050' },
+      { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#c07050' },
+      { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#c07050' },
       // Co-I grants
-      { title: 'Stabilising Bulk Nanobubbles', short: 'Nanobubbles', funder: 'EPSRC/ARCHER2', start: 2025 + 2/12, end: 2026 + 2/12, value: '£38.6K', role: 'Co-I', color: '#7888a8' },
-      { title: 'Vibrations for freeze-desalination', short: 'Freeze-desal', funder: 'EPSRC/CIRRUS', start: 2023 + 9/12, end: 2024 + 9/12, value: '£50K', role: 'Co-I', color: '#7888a8' },
-      { title: 'Nano-Engineered Flow Technologies', short: 'NEFT', funder: 'EPSRC', start: 2019 + 1/12, end: 2020 + 12/12, value: '£100K', role: 'Co-I', color: '#7888a8' }
+      { title: 'Stabilising Bulk Nanobubbles', short: 'Nanobubbles', funder: 'EPSRC/ARCHER2', start: 2025 + 2/12, end: 2026 + 2/12, value: '£38.6K', role: 'Co-I', color: '#a87080' },
+      { title: 'Vibrations for freeze-desalination', short: 'Freeze-desal', funder: 'EPSRC/CIRRUS', start: 2023 + 9/12, end: 2024 + 9/12, value: '£50K', role: 'Co-I', color: '#a87080' },
+      { title: 'Nano-Engineered Flow Technologies', short: 'NEFT', funder: 'EPSRC', start: 2019 + 1/12, end: 2020 + 12/12, value: '£100K', role: 'Co-I', color: '#a87080' }
     ];
 
     var YEAR_MIN = 2019, YEAR_MAX = 2030;
@@ -133,7 +133,7 @@
       titleEl.setAttribute('y', by + BAR_H / 2);
       titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
-      titleEl.setAttribute('fill', g.role === 'PI' ? '#d4a03a' : '#9098a8');
+      titleEl.setAttribute('fill', g.role === 'PI' ? '#c07050' : '#9098a8');
       titleEl.setAttribute('font-family', 'Inter, sans-serif');
       titleEl.setAttribute('font-size', '10');
       titleEl.setAttribute('font-weight', '500');

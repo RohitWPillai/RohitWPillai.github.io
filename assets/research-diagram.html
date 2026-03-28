@@ -25,7 +25,7 @@
 
     // ===== Research themes =====
     var themes = [
-      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
+      { id: 'ice', label: 'Ice Nucleation & Growth', x: 175, y: 220, gradient: 'pd-ice', glowFill: 'rgba(70,135,215,0.3)', ringStroke: '#4687d7',
         desc: 'Supercooled water: ice nucleation on surfaces, vibration effects, icephobic design',
         boundary: 'fusion',
         narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
@@ -35,7 +35,7 @@
           { num: 'B1', title: 'Icephobic surfaces: bridging experiments and simulations', journal: 'Springer', year: 2022, img: 'images/papers/book-icephobic-surfaces.jpg', doi: 'https://doi.org/10.1007/978-3-030-82992-6_8' }
         ]
       },
-      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140,
+      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140, gradient: 'pd-heat', glowFill: 'rgba(77,170,136,0.3)', ringStroke: '#4daa88',
         desc: 'Thermal conductance at solid\u2013liquid interfaces, surface wetting and self-cleaning, nanomaterial-enhanced cooling',
         boundary: 'fusion',
         narrative: 'The behaviour of liquids at solid surfaces governs both heat transfer and fluid transport at the nanoscale. We investigate spectral mechanisms of interfacial thermal conductance and nanomaterial-enhanced cooling strategies through our ERC-funded NANO-COOL programme, alongside the interfacial fluid dynamics that drive phenomena like contaminant removal from nature\u2019s self-cleaning surfaces.',
@@ -50,7 +50,7 @@
           { num: 7, title: 'Nanodroplets on vibrating surfaces', journal: 'Langmuir', year: 2018, img: 'images/papers/07-nanodroplet-vibrating.png', doi: 'https://doi.org/10.1021/acs.langmuir.8b02066' }
         ]
       },
-      { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
+      { id: 'boil', label: 'Phase Change &\nBubble Dynamics', x: 510, y: 370, gradient: 'pd-boil', glowFill: 'rgba(220,65,48,0.3)', ringStroke: '#dc4130',
         desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
         boundary: 'vapor',
         narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
@@ -67,11 +67,11 @@
     // ===== Orbit bonds (cross-cutting connections) =====
     var orbits = [
       { from: 0, to: 1, label: 'Surface chemistry controls both ice adhesion and thermal conductance',
-        path: 'M 175 220 C 250 120 380 100 470 140' },
+        path: 'M 175 220 C 250 120 380 100 470 140', particleColor: '#4687d7' },
       { from: 1, to: 2, label: 'Boiling heat transfer depends on interfacial thermal resistance',
-        path: 'M 470 140 C 530 220 540 300 510 370' },
+        path: 'M 470 140 C 530 220 540 300 510 370', particleColor: '#4daa88' },
       { from: 2, to: 0, label: 'Nucleation kinetics unify freezing and boiling',
-        path: 'M 510 370 C 420 380 250 340 175 220' }
+        path: 'M 510 370 C 420 380 250 340 175 220', particleColor: '#dc4130' }
     ];
 
     // ===== Build SVG =====
@@ -85,16 +85,23 @@
 
     var defs = document.createElementNS(NS, 'defs');
 
-    // Amber sphere gradient
-    var sgA = document.createElementNS(NS, 'radialGradient');
-    sgA.id = 'pd-amber';
-    sgA.setAttribute('cx', '0.35'); sgA.setAttribute('cy', '0.35'); sgA.setAttribute('r', '0.65');
-    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-      sgA.appendChild(st);
+    // Per-phase sphere gradients
+    var phaseGradients = [
+      { id: 'pd-ice',  stops: [{ o: '0%', c: '#8ab4e8' }, { o: '45%', c: '#4687d7' }, { o: '100%', c: '#1e4a7a' }] },
+      { id: 'pd-heat', stops: [{ o: '0%', c: '#80d0b0' }, { o: '45%', c: '#4daa88' }, { o: '100%', c: '#2a7060' }] },
+      { id: 'pd-boil', stops: [{ o: '0%', c: '#f08070' }, { o: '45%', c: '#dc4130' }, { o: '100%', c: '#882018' }] }
+    ];
+    phaseGradients.forEach(function(pg) {
+      var sg = document.createElementNS(NS, 'radialGradient');
+      sg.id = pg.id;
+      sg.setAttribute('cx', '0.35'); sg.setAttribute('cy', '0.35'); sg.setAttribute('r', '0.65');
+      pg.stops.forEach(function(s) {
+        var st = document.createElementNS(NS, 'stop');
+        st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
+        sg.appendChild(st);
+      });
+      defs.appendChild(sg);
     });
-    defs.appendChild(sgA);
 
     // Specular highlight
     var hl = document.createElementNS(NS, 'radialGradient');
@@ -160,12 +167,12 @@
     // ===== Phase fills =====
     svg.appendChild(makePath(SOLID_FILL, 'rgba(70,135,215,0.06)'));
     svg.appendChild(makePath(LIQUID_FILL, 'rgba(100,190,170,0.05)'));
-    svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
+    svg.appendChild(makePath(VAPOR_FILL, 'rgba(220,65,48,0.04)'));
 
     // ===== Phase labels =====
     svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
     svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(220,65,48,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
@@ -247,7 +254,7 @@
       // Drifting particle
       var particle = document.createElementNS(NS, 'circle');
       particle.setAttribute('r', '2.5');
-      particle.setAttribute('fill', '#d4a03a');
+      particle.setAttribute('fill', orb.particleColor);
       particle.setAttribute('opacity', '0.5');
       orbitGroup.appendChild(particle);
 
@@ -312,14 +319,14 @@
       var ring = document.createElementNS(NS, 'circle');
       ring.setAttribute('r', MARKER_R);
       ring.setAttribute('fill', 'none');
-      ring.setAttribute('stroke', '#d4a03a');
+      ring.setAttribute('stroke', th.ringStroke);
       ring.setAttribute('stroke-width', '2');
       ring.setAttribute('opacity', '0');
       g.appendChild(ring);
 
       var glow = document.createElementNS(NS, 'circle');
       glow.setAttribute('r', MARKER_R + 6);
-      glow.setAttribute('fill', 'rgba(212,160,58,0.3)');
+      glow.setAttribute('fill', th.glowFill);
       glow.setAttribute('filter', 'url(#marker-glow)');
       glow.setAttribute('opacity', '0');
       glow.style.transition = 'opacity 0.3s ease';
@@ -327,7 +334,7 @@
 
       var circ = document.createElementNS(NS, 'circle');
       circ.setAttribute('r', MARKER_R);
-      circ.setAttribute('fill', 'url(#pd-amber)');
+      circ.setAttribute('fill', 'url(#' + th.gradient + ')');
       g.appendChild(circ);
 
       var spec = document.createElementNS(NS, 'circle');
@@ -433,21 +440,27 @@
       return null;
     }
 
+    var userDismissed = false;
+
     svg.addEventListener('mousemove', function(e) {
       var rect = svg.getBoundingClientRect();
       var svgX = (e.clientX - rect.left) * (800 / rect.width);
       var svgY = (e.clientY - rect.top) * (500 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit) {
-        highlightTheme(hit);
+        if (!userDismissed) highlightTheme(hit);
         svg.style.cursor = 'pointer';
       } else {
         clearHighlight();
         svg.style.cursor = 'default';
+        userDismissed = false;
       }
     });
 
-    svg.addEventListener('mouseleave', clearHighlight);
+    svg.addEventListener('mouseleave', function() {
+      clearHighlight();
+      userDismissed = false;
+    });
 
     // Touch: tap highlights + opens panel, tap elsewhere dismisses
     svg.addEventListener('touchend', function(e) {
@@ -514,6 +527,8 @@
     function closePanel() {
       panel.classList.remove('visible');
       panelOpen = false;
+      userDismissed = true;
+      clearHighlight();
     }
 
     rpClose.addEventListener('click', function(e) {
@@ -524,6 +539,19 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && panelOpen) closePanel();
     });
+
+    // ===== Deep-link: open panel from hash (e.g. #theme-ice) =====
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('#theme-') === 0) {
+      var themeId = hash.substring(7);
+      for (var hi = 0; hi < themes.length; hi++) {
+        if (themes[hi].id === themeId) {
+          highlightTheme(themes[hi]);
+          container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    }
 
     // Start particle animation
     requestAnimationFrame(animateParticles);

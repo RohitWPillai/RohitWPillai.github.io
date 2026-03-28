@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div id="career-timeline-wrap">
 <div id="career-timeline"></div>
+<div class="career-legend"><span class="legend-item"><span class="legend-dot" style="background:#7888a8"></span>PhD</span><span class="legend-item"><span class="legend-dot" style="background:#9088a0"></span>Postdoc</span><span class="legend-item"><span class="legend-dot" style="background:#a87080"></span>Lecturer</span><span class="legend-item"><span class="legend-dot" style="background:#c07050"></span>Senior Lecturer</span></div>
 <div id="career-tooltip" class="career-tooltip">
 <div class="ct-title"></div>
 <div class="ct-desc"></div>
