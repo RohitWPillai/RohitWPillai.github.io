@@ -178,7 +178,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
   <div class="intro-themes">
     <div class="intro-card">
-      <span class="intro-card-title">Ice Nucleation</span>
+      <span class="intro-card-title">Ice Nucleation &amp; Growth</span>
       <span class="intro-card-desc">How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings</span>
     </div>
     <div class="intro-card">
@@ -186,7 +186,7 @@ ul.task-list li input[type="checkbox"] {
       <span class="intro-card-desc">Thermal conductance at solid–liquid interfaces, surface wetting and self-cleaning, and nanomaterial-enhanced cooling</span>
     </div>
     <div class="intro-card">
-      <span class="intro-card-title">Phase Change &amp; Bubbles</span>
+      <span class="intro-card-title">Phase Change &amp; Bubble Dynamics</span>
       <span class="intro-card-desc">Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics</span>
     </div>
   </div>
@@ -199,6 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
     solana.parentNode.insertBefore(intro, solana.nextSibling);
     intro.style.display = '';
   }
+  var themeIds = ['ice', 'heat', 'boil'];
+  document.querySelectorAll('.intro-card').forEach(function(card, i) {
+    if (!themeIds[i]) return;
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function() {
+      window.location.href = 'projects.html#theme-' + themeIds[i];
+    });
+  });
 });
 </script>
 
@@ -268,11 +276,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Build a few colour variants (depth gradient like homepage)
     var colours = [
-      [70, 135, 215],    // cool blue
-      [145, 160, 190],   // slate
-      [220, 185, 50],    // warm yellow
-      [212, 160, 58],    // amber
-      [220, 65, 45]      // red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [200, 75, 55],     // vapour red (slightly varied)
+      [230, 55, 40]      // vapour red (slightly varied)
     ];
     var sprites = [];
     for (var i = 0; i < colours.length; i++) {
@@ -285,9 +293,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
-    var trailAlpha = 0.35 * 0.8;
-    var trailWidth = 1.2;
+    // Trail modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail
+    var TRAIL_CONFIGS = [
+      { len: 0, alpha: 0, fade: false },       // 0: particles off
+      { len: 0, alpha: 0, fade: false },       // 1: no trail
+      { len: 120, alpha: 0.12, fade: true },   // 2: fading trail
+      { len: Infinity, alpha: 0.08, fade: false } // 3: permanent trail
+    ];
+    var trailWidth = 1.0;
 
     var W, H, dpr;
     var particles = [];
@@ -324,6 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var running = true;
 
     function loop() {
+      loopScheduled = false;
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
 
@@ -331,8 +345,11 @@ document.addEventListener('DOMContentLoaded', function() {
         var p = particles[i];
 
         // Store position in trail buffer
-        p.trail.push({ x: p.x, y: p.y });
-        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.len > 0) {
+          p.trail.push({ x: p.x, y: p.y });
+          if (tc.len !== Infinity && p.trail.length > tc.len) p.trail.shift();
+        }
 
         // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
         p.vx += (Math.random() - 0.5) * 1.2;
@@ -347,19 +364,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (p.y < -20) p.y = H + 20;
         if (p.y > H + 20) p.y = -20;
 
-        // Draw trail segments with fading alpha
+        // Draw trail segments
         var c = colours[p.colIdx];
-        ctx.lineWidth = trailWidth;
-        ctx.lineCap = 'round';
-        for (var j = 1; j < p.trail.length; j++) {
-          var t0 = p.trail[j - 1], t1 = p.trail[j];
-          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
-          var a = trailAlpha * (j / p.trail.length);
-          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
-          ctx.beginPath();
-          ctx.moveTo(t0.x, t0.y);
-          ctx.lineTo(t1.x, t1.y);
-          ctx.stroke();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.alpha > 0 && p.trail.length > 1) {
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          for (var j = 1; j < p.trail.length; j++) {
+            var t0 = p.trail[j - 1], t1 = p.trail[j];
+            if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+            var a = tc.fade ? tc.alpha * (j / p.trail.length) : tc.alpha;
+            ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+            ctx.beginPath();
+            ctx.moveTo(t0.x, t0.y);
+            ctx.lineTo(t1.x, t1.y);
+            ctx.stroke();
+          }
         }
 
         // Draw particle
@@ -369,17 +389,19 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       ctx.globalAlpha = 1;
 
+      loopScheduled = true;
       requestAnimationFrame(loop);
     }
 
-    /* Toggle button */
-    var PREF_KEY = 'ambient-dust-v2';
-    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+    /* Toggle button — 4 modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail */
+    var PREF_KEY = 'ambient-dust-v3';
+    var MODE_LABELS = ['Off', 'Particles', 'Trails', 'Permanent'];
+    var stored = parseInt(localStorage.getItem(PREF_KEY), 10);
+    var dustMode = (stored >= 0 && stored <= 3) ? stored : 1;
 
     var btn = document.createElement('button');
     btn.className = 'ambient-toggle';
-    btn.setAttribute('aria-label', 'Toggle floating particles');
-    btn.title = 'Toggle particles';
+    btn.setAttribute('aria-label', 'Cycle particle mode');
     /* Inline SVG atom icon — three elliptical orbits + central dot */
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
     /* Insert into navbar-tools (right side, left of search icon) */
@@ -387,21 +409,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (toolsEl) {
       toolsEl.appendChild(btn);
     } else {
-      /* Fallback: try inserting before search icon */
       var searchEl = document.getElementById('quarto-search');
       if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
     }
 
+    function clearTrails() {
+      particles.forEach(function(p) { p.trail = []; });
+    }
+
+    var loopScheduled = false;
+
     function applyState() {
-      canvas.style.display = dustOff ? 'none' : '';
-      running = !dustOff;
-      btn.classList.toggle('off', dustOff);
-      if (running) requestAnimationFrame(loop);
+      var off = dustMode === 0;
+      canvas.style.display = off ? 'none' : '';
+      running = !off;
+      btn.classList.toggle('off', off);
+      btn.title = MODE_LABELS[dustMode];
+      if (dustMode <= 1) clearTrails();
+      if (running && !loopScheduled) {
+        loopScheduled = true;
+        requestAnimationFrame(loop);
+      }
     }
 
     btn.addEventListener('click', function() {
-      dustOff = !dustOff;
-      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      dustMode = (dustMode + 1) % 4;
+      localStorage.setItem(PREF_KEY, dustMode);
       applyState();
     });
 
@@ -411,9 +444,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else if (!dustOff) {
+      } else if (dustMode > 0) {
         running = true;
-        requestAnimationFrame(loop);
+        if (!loopScheduled) {
+          loopScheduled = true;
+          requestAnimationFrame(loop);
+        }
       }
     });
 
@@ -542,17 +578,17 @@ main .level2.revealed {
     // --- Visual ---
     fluidAlpha: 0.70, bins: 1, vaporBins: 1, interfaceFrac: 0.84,
 
-    // --- Depth colour gradient (liquid: blue at solid → yellow at LV) ---
-    nearClr: [220, 185, 50],       // warm yellow (uniform liquid)
-    bulkClr: [220, 185, 50],       // warm yellow (near LV interface)
+    // --- Liquid colour (teal, matching phase palette) ---
+    nearClr: [77, 170, 136],       // teal (uniform liquid)
+    bulkClr: [77, 170, 136],       // teal (near LV interface)
 
-    // --- Vapor colour gradient (yellow transition → red) ---
-    vaporNearClr: [220, 65, 45],    // red (uniform vapor)
-    vaporFarClr:  [220, 65, 45],    // red (uniform vapor)
+    // --- Vapor colour (red, matching phase palette) ---
+    vaporNearClr: [220, 65, 48],    // red (uniform vapor)
+    vaporFarClr:  [220, 65, 48],    // red (uniform vapor)
 
-    // --- Wall colours (dark silver) ---
-    wallClrDark:  [145, 150, 168],
-    wallClrLight: [110, 115, 130],
+    // --- Wall colours (ice blue, matching solid phase) ---
+    wallClrDark:  [70, 135, 215],
+    wallClrLight: [46, 87, 140],
 
     // --- Ice nucleation (cold spots — physics-driven crystallisation) ---
     nucleationInterval: 180,
@@ -577,7 +613,7 @@ main .level2.revealed {
     bubbleCoreR: 0.4,           // fraction of radius that is hard void core
     bubbleCoreForce: 6.0,       // strong force inside core to maintain void
     hotKE: 1.2,                 // speed² above this → hot red
-    bubbleClr: [230, 75, 55],
+    bubbleClr: [220, 65, 48],
 
     // --- Nanoparticle colours ---
     nanoClrDark:  [212, 160, 58],

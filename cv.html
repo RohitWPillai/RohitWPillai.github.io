@@ -184,6 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="career-timeline">
 
 </div>
+<div class="career-legend">
+<span class="legend-item"><span class="legend-dot" style="background:#7888a8"></span>PhD</span><span class="legend-item"><span class="legend-dot" style="background:#9088a0"></span>Postdoc</span><span class="legend-item"><span class="legend-dot" style="background:#a87080"></span>Lecturer</span><span class="legend-item"><span class="legend-dot" style="background:#c07050"></span>Senior Lecturer</span>
+</div>
 <div id="career-tooltip" class="career-tooltip">
 <div class="ct-title">
 
@@ -351,11 +354,11 @@ Acoustothermal atomization
 
     // Build a few colour variants (depth gradient like homepage)
     var colours = [
-      [70, 135, 215],    // cool blue
-      [145, 160, 190],   // slate
-      [220, 185, 50],    // warm yellow
-      [212, 160, 58],    // amber
-      [220, 65, 45]      // red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [200, 75, 55],     // vapour red (slightly varied)
+      [230, 55, 40]      // vapour red (slightly varied)
     ];
     var sprites = [];
     for (var i = 0; i < colours.length; i++) {
@@ -368,9 +371,14 @@ Acoustothermal atomization
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
-    var trailAlpha = 0.35 * 0.8;
-    var trailWidth = 1.2;
+    // Trail modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail
+    var TRAIL_CONFIGS = [
+      { len: 0, alpha: 0, fade: false },       // 0: particles off
+      { len: 0, alpha: 0, fade: false },       // 1: no trail
+      { len: 120, alpha: 0.12, fade: true },   // 2: fading trail
+      { len: Infinity, alpha: 0.08, fade: false } // 3: permanent trail
+    ];
+    var trailWidth = 1.0;
 
     var W, H, dpr;
     var particles = [];
@@ -407,6 +415,7 @@ Acoustothermal atomization
     var running = true;
 
     function loop() {
+      loopScheduled = false;
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
 
@@ -414,8 +423,11 @@ Acoustothermal atomization
         var p = particles[i];
 
         // Store position in trail buffer
-        p.trail.push({ x: p.x, y: p.y });
-        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.len > 0) {
+          p.trail.push({ x: p.x, y: p.y });
+          if (tc.len !== Infinity && p.trail.length > tc.len) p.trail.shift();
+        }
 
         // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
         p.vx += (Math.random() - 0.5) * 1.2;
@@ -430,19 +442,22 @@ Acoustothermal atomization
         if (p.y < -20) p.y = H + 20;
         if (p.y > H + 20) p.y = -20;
 
-        // Draw trail segments with fading alpha
+        // Draw trail segments
         var c = colours[p.colIdx];
-        ctx.lineWidth = trailWidth;
-        ctx.lineCap = 'round';
-        for (var j = 1; j < p.trail.length; j++) {
-          var t0 = p.trail[j - 1], t1 = p.trail[j];
-          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
-          var a = trailAlpha * (j / p.trail.length);
-          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
-          ctx.beginPath();
-          ctx.moveTo(t0.x, t0.y);
-          ctx.lineTo(t1.x, t1.y);
-          ctx.stroke();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.alpha > 0 && p.trail.length > 1) {
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          for (var j = 1; j < p.trail.length; j++) {
+            var t0 = p.trail[j - 1], t1 = p.trail[j];
+            if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+            var a = tc.fade ? tc.alpha * (j / p.trail.length) : tc.alpha;
+            ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+            ctx.beginPath();
+            ctx.moveTo(t0.x, t0.y);
+            ctx.lineTo(t1.x, t1.y);
+            ctx.stroke();
+          }
         }
 
         // Draw particle
@@ -452,17 +467,19 @@ Acoustothermal atomization
       }
       ctx.globalAlpha = 1;
 
+      loopScheduled = true;
       requestAnimationFrame(loop);
     }
 
-    /* Toggle button */
-    var PREF_KEY = 'ambient-dust-v2';
-    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+    /* Toggle button — 4 modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail */
+    var PREF_KEY = 'ambient-dust-v3';
+    var MODE_LABELS = ['Off', 'Particles', 'Trails', 'Permanent'];
+    var stored = parseInt(localStorage.getItem(PREF_KEY), 10);
+    var dustMode = (stored >= 0 && stored <= 3) ? stored : 1;
 
     var btn = document.createElement('button');
     btn.className = 'ambient-toggle';
-    btn.setAttribute('aria-label', 'Toggle floating particles');
-    btn.title = 'Toggle particles';
+    btn.setAttribute('aria-label', 'Cycle particle mode');
     /* Inline SVG atom icon — three elliptical orbits + central dot */
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
     /* Insert into navbar-tools (right side, left of search icon) */
@@ -470,21 +487,32 @@ Acoustothermal atomization
     if (toolsEl) {
       toolsEl.appendChild(btn);
     } else {
-      /* Fallback: try inserting before search icon */
       var searchEl = document.getElementById('quarto-search');
       if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
     }
 
+    function clearTrails() {
+      particles.forEach(function(p) { p.trail = []; });
+    }
+
+    var loopScheduled = false;
+
     function applyState() {
-      canvas.style.display = dustOff ? 'none' : '';
-      running = !dustOff;
-      btn.classList.toggle('off', dustOff);
-      if (running) requestAnimationFrame(loop);
+      var off = dustMode === 0;
+      canvas.style.display = off ? 'none' : '';
+      running = !off;
+      btn.classList.toggle('off', off);
+      btn.title = MODE_LABELS[dustMode];
+      if (dustMode <= 1) clearTrails();
+      if (running && !loopScheduled) {
+        loopScheduled = true;
+        requestAnimationFrame(loop);
+      }
     }
 
     btn.addEventListener('click', function() {
-      dustOff = !dustOff;
-      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      dustMode = (dustMode + 1) % 4;
+      localStorage.setItem(PREF_KEY, dustMode);
       applyState();
     });
 
@@ -494,9 +522,12 @@ Acoustothermal atomization
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else if (!dustOff) {
+      } else if (dustMode > 0) {
         running = true;
-        requestAnimationFrame(loop);
+        if (!loopScheduled) {
+          loopScheduled = true;
+          requestAnimationFrame(loop);
+        }
       }
     });
 
@@ -603,44 +634,44 @@ main .level2.revealed {
     var BRANCH_LEN = 60;
 
     var COLORS = {
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' },
-      blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590' },
-      teal:  { light: '#80d0b0', base: '#4daa88', dark: '#2a7060' },
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18' },
+      slate:   { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' },
+      lilac:   { light: '#b8b0c0', base: '#9088a0', dark: '#585068' },
+      rose:    { light: '#d098a8', base: '#a87080', dark: '#684050' },
+      copper:  { light: '#e8a080', base: '#c07050', dark: '#784030' },
       neutral: { light: '#8a8a9a', base: '#5a5a6e', dark: '#3a3a4e' }
     };
 
     // ===== Year spine =====
-    // Colors: slate=PhD, blue=Postdoc, teal=Lecturer, amber=Senior Lecturer
+    // Colors: slate=PhD, lilac=Postdoc, rose=Lecturer, copper=Senior Lecturer
     var yearData = [
       { year: 2017, color: 'slate', role: 'PHD \u00b7 MELBOURNE', row: 0, col: 0,
         tip: 'PhD in Chemical & Biomolecular Engineering, University of Melbourne. Completed December 2017.' },
-      { year: 2018, color: 'blue', role: 'POSTDOC \u00b7 EDINBURGH', row: 0, col: 1,
+      { year: 2018, color: 'lilac', role: 'POSTDOC \u00b7 EDINBURGH', row: 0, col: 1,
         tip: 'Postdoctoral Research Associate, University of Edinburgh (January\u2013August 2018).' },
-      { year: 2019, color: 'teal', row: 0, col: 2,
+      { year: 2019, color: 'rose', row: 0, col: 2,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. First full year as independent PI.' },
-      { year: 2020, color: 'teal', row: 0, col: 3,
+      { year: 2020, color: 'rose', row: 0, col: 3,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2021, color: 'teal', row: 0, col: 4,
+      { year: 2021, color: 'rose', row: 0, col: 4,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2022, color: 'teal', row: 1, col: 4,
+      { year: 2022, color: 'rose', row: 1, col: 4,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2023, color: 'teal', row: 1, col: 3,
+      { year: 2023, color: 'rose', row: 1, col: 3,
         tip: 'Lecturer then Senior Lecturer, University of Edinburgh. Promoted 1 August 2023.' },
-      { year: 2024, color: 'amber', row: 1, col: 2,
+      { year: 2024, color: 'copper', row: 1, col: 2,
         tip: 'Senior Lecturer in Mechanical Engineering. ERC Starting Grant awarded August 2024.' },
-      { year: 2025, color: 'amber', row: 1, col: 1,
+      { year: 2025, color: 'copper', row: 1, col: 1,
         tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2026, color: 'amber', row: 1, col: 0,
+      { year: 2026, color: 'copper', row: 1, col: 0,
         tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' }
     ];
 
     // ===== Transitions on the spine =====
     var transitions = [
-      { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'blue', toColor: 'teal',
+      { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'lilac', toColor: 'rose',
         label: 'LECTURER', labelSide: 1,
         tip: 'Appointed Lecturer (Assistant Professor) in Mechanical Engineering, University of Edinburgh, September 2018.' },
-      { fromYear: 2023, toYear: 2024, frac: 0.67, fromColor: 'teal', toColor: 'amber',
+      { fromYear: 2023, toYear: 2024, frac: 0.67, fromColor: 'rose', toColor: 'copper',
         label: 'SENIOR LECTURER', labelSide: 1,
         tip: 'Promoted to Senior Lecturer (Associate Professor) in Mechanical Engineering, University of Edinburgh, 1 August 2023.' }
     ];
@@ -965,7 +996,7 @@ main .level2.revealed {
       if (m.ex > W - 120) anchor = 'end';
       else if (m.ex < 120) anchor = 'start';
       labelText.setAttribute('text-anchor', anchor);
-      labelText.setAttribute('fill', m.url ? '#d4a03a' : '#c0c0c8');
+      labelText.setAttribute('fill', m.url ? '#c07050' : '#c0c0c8');
       labelText.setAttribute('font-family', 'Inter, sans-serif');
       labelText.setAttribute('font-size', '11');
       labelText.textContent = m.label;
@@ -1103,14 +1134,14 @@ main .level2.revealed {
     // Month M in year Y = Y + M/12 (Jan=1/12, Dec=12/12)
     var grants = [
       // PI grants
-      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#d4a03a' },
-      { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#d4a03a' },
-      { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#d4a03a' },
-      { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#d4a03a' },
+      { title: 'ERC Starting Grant: NANO-COOL', short: 'NANO-COOL', funder: 'ERC', start: 2024 + 8/12, end: 2029 + 7/12, value: '£1.27M', role: 'PI', color: '#c07050' },
+      { title: 'Spectral heat transfer at interfaces', short: 'Spectral ITR', funder: 'EPSRC/ARCHER2', start: 2024 + 1/12, end: 2024 + 12/12, value: '£32K', role: 'PI', color: '#c07050' },
+      { title: 'Nano-engineering of surface de-icing', short: 'De-icing', funder: 'EPSRC/CIRRUS', start: 2021 + 6/12, end: 2022 + 6/12, value: '£35K', role: 'PI', color: '#c07050' },
+      { title: 'Efficient Multi-Scale Simulations', short: 'eCSE', funder: 'EPSRC eCSE', start: 2019 + 1/12, end: 2019 + 12/12, value: '£100K', role: 'PI', color: '#c07050' },
       // Co-I grants
-      { title: 'Stabilising Bulk Nanobubbles', short: 'Nanobubbles', funder: 'EPSRC/ARCHER2', start: 2025 + 2/12, end: 2026 + 2/12, value: '£38.6K', role: 'Co-I', color: '#7888a8' },
-      { title: 'Vibrations for freeze-desalination', short: 'Freeze-desal', funder: 'EPSRC/CIRRUS', start: 2023 + 9/12, end: 2024 + 9/12, value: '£50K', role: 'Co-I', color: '#7888a8' },
-      { title: 'Nano-Engineered Flow Technologies', short: 'NEFT', funder: 'EPSRC', start: 2019 + 1/12, end: 2020 + 12/12, value: '£100K', role: 'Co-I', color: '#7888a8' }
+      { title: 'Stabilising Bulk Nanobubbles', short: 'Nanobubbles', funder: 'EPSRC/ARCHER2', start: 2025 + 2/12, end: 2026 + 2/12, value: '£38.6K', role: 'Co-I', color: '#a87080' },
+      { title: 'Vibrations for freeze-desalination', short: 'Freeze-desal', funder: 'EPSRC/CIRRUS', start: 2023 + 9/12, end: 2024 + 9/12, value: '£50K', role: 'Co-I', color: '#a87080' },
+      { title: 'Nano-Engineered Flow Technologies', short: 'NEFT', funder: 'EPSRC', start: 2019 + 1/12, end: 2020 + 12/12, value: '£100K', role: 'Co-I', color: '#a87080' }
     ];
 
     var YEAR_MIN = 2019, YEAR_MAX = 2030;
@@ -1226,7 +1257,7 @@ main .level2.revealed {
       titleEl.setAttribute('y', by + BAR_H / 2);
       titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
-      titleEl.setAttribute('fill', g.role === 'PI' ? '#d4a03a' : '#9098a8');
+      titleEl.setAttribute('fill', g.role === 'PI' ? '#c07050' : '#9098a8');
       titleEl.setAttribute('font-family', 'Inter, sans-serif');
       titleEl.setAttribute('font-size', '10');
       titleEl.setAttribute('font-weight', '500');
@@ -1294,8 +1325,9 @@ main .level2.revealed {
     var BROWNIAN = 0.03, SPRING_K = 0.018, DAMPING = 0.92;
 
     var COLORS = {
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18' },
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' }
+      copper: { light: '#e8a080', base: '#c07050', dark: '#784030' },
+      rose:   { light: '#d098a8', base: '#a87080', dark: '#684050' },
+      slate:  { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' }
     };
 
     // ===== Role data (enriched) =====
@@ -1340,12 +1372,12 @@ main .level2.revealed {
         period: '2018' },
 
       // --- Committees & Advocacy (bottom-centre) ---
-      { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'lead', group: 2,
+      { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'mid', group: 2,
         title: 'PDRA Champion',
         body: 'School of Engineering, University of Edinburgh',
         desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.',
         period: '2022–present' },
-      { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'serv', group: 2,
+      { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'mid', group: 2,
         title: 'Staff Development Co-chair',
         body: 'School of Engineering, University of Edinburgh',
         desc: 'Co-chaired committee on staff training, mentoring schemes, and professional development.',
@@ -1407,8 +1439,8 @@ main .level2.revealed {
       r.px = r.ex; r.py = r.ey;
       r.vx = 0; r.vy = 0;
       r.cluster = cl;
-      r.color = r.tier === 'lead' ? 'amber' : 'slate';
-      r.r = r.tier === 'lead' ? LEAD_R : SERV_R;
+      r.color = r.tier === 'lead' ? 'copper' : r.tier === 'mid' ? 'rose' : 'slate';
+      r.r = r.tier === 'lead' ? LEAD_R : r.tier === 'mid' ? 6 : SERV_R;
     });
 
     var byId = {};
@@ -1526,7 +1558,7 @@ main .level2.revealed {
 
       // Role label below star
       var text = document.createElementNS(NS, 'text');
-      text.setAttribute('fill', r.tier === 'lead' ? '#d4a03a' : '#9098a8');
+      text.setAttribute('fill', r.tier === 'lead' ? '#c07050' : r.tier === 'mid' ? '#a87080' : '#9098a8');
       text.setAttribute('font-family', 'Inter, sans-serif');
       text.setAttribute('font-size', r.tier === 'lead' ? '11' : '10');
       text.setAttribute('font-weight', r.tier === 'lead' ? '500' : '400');
@@ -1696,11 +1728,11 @@ main .level2.revealed {
     var C = {
       land: "rgba(120,136,168,0.10)",
       landStroke: "rgba(180,190,210,0.50)",
-      amber: "#d4a03a",   amberL: "#f0d080",   amberD: "#7a5a18",
-      teal:  "#4daa88",   tealL:  "#80d0b0",   tealD:  "#2a7060",
-      neutral: "#7888a8", neutralL: "#a0aec0",  neutralD: "#4a5a6e",
-      amberGlow:   "rgba(212,160,58,0.25)",
-      tealGlow:    "rgba(77,170,136,0.25)",
+      copper: "#c07050",   copperL: "#e8a080",   copperD: "#784030",
+      rose:   "#a87080",   roseL:   "#d098a8",   roseD:   "#684050",
+      neutral: "#7888a8",  neutralL: "#a0aec0",   neutralD: "#4a5a6e",
+      copperGlow:  "rgba(192,112,80,0.25)",
+      roseGlow:    "rgba(168,112,128,0.25)",
       neutralGlow: "rgba(122,138,158,0.25)"
     };
 
@@ -1873,11 +1905,11 @@ main .level2.revealed {
     /* Radial gradients */
     var defs = document.createElementNS(NS, "defs");
     [
-      { id: "tm-amber", stops: [
-        { o: "0%", c: C.amberL }, { o: "45%", c: C.amber }, { o: "100%", c: C.amberD }
+      { id: "tm-copper", stops: [
+        { o: "0%", c: C.copperL }, { o: "45%", c: C.copper }, { o: "100%", c: C.copperD }
       ]},
-      { id: "tm-teal", stops: [
-        { o: "0%", c: C.tealL }, { o: "45%", c: C.teal }, { o: "100%", c: C.tealD }
+      { id: "tm-rose", stops: [
+        { o: "0%", c: C.roseL }, { o: "45%", c: C.rose }, { o: "100%", c: C.roseD }
       ]},
       { id: "tm-neutral", stops: [
         { o: "0%", c: C.neutralL }, { o: "45%", c: C.neutral }, { o: "100%", c: C.neutralD }
@@ -1937,7 +1969,7 @@ main .level2.revealed {
       visibleItems.forEach(function(t) { visibleTotal += (t.c || 1); });
 
       var tier = cityTier(city);
-      var accent = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
+      var accent = tier === "keynote" ? C.copper : tier === "invited" ? C.rose : C.neutral;
       var html = '<div class="tt-city" style="color:' + accent + '">' + city.city;
       if (visibleTotal > 1) html += ' <span class="tt-count">' + visibleTotal + " talks</span>";
       html += "</div>";
@@ -1993,9 +2025,9 @@ main .level2.revealed {
       allDots.push(g);
 
       var tier = cityTier(city);
-      var fillId = tier === "keynote" ? "url(#tm-amber)" : tier === "invited" ? "url(#tm-teal)" : "url(#tm-neutral)";
-      var glowColor = tier === "keynote" ? C.amberGlow : tier === "invited" ? C.tealGlow : C.neutralGlow;
-      var solidColor = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
+      var fillId = tier === "keynote" ? "url(#tm-copper)" : tier === "invited" ? "url(#tm-rose)" : "url(#tm-neutral)";
+      var glowColor = tier === "keynote" ? C.copperGlow : tier === "invited" ? C.roseGlow : C.neutralGlow;
+      var solidColor = tier === "keynote" ? C.copper : tier === "invited" ? C.rose : C.neutral;
 
       /* Scale pin height with talk count (hub keeps fixed size) */
       var pinH = city.hub ? baseR * 3.2 : baseR * 2.6 * (0.7 + 0.3 * Math.sqrt(city.total));
@@ -2031,7 +2063,7 @@ main .level2.revealed {
         var lbl = document.createElementNS(NS, "text");
         lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
-        lbl.setAttribute("fill", C.amber);
+        lbl.setAttribute("fill", C.copper);
         lbl.setAttribute("font-family", '"Fraunces", serif');
         lbl.setAttribute("font-size", "11");
         lbl.textContent = city.city;
@@ -2209,8 +2241,8 @@ main .level2.revealed {
       var legend = document.createElement("div");
       legend.className = "talks-legend";
       [
-        { key: "keynote", color: C.amber },
-        { key: "invited", color: C.teal },
+        { key: "keynote", color: C.copper },
+        { key: "invited", color: C.rose },
         { key: "conference", color: C.neutral }
       ].forEach(function(item) {
         var span = document.createElement("span");

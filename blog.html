@@ -223,7 +223,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV3cw==" data-listing-date-sort="1736208000000" data-listing-file-modified-sort="1774706532857" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="40">
+<div class="quarto-post image-right" data-index="0" data-categories="bmV3cw==" data-listing-date-sort="1736208000000" data-listing-file-modified-sort="1774721365222" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="40">
 <div class="thumbnail"><a href="./posts/welcome/index.html" class="no-external">
 
 <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
@@ -314,11 +314,11 @@ Rohit Pillai
 
     // Build a few colour variants (depth gradient like homepage)
     var colours = [
-      [70, 135, 215],    // cool blue
-      [145, 160, 190],   // slate
-      [220, 185, 50],    // warm yellow
-      [212, 160, 58],    // amber
-      [220, 65, 45]      // red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [200, 75, 55],     // vapour red (slightly varied)
+      [230, 55, 40]      // vapour red (slightly varied)
     ];
     var sprites = [];
     for (var i = 0; i < colours.length; i++) {
@@ -331,9 +331,14 @@ Rohit Pillai
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
-    var trailAlpha = 0.35 * 0.8;
-    var trailWidth = 1.2;
+    // Trail modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail
+    var TRAIL_CONFIGS = [
+      { len: 0, alpha: 0, fade: false },       // 0: particles off
+      { len: 0, alpha: 0, fade: false },       // 1: no trail
+      { len: 120, alpha: 0.12, fade: true },   // 2: fading trail
+      { len: Infinity, alpha: 0.08, fade: false } // 3: permanent trail
+    ];
+    var trailWidth = 1.0;
 
     var W, H, dpr;
     var particles = [];
@@ -370,6 +375,7 @@ Rohit Pillai
     var running = true;
 
     function loop() {
+      loopScheduled = false;
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
 
@@ -377,8 +383,11 @@ Rohit Pillai
         var p = particles[i];
 
         // Store position in trail buffer
-        p.trail.push({ x: p.x, y: p.y });
-        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.len > 0) {
+          p.trail.push({ x: p.x, y: p.y });
+          if (tc.len !== Infinity && p.trail.length > tc.len) p.trail.shift();
+        }
 
         // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
         p.vx += (Math.random() - 0.5) * 1.2;
@@ -393,19 +402,22 @@ Rohit Pillai
         if (p.y < -20) p.y = H + 20;
         if (p.y > H + 20) p.y = -20;
 
-        // Draw trail segments with fading alpha
+        // Draw trail segments
         var c = colours[p.colIdx];
-        ctx.lineWidth = trailWidth;
-        ctx.lineCap = 'round';
-        for (var j = 1; j < p.trail.length; j++) {
-          var t0 = p.trail[j - 1], t1 = p.trail[j];
-          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
-          var a = trailAlpha * (j / p.trail.length);
-          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
-          ctx.beginPath();
-          ctx.moveTo(t0.x, t0.y);
-          ctx.lineTo(t1.x, t1.y);
-          ctx.stroke();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.alpha > 0 && p.trail.length > 1) {
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          for (var j = 1; j < p.trail.length; j++) {
+            var t0 = p.trail[j - 1], t1 = p.trail[j];
+            if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+            var a = tc.fade ? tc.alpha * (j / p.trail.length) : tc.alpha;
+            ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+            ctx.beginPath();
+            ctx.moveTo(t0.x, t0.y);
+            ctx.lineTo(t1.x, t1.y);
+            ctx.stroke();
+          }
         }
 
         // Draw particle
@@ -415,17 +427,19 @@ Rohit Pillai
       }
       ctx.globalAlpha = 1;
 
+      loopScheduled = true;
       requestAnimationFrame(loop);
     }
 
-    /* Toggle button */
-    var PREF_KEY = 'ambient-dust-v2';
-    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+    /* Toggle button — 4 modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail */
+    var PREF_KEY = 'ambient-dust-v3';
+    var MODE_LABELS = ['Off', 'Particles', 'Trails', 'Permanent'];
+    var stored = parseInt(localStorage.getItem(PREF_KEY), 10);
+    var dustMode = (stored >= 0 && stored <= 3) ? stored : 1;
 
     var btn = document.createElement('button');
     btn.className = 'ambient-toggle';
-    btn.setAttribute('aria-label', 'Toggle floating particles');
-    btn.title = 'Toggle particles';
+    btn.setAttribute('aria-label', 'Cycle particle mode');
     /* Inline SVG atom icon — three elliptical orbits + central dot */
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
     /* Insert into navbar-tools (right side, left of search icon) */
@@ -433,21 +447,32 @@ Rohit Pillai
     if (toolsEl) {
       toolsEl.appendChild(btn);
     } else {
-      /* Fallback: try inserting before search icon */
       var searchEl = document.getElementById('quarto-search');
       if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
     }
 
+    function clearTrails() {
+      particles.forEach(function(p) { p.trail = []; });
+    }
+
+    var loopScheduled = false;
+
     function applyState() {
-      canvas.style.display = dustOff ? 'none' : '';
-      running = !dustOff;
-      btn.classList.toggle('off', dustOff);
-      if (running) requestAnimationFrame(loop);
+      var off = dustMode === 0;
+      canvas.style.display = off ? 'none' : '';
+      running = !off;
+      btn.classList.toggle('off', off);
+      btn.title = MODE_LABELS[dustMode];
+      if (dustMode <= 1) clearTrails();
+      if (running && !loopScheduled) {
+        loopScheduled = true;
+        requestAnimationFrame(loop);
+      }
     }
 
     btn.addEventListener('click', function() {
-      dustOff = !dustOff;
-      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      dustMode = (dustMode + 1) % 4;
+      localStorage.setItem(PREF_KEY, dustMode);
       applyState();
     });
 
@@ -457,9 +482,12 @@ Rohit Pillai
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else if (!dustOff) {
+      } else if (dustMode > 0) {
         running = true;
-        requestAnimationFrame(loop);
+        if (!loopScheduled) {
+          loopScheduled = true;
+          requestAnimationFrame(loop);
+        }
       }
     });
 

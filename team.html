@@ -176,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
 <span id="team-member-count" class="team-member-count"></span>
 </div>
 <div class="team-legend">
-<span class="legend-item"><span class="legend-dot legend-amber"></span>PI</span><span class="legend-item"><span class="legend-dot legend-blue"></span>Postdoc</span><span class="legend-item"><span class="legend-dot legend-slate"></span>PhD</span><span class="legend-item"><span class="legend-dot legend-teal"></span>Industry</span>
+<span class="legend-item"><span class="legend-dot legend-copper"></span>PI</span><span class="legend-item"><span class="legend-dot legend-lilac"></span>Postdoc</span><span class="legend-item"><span class="legend-dot legend-slate"></span>PhD</span><span class="legend-item"><span class="legend-dot legend-neutral"></span>Industry</span>
 </div>
 <div id="team-tooltip" class="team-tooltip">
 <div class="tt-name">
@@ -292,11 +292,11 @@ ul.task-list li input[type="checkbox"] {
 
     // Build a few colour variants (depth gradient like homepage)
     var colours = [
-      [70, 135, 215],    // cool blue
-      [145, 160, 190],   // slate
-      [220, 185, 50],    // warm yellow
-      [212, 160, 58],    // amber
-      [220, 65, 45]      // red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [200, 75, 55],     // vapour red (slightly varied)
+      [230, 55, 40]      // vapour red (slightly varied)
     ];
     var sprites = [];
     for (var i = 0; i < colours.length; i++) {
@@ -309,9 +309,14 @@ ul.task-list li input[type="checkbox"] {
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
-    var trailAlpha = 0.35 * 0.8;
-    var trailWidth = 1.2;
+    // Trail modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail
+    var TRAIL_CONFIGS = [
+      { len: 0, alpha: 0, fade: false },       // 0: particles off
+      { len: 0, alpha: 0, fade: false },       // 1: no trail
+      { len: 120, alpha: 0.12, fade: true },   // 2: fading trail
+      { len: Infinity, alpha: 0.08, fade: false } // 3: permanent trail
+    ];
+    var trailWidth = 1.0;
 
     var W, H, dpr;
     var particles = [];
@@ -348,6 +353,7 @@ ul.task-list li input[type="checkbox"] {
     var running = true;
 
     function loop() {
+      loopScheduled = false;
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
 
@@ -355,8 +361,11 @@ ul.task-list li input[type="checkbox"] {
         var p = particles[i];
 
         // Store position in trail buffer
-        p.trail.push({ x: p.x, y: p.y });
-        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.len > 0) {
+          p.trail.push({ x: p.x, y: p.y });
+          if (tc.len !== Infinity && p.trail.length > tc.len) p.trail.shift();
+        }
 
         // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
         p.vx += (Math.random() - 0.5) * 1.2;
@@ -371,19 +380,22 @@ ul.task-list li input[type="checkbox"] {
         if (p.y < -20) p.y = H + 20;
         if (p.y > H + 20) p.y = -20;
 
-        // Draw trail segments with fading alpha
+        // Draw trail segments
         var c = colours[p.colIdx];
-        ctx.lineWidth = trailWidth;
-        ctx.lineCap = 'round';
-        for (var j = 1; j < p.trail.length; j++) {
-          var t0 = p.trail[j - 1], t1 = p.trail[j];
-          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
-          var a = trailAlpha * (j / p.trail.length);
-          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
-          ctx.beginPath();
-          ctx.moveTo(t0.x, t0.y);
-          ctx.lineTo(t1.x, t1.y);
-          ctx.stroke();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.alpha > 0 && p.trail.length > 1) {
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          for (var j = 1; j < p.trail.length; j++) {
+            var t0 = p.trail[j - 1], t1 = p.trail[j];
+            if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+            var a = tc.fade ? tc.alpha * (j / p.trail.length) : tc.alpha;
+            ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+            ctx.beginPath();
+            ctx.moveTo(t0.x, t0.y);
+            ctx.lineTo(t1.x, t1.y);
+            ctx.stroke();
+          }
         }
 
         // Draw particle
@@ -393,17 +405,19 @@ ul.task-list li input[type="checkbox"] {
       }
       ctx.globalAlpha = 1;
 
+      loopScheduled = true;
       requestAnimationFrame(loop);
     }
 
-    /* Toggle button */
-    var PREF_KEY = 'ambient-dust-v2';
-    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+    /* Toggle button — 4 modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail */
+    var PREF_KEY = 'ambient-dust-v3';
+    var MODE_LABELS = ['Off', 'Particles', 'Trails', 'Permanent'];
+    var stored = parseInt(localStorage.getItem(PREF_KEY), 10);
+    var dustMode = (stored >= 0 && stored <= 3) ? stored : 1;
 
     var btn = document.createElement('button');
     btn.className = 'ambient-toggle';
-    btn.setAttribute('aria-label', 'Toggle floating particles');
-    btn.title = 'Toggle particles';
+    btn.setAttribute('aria-label', 'Cycle particle mode');
     /* Inline SVG atom icon — three elliptical orbits + central dot */
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
     /* Insert into navbar-tools (right side, left of search icon) */
@@ -411,21 +425,32 @@ ul.task-list li input[type="checkbox"] {
     if (toolsEl) {
       toolsEl.appendChild(btn);
     } else {
-      /* Fallback: try inserting before search icon */
       var searchEl = document.getElementById('quarto-search');
       if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
     }
 
+    function clearTrails() {
+      particles.forEach(function(p) { p.trail = []; });
+    }
+
+    var loopScheduled = false;
+
     function applyState() {
-      canvas.style.display = dustOff ? 'none' : '';
-      running = !dustOff;
-      btn.classList.toggle('off', dustOff);
-      if (running) requestAnimationFrame(loop);
+      var off = dustMode === 0;
+      canvas.style.display = off ? 'none' : '';
+      running = !off;
+      btn.classList.toggle('off', off);
+      btn.title = MODE_LABELS[dustMode];
+      if (dustMode <= 1) clearTrails();
+      if (running && !loopScheduled) {
+        loopScheduled = true;
+        requestAnimationFrame(loop);
+      }
     }
 
     btn.addEventListener('click', function() {
-      dustOff = !dustOff;
-      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      dustMode = (dustMode + 1) % 4;
+      localStorage.setItem(PREF_KEY, dustMode);
       applyState();
     });
 
@@ -435,9 +460,12 @@ ul.task-list li input[type="checkbox"] {
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else if (!dustOff) {
+      } else if (dustMode > 0) {
         running = true;
-        requestAnimationFrame(loop);
+        if (!loopScheduled) {
+          loopScheduled = true;
+          requestAnimationFrame(loop);
+        }
       }
     });
 
@@ -543,24 +571,24 @@ main .level2.revealed {
     var YEAR_MIN = 2018, YEAR_MAX = 2026;
 
     var COLORS = {
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18', glow: 'rgba(212,160,58,0.3)' },
-      blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590', glow: 'rgba(74,135,215,0.3)' },
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' },
-      teal:  { light: '#80d0b0', base: '#4daa88', dark: '#2a7060', glow: 'rgba(77,170,136,0.3)' }
+      copper:  { light: '#e8a080', base: '#c07050', dark: '#784030', glow: 'rgba(192,112,80,0.3)' },
+      lilac:   { light: '#b8b0c0', base: '#9088a0', dark: '#585068', glow: 'rgba(144,136,160,0.3)' },
+      slate:   { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' },
+      neutral: { light: '#b0a898', base: '#888078', dark: '#504840', glow: 'rgba(136,128,120,0.3)' }
     };
 
     // ===== Member data (sorted by startYear for clockwise chronological layout) =====
     var members = [
-      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, url: 'https://multiscaleflowx.github.io/team/rohit-pillai/', photo: 'images/profile.jpg', color: 'amber', r: PI_R },
+      { id: 'rp', name: 'Rohit Pillai', role: 'Principal Investigator', topic: 'Interfacial physics & molecular simulations', startYear: 2016, endYear: null, url: 'https://multiscaleflowx.github.io/team/rohit-pillai/', photo: 'images/profile.jpg', color: 'copper', r: PI_R },
       // Ring members — sorted by start year
-      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Multiscale fluid dynamics', startYear: 2019, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', photo: 'images/team/sp.jpg', color: 'slate', r: POSTDOC_R, roles: [{ from: 2019, to: 2019, color: 'slate' }, { from: 2020, to: 2023, color: 'blue' }, { from: 2024, to: null, color: 'amber' }] },
-      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', url: 'https://multiscaleflowx.github.io/team/martin-nikiforidis/', photo: 'images/team/vn.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2017, to: 2021, color: 'slate' }, { from: 2022, to: null, color: 'blue' }] },
-      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', photo: 'images/team/sd.jpg', color: 'blue', r: POSTDOC_R, roles: [{ from: 2018, to: 2024, color: 'blue' }, { from: 2025, to: null, color: 'amber' }] },
-      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', url: 'https://multiscaleflowx.github.io/team/mistry-sritay/', photo: 'images/team/sm.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2018, to: 2022, color: 'slate' }, { from: 2023, to: null, color: 'blue' }] },
-      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', url: 'https://www.durham.ac.uk/staff/patrick-j-sullivan/', photo: 'images/team/ps.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2019, to: 2023, color: 'slate' }, { from: 2024, to: null, color: 'blue' }] },
-      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', url: 'https://uk.linkedin.com/in/abdullahelrifai', photo: 'images/team/ae.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2020, to: 2024, color: 'slate' }, { from: 2025, to: null, color: 'teal' }] },
+      { id: 'sp', name: 'Sree Hari Perumanath', role: 'PhD \u2192 Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Multiscale fluid dynamics', startYear: 2019, endYear: 2021, now: 'Asst. Professor, IIT Madras', url: 'https://mech.iitm.ac.in/profile.php?fname=sreehari', photo: 'images/team/sp.jpg', color: 'slate', r: POSTDOC_R, roles: [{ from: 2019, to: 2019, color: 'slate' }, { from: 2020, to: 2023, color: 'lilac' }, { from: 2024, to: null, color: 'copper' }] },
+      { id: 'vn', name: 'V-M Nikiforidis', role: 'PhD Student', topic: 'Ice growth on surfaces', startYear: 2017, endYear: 2021, now: 'Postdoc, University of Cyprus', url: 'https://multiscaleflowx.github.io/team/martin-nikiforidis/', photo: 'images/team/vn.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2017, to: 2021, color: 'slate' }, { from: 2022, to: null, color: 'lilac' }] },
+      { id: 'sd', name: 'Saikat Datta', role: 'Postdoc \u2192 Leverhulme ECF \u2192 PI', topic: 'Acoustothermal nanobubbles', startYear: 2018, endYear: 2024, now: 'Senior Lecturer, Swansea University', url: 'https://www.swansea.ac.uk/staff/saikat.datta/', photo: 'images/team/sd.jpg', color: 'lilac', r: POSTDOC_R, roles: [{ from: 2018, to: 2024, color: 'lilac' }, { from: 2025, to: null, color: 'copper' }] },
+      { id: 'sm', name: 'Sritay Mistry', role: 'PhD Student', topic: 'Flows through nanomaterials', startYear: 2018, endYear: 2022, now: 'PDRA, Brunel University', url: 'https://multiscaleflowx.github.io/team/mistry-sritay/', photo: 'images/team/sm.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2018, to: 2022, color: 'slate' }, { from: 2023, to: null, color: 'lilac' }] },
+      { id: 'ps', name: 'Patrick Sullivan', role: 'PhD Student', topic: 'Formation and growth of vapour bubbles', startYear: 2019, endYear: 2023, now: 'PDRA, Durham University', url: 'https://www.durham.ac.uk/staff/patrick-j-sullivan/', photo: 'images/team/ps.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2019, to: 2023, color: 'slate' }, { from: 2024, to: null, color: 'lilac' }] },
+      { id: 'ae', name: 'Abdullah El-Rifai', role: 'PhD Student', topic: 'Thermal resistance at liquid-solid interfaces', startYear: 2020, endYear: 2024, now: 'Renewables Consultant, Wood PLC', url: 'https://uk.linkedin.com/in/abdullahelrifai', photo: 'images/team/ae.jpg', color: 'slate', r: PHD_R, roles: [{ from: 2020, to: 2024, color: 'slate' }, { from: 2025, to: null, color: 'neutral' }] },
       { id: 'pc', name: 'Pengxu Chen', role: 'PhD Student', topic: 'Nanoscale vibrations to reduce surface icing', startYear: 2022, endYear: null, url: 'https://multiscaleflowx.github.io/team/chen-pengxu/', photo: 'images/team/pc.jpg', color: 'slate', r: PHD_R },
-      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, url: 'https://multiscaleflowx.github.io/team/thejas-hulikal-chakrapani/', photo: 'images/team/tc.png', color: 'blue', r: POSTDOC_R },
+      { id: 'tc', name: 'Thejas Chakrapani', role: 'Postdoc', topic: 'Spectral heat flows at solid-liquid interfaces', startYear: 2024, endYear: null, url: 'https://multiscaleflowx.github.io/team/thejas-hulikal-chakrapani/', photo: 'images/team/tc.png', color: 'lilac', r: POSTDOC_R },
       { id: 'zl', name: 'Zhaolun Li', role: 'PhD Student', topic: 'Machine learning potentials for solid-liquid interfaces', startYear: 2025, endYear: null, url: 'https://multiscaleflowx.github.io/team/zhaolun-li/', photo: 'images/team/zl.jpg', color: 'slate', r: PHD_R }
     ];
 
@@ -762,6 +790,18 @@ main .level2.revealed {
     });
     svg.appendChild(orbitGroup);
 
+    // Backing circles (opaque, on top of guide lines, hide dashes behind member faces)
+    var backingGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(backingGroup);
+    members.forEach(function(m) {
+      var bc = document.createElementNS(NS, 'circle');
+      bc.setAttribute('r', m.r + 2);
+      bc.setAttribute('fill', '#1a1a2e');
+      bc.setAttribute('cx', m.x); bc.setAttribute('cy', m.y);
+      backingGroup.appendChild(bc);
+      m.backingEl = bc;
+    });
+
     // Bond layer
     var bondGroup = document.createElementNS(NS, 'g');
     svg.appendChild(bondGroup);
@@ -873,7 +913,7 @@ main .level2.revealed {
         var sub = document.createElementNS(NS, 'text');
         sub.setAttribute('y', m.r + 30);
         sub.setAttribute('text-anchor', 'middle');
-        sub.setAttribute('fill', COLORS.amber.base);
+        sub.setAttribute('fill', COLORS.copper.base);
         sub.setAttribute('font-family', 'Inter, sans-serif');
         sub.setAttribute('font-size', '9');
         sub.setAttribute('font-weight', '600');
@@ -1192,6 +1232,11 @@ main .level2.revealed {
       members.forEach(function(m) {
         m.el.setAttribute('transform', 'translate(' + m.x.toFixed(1) + ',' + m.y.toFixed(1) + ')');
         m.el.style.opacity = m.opacity.toFixed(3);
+        if (m.backingEl) {
+          m.backingEl.setAttribute('cx', m.x.toFixed(1));
+          m.backingEl.setAttribute('cy', m.y.toFixed(1));
+          m.backingEl.style.display = m.opacity > 0.01 ? '' : 'none';
+        }
       });
       bonds.forEach(function(b) {
         b.el.setAttribute('x1', pi.x.toFixed(1));
