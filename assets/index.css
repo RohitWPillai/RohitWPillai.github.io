@@ -203,6 +203,12 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   border-radius: 10px;
   padding: 1.5rem;
   border: 1px solid rgba(200, 200, 216, 0.06);
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.2s;
+}
+.intro-card:hover {
+  border-color: rgba(200, 200, 216, 0.18);
 }
 
 .intro-explore {
@@ -247,6 +253,10 @@ div.quarto-about-solana .about-entity a[href^="mailto"]:focus-visible {
   color: #d4a03a;
   margin-bottom: 0.6rem;
   font-variation-settings: 'opsz' 24;
+}
+.intro-card:nth-child(1) .intro-card-title { color: #4687d7; }
+.intro-card:nth-child(2) .intro-card-title { color: #4daa88; }
+.intro-card:nth-child(3) .intro-card-title { color: #dc4130;
 }
 
 .intro-card-desc {

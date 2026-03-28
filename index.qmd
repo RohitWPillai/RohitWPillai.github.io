@@ -51,7 +51,7 @@ header-includes: |
   </div>
   <div class="intro-themes">
     <div class="intro-card">
-      <span class="intro-card-title">Ice Nucleation</span>
+      <span class="intro-card-title">Ice Nucleation & Growth</span>
       <span class="intro-card-desc">How ice forms on surfaces, vibration effects on freezing, and the design of icephobic coatings</span>
     </div>
     <div class="intro-card">
@@ -59,7 +59,7 @@ header-includes: |
       <span class="intro-card-desc">Thermal conductance at solid–liquid interfaces, surface wetting and self-cleaning, and nanomaterial-enhanced cooling</span>
     </div>
     <div class="intro-card">
-      <span class="intro-card-title">Phase Change &amp; Bubbles</span>
+      <span class="intro-card-title">Phase Change & Bubble Dynamics</span>
       <span class="intro-card-desc">Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics</span>
     </div>
   </div>
@@ -72,6 +72,14 @@ document.addEventListener('DOMContentLoaded', function() {
     solana.parentNode.insertBefore(intro, solana.nextSibling);
     intro.style.display = '';
   }
+  var themeIds = ['ice', 'heat', 'boil'];
+  document.querySelectorAll('.intro-card').forEach(function(card, i) {
+    if (!themeIds[i]) return;
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function() {
+      window.location.href = 'projects.html#theme-' + themeIds[i];
+    });
+  });
 });
 </script>
 ```

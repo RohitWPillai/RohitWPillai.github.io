@@ -21,44 +21,44 @@
     var BRANCH_LEN = 60;
 
     var COLORS = {
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' },
-      blue:  { light: '#80b8f0', base: '#4a87d7', dark: '#2a5590' },
-      teal:  { light: '#80d0b0', base: '#4daa88', dark: '#2a7060' },
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18' },
+      slate:   { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' },
+      lilac:   { light: '#b8b0c0', base: '#9088a0', dark: '#585068' },
+      rose:    { light: '#d098a8', base: '#a87080', dark: '#684050' },
+      copper:  { light: '#e8a080', base: '#c07050', dark: '#784030' },
       neutral: { light: '#8a8a9a', base: '#5a5a6e', dark: '#3a3a4e' }
     };
 
     // ===== Year spine =====
-    // Colors: slate=PhD, blue=Postdoc, teal=Lecturer, amber=Senior Lecturer
+    // Colors: slate=PhD, lilac=Postdoc, rose=Lecturer, copper=Senior Lecturer
     var yearData = [
       { year: 2017, color: 'slate', role: 'PHD \u00b7 MELBOURNE', row: 0, col: 0,
         tip: 'PhD in Chemical & Biomolecular Engineering, University of Melbourne. Completed December 2017.' },
-      { year: 2018, color: 'blue', role: 'POSTDOC \u00b7 EDINBURGH', row: 0, col: 1,
+      { year: 2018, color: 'lilac', role: 'POSTDOC \u00b7 EDINBURGH', row: 0, col: 1,
         tip: 'Postdoctoral Research Associate, University of Edinburgh (January\u2013August 2018).' },
-      { year: 2019, color: 'teal', row: 0, col: 2,
+      { year: 2019, color: 'rose', row: 0, col: 2,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. First full year as independent PI.' },
-      { year: 2020, color: 'teal', row: 0, col: 3,
+      { year: 2020, color: 'rose', row: 0, col: 3,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2021, color: 'teal', row: 0, col: 4,
+      { year: 2021, color: 'rose', row: 0, col: 4,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2022, color: 'teal', row: 1, col: 4,
+      { year: 2022, color: 'rose', row: 1, col: 4,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2023, color: 'teal', row: 1, col: 3,
+      { year: 2023, color: 'rose', row: 1, col: 3,
         tip: 'Lecturer then Senior Lecturer, University of Edinburgh. Promoted 1 August 2023.' },
-      { year: 2024, color: 'amber', row: 1, col: 2,
+      { year: 2024, color: 'copper', row: 1, col: 2,
         tip: 'Senior Lecturer in Mechanical Engineering. ERC Starting Grant awarded August 2024.' },
-      { year: 2025, color: 'amber', row: 1, col: 1,
+      { year: 2025, color: 'copper', row: 1, col: 1,
         tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' },
-      { year: 2026, color: 'amber', row: 1, col: 0,
+      { year: 2026, color: 'copper', row: 1, col: 0,
         tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' }
     ];
 
     // ===== Transitions on the spine =====
     var transitions = [
-      { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'blue', toColor: 'teal',
+      { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'lilac', toColor: 'rose',
         label: 'LECTURER', labelSide: 1,
         tip: 'Appointed Lecturer (Assistant Professor) in Mechanical Engineering, University of Edinburgh, September 2018.' },
-      { fromYear: 2023, toYear: 2024, frac: 0.67, fromColor: 'teal', toColor: 'amber',
+      { fromYear: 2023, toYear: 2024, frac: 0.67, fromColor: 'rose', toColor: 'copper',
         label: 'SENIOR LECTURER', labelSide: 1,
         tip: 'Promoted to Senior Lecturer (Associate Professor) in Mechanical Engineering, University of Edinburgh, 1 August 2023.' }
     ];
@@ -383,7 +383,7 @@
       if (m.ex > W - 120) anchor = 'end';
       else if (m.ex < 120) anchor = 'start';
       labelText.setAttribute('text-anchor', anchor);
-      labelText.setAttribute('fill', m.url ? '#d4a03a' : '#c0c0c8');
+      labelText.setAttribute('fill', m.url ? '#c07050' : '#c0c0c8');
       labelText.setAttribute('font-family', 'Inter, sans-serif');
       labelText.setAttribute('font-size', '11');
       labelText.textContent = m.label;

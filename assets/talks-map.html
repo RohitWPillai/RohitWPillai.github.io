@@ -28,11 +28,11 @@
     var C = {
       land: "rgba(120,136,168,0.10)",
       landStroke: "rgba(180,190,210,0.50)",
-      amber: "#d4a03a",   amberL: "#f0d080",   amberD: "#7a5a18",
-      teal:  "#4daa88",   tealL:  "#80d0b0",   tealD:  "#2a7060",
-      neutral: "#7888a8", neutralL: "#a0aec0",  neutralD: "#4a5a6e",
-      amberGlow:   "rgba(212,160,58,0.25)",
-      tealGlow:    "rgba(77,170,136,0.25)",
+      copper: "#c07050",   copperL: "#e8a080",   copperD: "#784030",
+      rose:   "#a87080",   roseL:   "#d098a8",   roseD:   "#684050",
+      neutral: "#7888a8",  neutralL: "#a0aec0",   neutralD: "#4a5a6e",
+      copperGlow:  "rgba(192,112,80,0.25)",
+      roseGlow:    "rgba(168,112,128,0.25)",
       neutralGlow: "rgba(122,138,158,0.25)"
     };
 
@@ -205,11 +205,11 @@
     /* Radial gradients */
     var defs = document.createElementNS(NS, "defs");
     [
-      { id: "tm-amber", stops: [
-        { o: "0%", c: C.amberL }, { o: "45%", c: C.amber }, { o: "100%", c: C.amberD }
+      { id: "tm-copper", stops: [
+        { o: "0%", c: C.copperL }, { o: "45%", c: C.copper }, { o: "100%", c: C.copperD }
       ]},
-      { id: "tm-teal", stops: [
-        { o: "0%", c: C.tealL }, { o: "45%", c: C.teal }, { o: "100%", c: C.tealD }
+      { id: "tm-rose", stops: [
+        { o: "0%", c: C.roseL }, { o: "45%", c: C.rose }, { o: "100%", c: C.roseD }
       ]},
       { id: "tm-neutral", stops: [
         { o: "0%", c: C.neutralL }, { o: "45%", c: C.neutral }, { o: "100%", c: C.neutralD }
@@ -269,7 +269,7 @@
       visibleItems.forEach(function(t) { visibleTotal += (t.c || 1); });
 
       var tier = cityTier(city);
-      var accent = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
+      var accent = tier === "keynote" ? C.copper : tier === "invited" ? C.rose : C.neutral;
       var html = '<div class="tt-city" style="color:' + accent + '">' + city.city;
       if (visibleTotal > 1) html += ' <span class="tt-count">' + visibleTotal + " talks</span>";
       html += "</div>";
@@ -325,9 +325,9 @@
       allDots.push(g);
 
       var tier = cityTier(city);
-      var fillId = tier === "keynote" ? "url(#tm-amber)" : tier === "invited" ? "url(#tm-teal)" : "url(#tm-neutral)";
-      var glowColor = tier === "keynote" ? C.amberGlow : tier === "invited" ? C.tealGlow : C.neutralGlow;
-      var solidColor = tier === "keynote" ? C.amber : tier === "invited" ? C.teal : C.neutral;
+      var fillId = tier === "keynote" ? "url(#tm-copper)" : tier === "invited" ? "url(#tm-rose)" : "url(#tm-neutral)";
+      var glowColor = tier === "keynote" ? C.copperGlow : tier === "invited" ? C.roseGlow : C.neutralGlow;
+      var solidColor = tier === "keynote" ? C.copper : tier === "invited" ? C.rose : C.neutral;
 
       /* Scale pin height with talk count (hub keeps fixed size) */
       var pinH = city.hub ? baseR * 3.2 : baseR * 2.6 * (0.7 + 0.3 * Math.sqrt(city.total));
@@ -363,7 +363,7 @@
         var lbl = document.createElementNS(NS, "text");
         lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
-        lbl.setAttribute("fill", C.amber);
+        lbl.setAttribute("fill", C.copper);
         lbl.setAttribute("font-family", '"Fraunces", serif');
         lbl.setAttribute("font-size", "11");
         lbl.textContent = city.city;
@@ -541,8 +541,8 @@
       var legend = document.createElement("div");
       legend.className = "talks-legend";
       [
-        { key: "keynote", color: C.amber },
-        { key: "invited", color: C.teal },
+        { key: "keynote", color: C.copper },
+        { key: "invited", color: C.rose },
         { key: "conference", color: C.neutral }
       ].forEach(function(item) {
         var span = document.createElement("span");

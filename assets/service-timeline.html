@@ -14,8 +14,9 @@
     var BROWNIAN = 0.03, SPRING_K = 0.018, DAMPING = 0.92;
 
     var COLORS = {
-      amber: { light: '#f0d080', base: '#d4a03a', dark: '#7a5a18' },
-      slate: { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' }
+      copper: { light: '#e8a080', base: '#c07050', dark: '#784030' },
+      rose:   { light: '#d098a8', base: '#a87080', dark: '#684050' },
+      slate:  { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870' }
     };
 
     // ===== Role data (enriched) =====
@@ -60,12 +61,12 @@
         period: '2018' },
 
       // --- Committees & Advocacy (bottom-centre) ---
-      { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'lead', group: 2,
+      { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'mid', group: 2,
         title: 'PDRA Champion',
         body: 'School of Engineering, University of Edinburgh',
         desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.',
         period: '2022–present' },
-      { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'serv', group: 2,
+      { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'mid', group: 2,
         title: 'Staff Development Co-chair',
         body: 'School of Engineering, University of Edinburgh',
         desc: 'Co-chaired committee on staff training, mentoring schemes, and professional development.',
@@ -127,8 +128,8 @@
       r.px = r.ex; r.py = r.ey;
       r.vx = 0; r.vy = 0;
       r.cluster = cl;
-      r.color = r.tier === 'lead' ? 'amber' : 'slate';
-      r.r = r.tier === 'lead' ? LEAD_R : SERV_R;
+      r.color = r.tier === 'lead' ? 'copper' : r.tier === 'mid' ? 'rose' : 'slate';
+      r.r = r.tier === 'lead' ? LEAD_R : r.tier === 'mid' ? 6 : SERV_R;
     });
 
     var byId = {};
@@ -246,7 +247,7 @@
 
       // Role label below star
       var text = document.createElementNS(NS, 'text');
-      text.setAttribute('fill', r.tier === 'lead' ? '#d4a03a' : '#9098a8');
+      text.setAttribute('fill', r.tier === 'lead' ? '#c07050' : r.tier === 'mid' ? '#a87080' : '#9098a8');
       text.setAttribute('font-family', 'Inter, sans-serif');
       text.setAttribute('font-size', r.tier === 'lead' ? '11' : '10');
       text.setAttribute('font-weight', r.tier === 'lead' ? '500' : '400');
