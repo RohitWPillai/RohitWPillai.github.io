@@ -648,7 +648,8 @@ html {
 }
 
 /* Role legend */
-.team-legend {
+.team-legend,
+.career-legend {
   display: flex;
   gap: 16px;
   justify-content: center;
@@ -673,10 +674,10 @@ html {
   display: inline-block;
 }
 
-.legend-amber { background: #d4a03a; }
-.legend-blue { background: #4a87d7; }
+.legend-copper { background: #c07050; }
+.legend-lilac { background: #9088a0; }
 .legend-slate { background: #7888a8; }
-.legend-teal { background: #4daa88; }
+.legend-neutral { background: #888078; }
 
 /* ===== Career Timeline ===== */
 #career-timeline-wrap {
@@ -832,12 +833,12 @@ html {
   margin-left: 0.3em;
 }
 .talks-tooltip .tt-type-keynote {
-  background: rgba(212,160,58,0.2);
-  color: #d4a03a;
+  background: rgba(192,112,80,0.2);
+  color: #c07050;
 }
 .talks-tooltip .tt-type-invited {
-  background: rgba(77,170,136,0.2);
-  color: #4daa88;
+  background: rgba(168,112,128,0.2);
+  color: #a87080;
 }
 .talks-tooltip .tt-count {
   font-size: 0.7rem;

@@ -276,11 +276,11 @@ ul.task-list li input[type="checkbox"] {
 
     // Build a few colour variants (depth gradient like homepage)
     var colours = [
-      [70, 135, 215],    // cool blue
-      [145, 160, 190],   // slate
-      [220, 185, 50],    // warm yellow
-      [212, 160, 58],    // amber
-      [220, 65, 45]      // red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [220, 65, 45],     // vapour red
+      [200, 75, 55],     // vapour red (slightly varied)
+      [230, 55, 40]      // vapour red (slightly varied)
     ];
     var sprites = [];
     for (var i = 0; i < colours.length; i++) {
@@ -293,9 +293,14 @@ ul.task-list li input[type="checkbox"] {
     document.body.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
-    var TRAIL_LEN = 120;  // frames of trail history — long for elaborate patterns
-    var trailAlpha = 0.35 * 0.8;
-    var trailWidth = 1.2;
+    // Trail modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail
+    var TRAIL_CONFIGS = [
+      { len: 0, alpha: 0, fade: false },       // 0: particles off
+      { len: 0, alpha: 0, fade: false },       // 1: no trail
+      { len: 120, alpha: 0.12, fade: true },   // 2: fading trail
+      { len: Infinity, alpha: 0.08, fade: false } // 3: permanent trail
+    ];
+    var trailWidth = 1.0;
 
     var W, H, dpr;
     var particles = [];
@@ -332,6 +337,7 @@ ul.task-list li input[type="checkbox"] {
     var running = true;
 
     function loop() {
+      loopScheduled = false;
       if (!running) return;
       ctx.clearRect(0, 0, W, H);
 
@@ -339,8 +345,11 @@ ul.task-list li input[type="checkbox"] {
         var p = particles[i];
 
         // Store position in trail buffer
-        p.trail.push({ x: p.x, y: p.y });
-        if (p.trail.length > TRAIL_LEN) p.trail.shift();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.len > 0) {
+          p.trail.push({ x: p.x, y: p.y });
+          if (tc.len !== Infinity && p.trail.length > tc.len) p.trail.shift();
+        }
 
         // Same Brownian thermostat as homepage: kick 0.6, damping 0.88
         p.vx += (Math.random() - 0.5) * 1.2;
@@ -355,19 +364,22 @@ ul.task-list li input[type="checkbox"] {
         if (p.y < -20) p.y = H + 20;
         if (p.y > H + 20) p.y = -20;
 
-        // Draw trail segments with fading alpha
+        // Draw trail segments
         var c = colours[p.colIdx];
-        ctx.lineWidth = trailWidth;
-        ctx.lineCap = 'round';
-        for (var j = 1; j < p.trail.length; j++) {
-          var t0 = p.trail[j - 1], t1 = p.trail[j];
-          if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
-          var a = trailAlpha * (j / p.trail.length);
-          ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
-          ctx.beginPath();
-          ctx.moveTo(t0.x, t0.y);
-          ctx.lineTo(t1.x, t1.y);
-          ctx.stroke();
+        var tc = TRAIL_CONFIGS[dustMode];
+        if (tc.alpha > 0 && p.trail.length > 1) {
+          ctx.lineWidth = trailWidth;
+          ctx.lineCap = 'round';
+          for (var j = 1; j < p.trail.length; j++) {
+            var t0 = p.trail[j - 1], t1 = p.trail[j];
+            if (Math.abs(t1.x - t0.x) > W * 0.3 || Math.abs(t1.y - t0.y) > H * 0.3) continue;
+            var a = tc.fade ? tc.alpha * (j / p.trail.length) : tc.alpha;
+            ctx.strokeStyle = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')';
+            ctx.beginPath();
+            ctx.moveTo(t0.x, t0.y);
+            ctx.lineTo(t1.x, t1.y);
+            ctx.stroke();
+          }
         }
 
         // Draw particle
@@ -377,17 +389,19 @@ ul.task-list li input[type="checkbox"] {
       }
       ctx.globalAlpha = 1;
 
+      loopScheduled = true;
       requestAnimationFrame(loop);
     }
 
-    /* Toggle button */
-    var PREF_KEY = 'ambient-dust-v2';
-    var dustOff = localStorage.getItem(PREF_KEY) === 'off';
+    /* Toggle button — 4 modes: 0=off, 1=no trail (default), 2=fading trail, 3=permanent trail */
+    var PREF_KEY = 'ambient-dust-v3';
+    var MODE_LABELS = ['Off', 'Particles', 'Trails', 'Permanent'];
+    var stored = parseInt(localStorage.getItem(PREF_KEY), 10);
+    var dustMode = (stored >= 0 && stored <= 3) ? stored : 1;
 
     var btn = document.createElement('button');
     btn.className = 'ambient-toggle';
-    btn.setAttribute('aria-label', 'Toggle floating particles');
-    btn.title = 'Toggle particles';
+    btn.setAttribute('aria-label', 'Cycle particle mode');
     /* Inline SVG atom icon — three elliptical orbits + central dot */
     btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>';
     /* Insert into navbar-tools (right side, left of search icon) */
@@ -395,21 +409,32 @@ ul.task-list li input[type="checkbox"] {
     if (toolsEl) {
       toolsEl.appendChild(btn);
     } else {
-      /* Fallback: try inserting before search icon */
       var searchEl = document.getElementById('quarto-search');
       if (searchEl) searchEl.parentNode.insertBefore(btn, searchEl);
     }
 
+    function clearTrails() {
+      particles.forEach(function(p) { p.trail = []; });
+    }
+
+    var loopScheduled = false;
+
     function applyState() {
-      canvas.style.display = dustOff ? 'none' : '';
-      running = !dustOff;
-      btn.classList.toggle('off', dustOff);
-      if (running) requestAnimationFrame(loop);
+      var off = dustMode === 0;
+      canvas.style.display = off ? 'none' : '';
+      running = !off;
+      btn.classList.toggle('off', off);
+      btn.title = MODE_LABELS[dustMode];
+      if (dustMode <= 1) clearTrails();
+      if (running && !loopScheduled) {
+        loopScheduled = true;
+        requestAnimationFrame(loop);
+      }
     }
 
     btn.addEventListener('click', function() {
-      dustOff = !dustOff;
-      localStorage.setItem(PREF_KEY, dustOff ? 'off' : 'on');
+      dustMode = (dustMode + 1) % 4;
+      localStorage.setItem(PREF_KEY, dustMode);
       applyState();
     });
 
@@ -419,9 +444,12 @@ ul.task-list li input[type="checkbox"] {
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         running = false;
-      } else if (!dustOff) {
+      } else if (dustMode > 0) {
         running = true;
-        requestAnimationFrame(loop);
+        if (!loopScheduled) {
+          loopScheduled = true;
+          requestAnimationFrame(loop);
+        }
       }
     });
 
@@ -532,7 +560,7 @@ main .level2.revealed {
 
     // ===== Research themes =====
     var themes = [
-      { id: 'ice', label: 'Ice Nucleation and Growth', x: 175, y: 220,
+      { id: 'ice', label: 'Ice Nucleation & Growth', x: 175, y: 220, gradient: 'pd-ice', glowFill: 'rgba(70,135,215,0.3)', ringStroke: '#4687d7',
         desc: 'Supercooled water: ice nucleation on surfaces, vibration effects, icephobic design',
         boundary: 'fusion',
         narrative: 'Understanding how ice forms at the nanoscale is crucial for designing surfaces that prevent icing on aircraft, wind turbines, and infrastructure. We use molecular dynamics to study heterogeneous ice nucleation on different surface chemistries, the role of surface vibrations in suppressing or promoting freezing, and the design principles behind icephobic coatings.',
@@ -542,7 +570,7 @@ main .level2.revealed {
           { num: 'B1', title: 'Icephobic surfaces: bridging experiments and simulations', journal: 'Springer', year: 2022, img: 'images/papers/book-icephobic-surfaces.jpg', doi: 'https://doi.org/10.1007/978-3-030-82992-6_8' }
         ]
       },
-      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140,
+      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140, gradient: 'pd-heat', glowFill: 'rgba(77,170,136,0.3)', ringStroke: '#4daa88',
         desc: 'Thermal conductance at solid\u2013liquid interfaces, surface wetting and self-cleaning, nanomaterial-enhanced cooling',
         boundary: 'fusion',
         narrative: 'The behaviour of liquids at solid surfaces governs both heat transfer and fluid transport at the nanoscale. We investigate spectral mechanisms of interfacial thermal conductance and nanomaterial-enhanced cooling strategies through our ERC-funded NANO-COOL programme, alongside the interfacial fluid dynamics that drive phenomena like contaminant removal from nature\u2019s self-cleaning surfaces.',
@@ -557,7 +585,7 @@ main .level2.revealed {
           { num: 7, title: 'Nanodroplets on vibrating surfaces', journal: 'Langmuir', year: 2018, img: 'images/papers/07-nanodroplet-vibrating.png', doi: 'https://doi.org/10.1021/acs.langmuir.8b02066' }
         ]
       },
-      { id: 'boil', label: 'Phase Change and\nBubble Dynamics', x: 510, y: 370,
+      { id: 'boil', label: 'Phase Change &\nBubble Dynamics', x: 510, y: 370, gradient: 'pd-boil', glowFill: 'rgba(220,65,48,0.3)', ringStroke: '#dc4130',
         desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
         boundary: 'vapor',
         narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
@@ -574,11 +602,11 @@ main .level2.revealed {
     // ===== Orbit bonds (cross-cutting connections) =====
     var orbits = [
       { from: 0, to: 1, label: 'Surface chemistry controls both ice adhesion and thermal conductance',
-        path: 'M 175 220 C 250 120 380 100 470 140' },
+        path: 'M 175 220 C 250 120 380 100 470 140', particleColor: '#4687d7' },
       { from: 1, to: 2, label: 'Boiling heat transfer depends on interfacial thermal resistance',
-        path: 'M 470 140 C 530 220 540 300 510 370' },
+        path: 'M 470 140 C 530 220 540 300 510 370', particleColor: '#4daa88' },
       { from: 2, to: 0, label: 'Nucleation kinetics unify freezing and boiling',
-        path: 'M 510 370 C 420 380 250 340 175 220' }
+        path: 'M 510 370 C 420 380 250 340 175 220', particleColor: '#dc4130' }
     ];
 
     // ===== Build SVG =====
@@ -592,16 +620,23 @@ main .level2.revealed {
 
     var defs = document.createElementNS(NS, 'defs');
 
-    // Amber sphere gradient
-    var sgA = document.createElementNS(NS, 'radialGradient');
-    sgA.id = 'pd-amber';
-    sgA.setAttribute('cx', '0.35'); sgA.setAttribute('cy', '0.35'); sgA.setAttribute('r', '0.65');
-    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-      sgA.appendChild(st);
+    // Per-phase sphere gradients
+    var phaseGradients = [
+      { id: 'pd-ice',  stops: [{ o: '0%', c: '#8ab4e8' }, { o: '45%', c: '#4687d7' }, { o: '100%', c: '#1e4a7a' }] },
+      { id: 'pd-heat', stops: [{ o: '0%', c: '#80d0b0' }, { o: '45%', c: '#4daa88' }, { o: '100%', c: '#2a7060' }] },
+      { id: 'pd-boil', stops: [{ o: '0%', c: '#f08070' }, { o: '45%', c: '#dc4130' }, { o: '100%', c: '#882018' }] }
+    ];
+    phaseGradients.forEach(function(pg) {
+      var sg = document.createElementNS(NS, 'radialGradient');
+      sg.id = pg.id;
+      sg.setAttribute('cx', '0.35'); sg.setAttribute('cy', '0.35'); sg.setAttribute('r', '0.65');
+      pg.stops.forEach(function(s) {
+        var st = document.createElementNS(NS, 'stop');
+        st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
+        sg.appendChild(st);
+      });
+      defs.appendChild(sg);
     });
-    defs.appendChild(sgA);
 
     // Specular highlight
     var hl = document.createElementNS(NS, 'radialGradient');
@@ -667,12 +702,12 @@ main .level2.revealed {
     // ===== Phase fills =====
     svg.appendChild(makePath(SOLID_FILL, 'rgba(70,135,215,0.06)'));
     svg.appendChild(makePath(LIQUID_FILL, 'rgba(100,190,170,0.05)'));
-    svg.appendChild(makePath(VAPOR_FILL, 'rgba(212,160,58,0.04)'));
+    svg.appendChild(makePath(VAPOR_FILL, 'rgba(220,65,48,0.04)'));
 
     // ===== Phase labels =====
     svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
     svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(212,160,58,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(220,65,48,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
@@ -754,7 +789,7 @@ main .level2.revealed {
       // Drifting particle
       var particle = document.createElementNS(NS, 'circle');
       particle.setAttribute('r', '2.5');
-      particle.setAttribute('fill', '#d4a03a');
+      particle.setAttribute('fill', orb.particleColor);
       particle.setAttribute('opacity', '0.5');
       orbitGroup.appendChild(particle);
 
@@ -819,14 +854,14 @@ main .level2.revealed {
       var ring = document.createElementNS(NS, 'circle');
       ring.setAttribute('r', MARKER_R);
       ring.setAttribute('fill', 'none');
-      ring.setAttribute('stroke', '#d4a03a');
+      ring.setAttribute('stroke', th.ringStroke);
       ring.setAttribute('stroke-width', '2');
       ring.setAttribute('opacity', '0');
       g.appendChild(ring);
 
       var glow = document.createElementNS(NS, 'circle');
       glow.setAttribute('r', MARKER_R + 6);
-      glow.setAttribute('fill', 'rgba(212,160,58,0.3)');
+      glow.setAttribute('fill', th.glowFill);
       glow.setAttribute('filter', 'url(#marker-glow)');
       glow.setAttribute('opacity', '0');
       glow.style.transition = 'opacity 0.3s ease';
@@ -834,7 +869,7 @@ main .level2.revealed {
 
       var circ = document.createElementNS(NS, 'circle');
       circ.setAttribute('r', MARKER_R);
-      circ.setAttribute('fill', 'url(#pd-amber)');
+      circ.setAttribute('fill', 'url(#' + th.gradient + ')');
       g.appendChild(circ);
 
       var spec = document.createElementNS(NS, 'circle');
@@ -940,21 +975,27 @@ main .level2.revealed {
       return null;
     }
 
+    var userDismissed = false;
+
     svg.addEventListener('mousemove', function(e) {
       var rect = svg.getBoundingClientRect();
       var svgX = (e.clientX - rect.left) * (800 / rect.width);
       var svgY = (e.clientY - rect.top) * (500 / rect.height);
       var hit = hitTest(svgX, svgY);
       if (hit) {
-        highlightTheme(hit);
+        if (!userDismissed) highlightTheme(hit);
         svg.style.cursor = 'pointer';
       } else {
         clearHighlight();
         svg.style.cursor = 'default';
+        userDismissed = false;
       }
     });
 
-    svg.addEventListener('mouseleave', clearHighlight);
+    svg.addEventListener('mouseleave', function() {
+      clearHighlight();
+      userDismissed = false;
+    });
 
     // Touch: tap highlights + opens panel, tap elsewhere dismisses
     svg.addEventListener('touchend', function(e) {
@@ -1021,6 +1062,8 @@ main .level2.revealed {
     function closePanel() {
       panel.classList.remove('visible');
       panelOpen = false;
+      userDismissed = true;
+      clearHighlight();
     }
 
     rpClose.addEventListener('click', function(e) {
@@ -1031,6 +1074,19 @@ main .level2.revealed {
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && panelOpen) closePanel();
     });
+
+    // ===== Deep-link: open panel from hash (e.g. #theme-ice) =====
+    var hash = window.location.hash;
+    if (hash && hash.indexOf('#theme-') === 0) {
+      var themeId = hash.substring(7);
+      for (var hi = 0; hi < themes.length; hi++) {
+        if (themes[hi].id === themeId) {
+          highlightTheme(themes[hi]);
+          container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          break;
+        }
+      }
+    }
 
     // Start particle animation
     requestAnimationFrame(animateParticles);
@@ -1065,13 +1121,24 @@ main .level2.revealed {
     if (!container) return;
 
     var NS = 'http://www.w3.org/2000/svg';
-    var W = 800, H = 200;
+    var W = 800, H = 240;
+    var CY = 65;
+    var NODE_R = 28;
+    var AMBER = '#d4a03a';
 
     var stages = [
-      { id: 'dft', label: 'DFT / AIMD', x: 100, detail: 'Ab initio training data', desc: 'Ab initio calculations generate training data with quantum-level accuracy for atomic interactions at solid\u2013liquid interfaces.' },
-      { id: 'mlp', label: 'ML Potentials', x: 300, detail: 'Near-DFT accuracy, classical cost', desc: 'Machine-learning interatomic potentials achieve near-DFT accuracy at classical MD cost, enabling large-scale simulations with quantum-level fidelity.' },
-      { id: 'md',  label: 'Large-Scale MD', x: 500, detail: 'Millions of atoms, nanoseconds', desc: 'Classical and MLP-driven molecular dynamics simulations of millions of atoms over nanosecond timescales resolve interfacial phenomena.' },
-      { id: 'cont', label: 'Continuum\nCoupling', x: 700, detail: 'Molecular to macroscale', desc: 'Multiscale methods couple molecular simulations with continuum solvers, bridging nanoscale physics to macroscale engineering problems.' }
+      { id: 'dft', label: 'DFT / AIMD', x: 100,
+        scales: 'fs / \u212B',
+        desc: 'Ab initio calculations generate training data with quantum-level accuracy for atomic interactions at solid\u2013liquid interfaces.' },
+      { id: 'mlp', label: 'ML Potentials', x: 300,
+        scales: 'ps / nm',
+        desc: 'Machine-learning interatomic potentials achieve near-DFT accuracy at classical MD cost, enabling large-scale simulations with quantum-level fidelity.' },
+      { id: 'md',  label: 'Large-Scale MD', x: 500,
+        scales: 'ns / nm\u2013\u03BCm',
+        desc: 'Classical and MLP-driven molecular dynamics simulations of millions of atoms over nanosecond timescales resolve interfacial phenomena.' },
+      { id: 'cont', label: 'Continuum\nCoupling', x: 700,
+        scales: '\u03BCs\u2013s / \u03BCm\u2013m',
+        desc: 'Multiscale methods couple molecular simulations with continuum solvers, bridging nanoscale physics to macroscale engineering problems.' }
     ];
 
     var svg = document.createElementNS(NS, 'svg');
@@ -1080,30 +1147,32 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Research methods pipeline: DFT, ML Potentials, Large-Scale MD, Continuum Coupling');
+    svg.setAttribute('aria-label', 'Research methods pipeline: DFT, ML Potentials, Large-Scale MD, Continuum Coupling. Tab through stages for details.');
 
     var defs = document.createElementNS(NS, 'defs');
 
-    // Amber gradient (small sphere)
-    var sg = document.createElementNS(NS, 'radialGradient');
-    sg.id = 'mp-amber';
-    sg.setAttribute('cx', '0.35'); sg.setAttribute('cy', '0.35'); sg.setAttribute('r', '0.65');
-    [{ o: '0%', c: '#f0d080' }, { o: '45%', c: '#d4a03a' }, { o: '100%', c: '#7a5a18' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-      sg.appendChild(st);
-    });
-    defs.appendChild(sg);
+    // Clip path for icon content
+    var clip = document.createElementNS(NS, 'clipPath');
+    clip.id = 'mp-badge-clip';
+    var clipCirc = document.createElementNS(NS, 'circle');
+    clipCirc.setAttribute('r', NODE_R - 2);
+    clip.appendChild(clipCirc);
+    defs.appendChild(clip);
 
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'mp-spec';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.50' }, { o: '30%', a: '0.15' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
+    // Glow filter
+    var gf = document.createElementNS(NS, 'filter');
+    gf.id = 'mp-glow';
+    gf.setAttribute('x', '-50%'); gf.setAttribute('y', '-50%');
+    gf.setAttribute('width', '200%'); gf.setAttribute('height', '200%');
+    var gb = document.createElementNS(NS, 'feGaussianBlur');
+    gb.setAttribute('in', 'SourceGraphic'); gb.setAttribute('stdDeviation', '4');
+    gb.setAttribute('result', 'blur');
+    gf.appendChild(gb);
+    var gm = document.createElementNS(NS, 'feMerge');
+    var gm1 = document.createElementNS(NS, 'feMergeNode'); gm1.setAttribute('in', 'blur'); gm.appendChild(gm1);
+    var gm2 = document.createElementNS(NS, 'feMergeNode'); gm2.setAttribute('in', 'SourceGraphic'); gm.appendChild(gm2);
+    gf.appendChild(gm);
+    defs.appendChild(gf);
 
     // Arrow marker
     var marker = document.createElementNS(NS, 'marker');
@@ -1120,8 +1189,127 @@ main .level2.revealed {
 
     svg.appendChild(defs);
 
-    var CY = 80;
-    var NODE_R = 14;
+    // ===== Icon drawing functions =====
+
+    function drawAtom(parent) {
+      var ig = document.createElementNS(NS, 'g');
+      ig.setAttribute('clip-path', 'url(#mp-badge-clip)');
+
+      [0, 60, -60].forEach(function(angle) {
+        var e = document.createElementNS(NS, 'ellipse');
+        e.setAttribute('rx', 20); e.setAttribute('ry', 8);
+        e.setAttribute('fill', 'none');
+        e.setAttribute('stroke', 'rgba(212,160,58,0.4)');
+        e.setAttribute('stroke-width', '1');
+        e.setAttribute('transform', 'rotate(' + angle + ')');
+        ig.appendChild(e);
+      });
+
+      [[18, 0], [-9, 15.6], [-9, -15.6]].forEach(function(p) {
+        var c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]);
+        c.setAttribute('r', 2.5); c.setAttribute('fill', AMBER);
+        ig.appendChild(c);
+      });
+
+      var n = document.createElementNS(NS, 'circle');
+      n.setAttribute('r', 4); n.setAttribute('fill', AMBER);
+      ig.appendChild(n);
+
+      parent.appendChild(ig);
+    }
+
+    function drawNetwork(parent) {
+      var ig = document.createElementNS(NS, 'g');
+      ig.setAttribute('clip-path', 'url(#mp-badge-clip)');
+
+      var layers = [
+        [[-16, -10], [-16, 10]],
+        [[0, -15], [0, 0], [0, 15]],
+        [[16, -10], [16, 10]]
+      ];
+
+      for (var i = 0; i < layers.length - 1; i++) {
+        layers[i].forEach(function(from) {
+          layers[i + 1].forEach(function(to) {
+            var l = document.createElementNS(NS, 'line');
+            l.setAttribute('x1', from[0]); l.setAttribute('y1', from[1]);
+            l.setAttribute('x2', to[0]); l.setAttribute('y2', to[1]);
+            l.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+            l.setAttribute('stroke-width', '1');
+            ig.appendChild(l);
+          });
+        });
+      }
+
+      layers.forEach(function(layer) {
+        layer.forEach(function(node) {
+          var c = document.createElementNS(NS, 'circle');
+          c.setAttribute('cx', node[0]); c.setAttribute('cy', node[1]);
+          c.setAttribute('r', 3.5); c.setAttribute('fill', AMBER);
+          ig.appendChild(c);
+        });
+      });
+
+      parent.appendChild(ig);
+    }
+
+    function drawParticles(parent) {
+      var ig = document.createElementNS(NS, 'g');
+      ig.setAttribute('clip-path', 'url(#mp-badge-clip)');
+
+      [
+        [-16,-14],[-6,-18],[6,-15],[16,-10],[22,-2],
+        [-20,-2],[-12,-8],[0,-6],[10,-10],[18,4],
+        [-16,8],[-6,2],[6,8],[16,10],[-14,16],
+        [-2,14],[10,18],[18,15],[-6,20],[8,-1],
+        [-18,6],[12,0],[2,10],[-10,12],[20,8]
+      ].forEach(function(p) {
+        var c = document.createElementNS(NS, 'circle');
+        c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]);
+        c.setAttribute('r', 2.5);
+        c.setAttribute('fill', 'rgba(212,160,58,0.6)');
+        ig.appendChild(c);
+      });
+
+      parent.appendChild(ig);
+    }
+
+    function drawStreamlines(parent) {
+      var ig = document.createElementNS(NS, 'g');
+      ig.setAttribute('clip-path', 'url(#mp-badge-clip)');
+
+      [-16, -8, 0, 8, 16].forEach(function(y0, i) {
+        var amp = 2.5 + Math.abs(y0) * 0.15;
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('d',
+          'M -26 ' + y0 +
+          ' C -8 ' + (y0 - amp) + ' 8 ' + (y0 + amp) + ' 26 ' + y0
+        );
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'rgba(212,160,58,' + (0.3 + i * 0.06).toFixed(2) + ')');
+        path.setAttribute('stroke-width', '1.2');
+        ig.appendChild(path);
+      });
+
+      [[-4, -4], [6, 4]].forEach(function(p) {
+        var a = document.createElementNS(NS, 'path');
+        a.setAttribute('d',
+          'M ' + (p[0] - 3) + ' ' + (p[1] - 2.5) +
+          ' L ' + (p[0] + 2) + ' ' + p[1] +
+          ' L ' + (p[0] - 3) + ' ' + (p[1] + 2.5)
+        );
+        a.setAttribute('fill', 'none');
+        a.setAttribute('stroke', 'rgba(212,160,58,0.45)');
+        a.setAttribute('stroke-width', '1');
+        a.setAttribute('stroke-linecap', 'round');
+        ig.appendChild(a);
+      });
+
+      parent.appendChild(ig);
+    }
+
+    var iconDrawers = [drawAtom, drawNetwork, drawParticles, drawStreamlines];
 
     // ===== Conduit lines between stages =====
     for (var i = 0; i < stages.length - 1; i++) {
@@ -1146,36 +1334,38 @@ main .level2.revealed {
     var mtDesc = tooltip.querySelector('.mt-desc');
     var hoveredStage = null;
 
-    stages.forEach(function(st) {
+    stages.forEach(function(st, idx) {
       var g = document.createElementNS(NS, 'g');
       g.setAttribute('transform', 'translate(' + st.x + ',' + CY + ')');
       g.style.cursor = 'pointer';
 
-      // Glow
+      // Glow (hidden by default)
       var glow = document.createElementNS(NS, 'circle');
-      glow.setAttribute('r', NODE_R + 5);
-      glow.setAttribute('fill', 'rgba(212,160,58,0.25)');
+      glow.setAttribute('r', NODE_R + 6);
+      glow.setAttribute('fill', 'rgba(212,160,58,0.2)');
+      glow.setAttribute('filter', 'url(#mp-glow)');
       glow.setAttribute('opacity', '0');
       glow.style.transition = 'opacity 0.3s';
       g.appendChild(glow);
 
-      // Sphere
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', NODE_R);
-      circ.setAttribute('fill', 'url(#mp-amber)');
-      g.appendChild(circ);
+      // Badge circle
+      var badge = document.createElementNS(NS, 'circle');
+      badge.setAttribute('r', NODE_R);
+      badge.setAttribute('fill', '#1e1e32');
+      badge.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+      badge.setAttribute('stroke-width', '1.5');
+      badge.style.transition = 'stroke 0.3s';
+      g.appendChild(badge);
+      st.badgeEl = badge;
 
-      // Specular
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', NODE_R);
-      spec.setAttribute('fill', 'url(#mp-spec)');
-      g.appendChild(spec);
+      // Draw icon
+      iconDrawers[idx](g);
 
-      // Label (multi-line support)
+      // Method label
       var lines = st.label.split('\n');
       lines.forEach(function(line, i) {
         var lbl = document.createElementNS(NS, 'text');
-        lbl.setAttribute('y', NODE_R + 20 + i * 14);
+        lbl.setAttribute('y', NODE_R + 18 + i * 14);
         lbl.setAttribute('text-anchor', 'middle');
         lbl.setAttribute('fill', '#e0e0e0');
         lbl.setAttribute('font-family', 'Inter, sans-serif');
@@ -1185,29 +1375,30 @@ main .level2.revealed {
         g.appendChild(lbl);
       });
 
-      // Detail line
-      var detail = document.createElementNS(NS, 'text');
-      detail.setAttribute('y', NODE_R + 20 + lines.length * 14);
-      detail.setAttribute('text-anchor', 'middle');
-      detail.setAttribute('fill', '#9898b0');
-      detail.setAttribute('font-family', 'Inter, sans-serif');
-      detail.setAttribute('font-size', '9');
-      detail.textContent = st.detail;
-      g.appendChild(detail);
+      // Scale annotation
+      var scaleText = document.createElementNS(NS, 'text');
+      scaleText.setAttribute('y', NODE_R + 18 + lines.length * 14);
+      scaleText.setAttribute('text-anchor', 'middle');
+      scaleText.setAttribute('fill', '#9898b0');
+      scaleText.setAttribute('font-family', 'Inter, sans-serif');
+      scaleText.setAttribute('font-size', '9');
+      scaleText.textContent = st.scales;
+      g.appendChild(scaleText);
 
       // Hit area
       var hit = document.createElementNS(NS, 'circle');
-      hit.setAttribute('r', NODE_R + 10);
+      hit.setAttribute('r', NODE_R + 8);
       hit.setAttribute('fill', 'transparent');
       g.appendChild(hit);
 
       st.el = g;
       st.glowEl = glow;
-      svg.appendChild(g);
 
+      // Hover handlers
       hit.addEventListener('mouseenter', function(e) {
         hoveredStage = st;
         glow.setAttribute('opacity', '1');
+        badge.setAttribute('stroke', 'rgba(212,160,58,0.6)');
         if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
         if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
         showMethodTip(st, e);
@@ -1216,6 +1407,7 @@ main .level2.revealed {
       hit.addEventListener('mouseleave', function() {
         hoveredStage = null;
         glow.setAttribute('opacity', '0');
+        badge.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         tooltip.classList.remove('visible');
@@ -1224,17 +1416,23 @@ main .level2.revealed {
         e.preventDefault();
         var te = e.changedTouches[0];
         glow.setAttribute('opacity', '1');
+        badge.setAttribute('stroke', 'rgba(212,160,58,0.6)');
         showMethodTip(st, te);
-        setTimeout(function() { glow.setAttribute('opacity', '0'); tooltip.classList.remove('visible'); }, 3000);
+        setTimeout(function() {
+          glow.setAttribute('opacity', '0');
+          badge.setAttribute('stroke', 'rgba(212,160,58,0.25)');
+          tooltip.classList.remove('visible');
+        }, 3000);
       });
 
       // Keyboard accessibility
       g.setAttribute('tabindex', '0');
       g.setAttribute('role', 'img');
-      g.setAttribute('aria-label', st.label.replace('\n', ' ') + ': ' + st.detail);
+      g.setAttribute('aria-label', st.label.replace('\n', ' ') + ' (' + st.scales + '): ' + st.desc);
       g.addEventListener('focus', function() {
         hoveredStage = st;
         glow.setAttribute('opacity', '1');
+        badge.setAttribute('stroke', 'rgba(212,160,58,0.6)');
         if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.5)');
         if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.5)');
         var r = g.getBoundingClientRect();
@@ -1243,10 +1441,13 @@ main .level2.revealed {
       g.addEventListener('blur', function() {
         hoveredStage = null;
         glow.setAttribute('opacity', '0');
+        badge.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         if (st.lineIn) st.lineIn.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         if (st.lineOut) st.lineOut.setAttribute('stroke', 'rgba(212,160,58,0.25)');
         tooltip.classList.remove('visible');
       });
+
+      svg.appendChild(g);
     });
 
     // HPC underpinning badge
@@ -1260,7 +1461,6 @@ main .level2.revealed {
     hpcText.textContent = 'ARCHER2 \u00b7 CIRRUS \u00b7 LOCAL GPU';
     svg.appendChild(hpcText);
 
-    // Subtle underline for HPC
     var hpcLine = document.createElementNS(NS, 'line');
     hpcLine.setAttribute('x1', 200); hpcLine.setAttribute('y1', H - 24);
     hpcLine.setAttribute('x2', 600); hpcLine.setAttribute('y2', H - 24);
