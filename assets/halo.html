@@ -86,11 +86,12 @@ document.addEventListener('DOMContentLoaded', function() {
   var defs = document.createElementNS(ns, 'defs');
   svg.appendChild(defs);
 
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var style = document.createElementNS(ns, 'style');
   style.textContent =
-    '.halo-seg path.halo-bg { transition: stroke 0.3s ease; }' +
-    '.halo-seg path.halo-outline { transition: stroke-opacity 0.3s ease; }' +
-    '.halo-seg text { transition: fill 0.3s ease; cursor: pointer; }' +
+    '.halo-seg path.halo-bg { transition: ' + (reduceMotion ? 'none' : 'stroke 0.3s ease') + '; }' +
+    '.halo-seg path.halo-outline { transition: ' + (reduceMotion ? 'none' : 'stroke-opacity 0.3s ease') + '; }' +
+    '.halo-seg text { transition: ' + (reduceMotion ? 'none' : 'fill 0.3s ease') + '; cursor: pointer; }' +
     '.halo-seg:hover path.halo-bg { stroke: rgba(232, 234, 240, 0.95); }' +
     '.halo-seg:hover path.halo-outline { stroke-opacity: 0; }' +
     '.halo-seg:hover text { fill: #2d3047; }';

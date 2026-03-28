@@ -875,14 +875,18 @@
         drawInset(rings);
         addLegend();
         updateForYear(YEAR_MIN);
-        // Autoplay when map scrolls into view (once)
-        var observer = new IntersectionObserver(function(entries) {
-          if (entries[0].isIntersecting) {
-            observer.disconnect();
-            setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
-          }
-        }, { threshold: 0.3 });
-        observer.observe(container);
+        // Autoplay when map scrolls into view (once), unless reduced motion preferred
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          updateForYear(YEAR_MAX);
+        } else {
+          var observer = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+              observer.disconnect();
+              setTimeout(function() { runTimeline(); }, AUTOPLAY_DELAY);
+            }
+          }, { threshold: 0.3 });
+          observer.observe(container);
+        }
       })
       .catch(function() {
         renderDots();
