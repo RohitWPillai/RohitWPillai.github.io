@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ---
 
-## Service & Leadership
+## Academic Citizenship
 
 <div id="service-timeline-wrap">
 <div id="service-timeline"></div>

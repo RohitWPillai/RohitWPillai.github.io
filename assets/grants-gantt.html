@@ -53,7 +53,7 @@
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#666878');
       text.setAttribute('font-family', '"Fraunces", serif');
-      text.setAttribute('font-size', '11');
+      text.setAttribute('font-size', '13');
       text.textContent = y;
       svg.appendChild(text);
     }
@@ -73,7 +73,7 @@
     nowLabel.setAttribute('text-anchor', 'middle');
     nowLabel.setAttribute('fill', '#d4a03a');
     nowLabel.setAttribute('font-family', 'Inter, sans-serif');
-    nowLabel.setAttribute('font-size', '9');
+    nowLabel.setAttribute('font-size', '10');
     nowLabel.setAttribute('letter-spacing', '0.05em');
     nowLabel.textContent = 'NOW';
     svg.appendChild(nowLabel);
@@ -133,7 +133,7 @@
       badge.setAttribute('dy', '0.35em');
       badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
       badge.setAttribute('font-family', 'Inter, sans-serif');
-      badge.setAttribute('font-size', '8');
+      badge.setAttribute('font-size', '10');
       badge.setAttribute('font-weight', '700');
       badge.setAttribute('letter-spacing', '0.06em');
       badge.textContent = g.role;
@@ -147,7 +147,7 @@
       titleEl.setAttribute('text-anchor', 'start');
       titleEl.setAttribute('fill', g.role === 'PI' ? '#c07050' : '#9098a8');
       titleEl.setAttribute('font-family', 'Inter, sans-serif');
-      titleEl.setAttribute('font-size', '10');
+      titleEl.setAttribute('font-size', '11');
       titleEl.setAttribute('font-weight', '500');
       titleEl.textContent = g.short;
       group.appendChild(titleEl);
