@@ -1,0 +1,486 @@
+<script>
+(function() {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var container = document.getElementById('career-timeline-rail') || document.getElementById('career-timeline');
+    if (!container) return;
+
+    // ===== Configuration =====
+    var W = 750, H = 480;
+    var LINE_W = 8;
+    var STOP_R = 11;
+    var STOP_STROKE = 3.5;
+    var MS_R = 4;
+    var BRANCH_W = 2;
+    var JAG_GAP = 12;       // nominal gap between trough edges
+    var JAG_TOOTH = 4;      // tooth depth into gap
+    var JAG_TEETH = 3;      // number of teeth per side
+    var FOLD_EXT = 20;
+    var FOLD_R = 45;
+    // No Brownian motion — static rail map (not atoms)
+    var ROW1_Y = 130, ROW2_Y = 350;
+    var X_PAD = 80;
+    var COLS = 5;
+    var COL_W = (W - 2 * X_PAD) / (COLS - 1);
+    var BRANCH_LEN = 60;
+    var BG = '#1a1a2e';
+    var MUTED = '#9898b0';
+
+    var COLORS = {
+      slate:   '#5e8db8',
+      lilac:   '#8878b4',
+      rose:    '#a87080',
+      copper:  '#c07050',
+      neutral: '#689080'
+    };
+
+    // ===== Data =====
+    var yearData = [
+      { year: 2017, color: 'slate', role: 'PHD \u00b7 MELBOURNE', row: 0, col: 0,
+        tip: 'PhD in Chemical & Biomolecular Engineering, University of Melbourne. Completed December 2017.' },
+      { year: 2018, color: 'lilac', role: 'POSTDOC \u00b7 EDINBURGH', row: 0, col: 1,
+        tip: 'Postdoctoral Research Associate, University of Edinburgh (January\u2013August 2018).' },
+      { year: 2019, color: 'rose', row: 0, col: 2,
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. First full year as independent PI.' },
+      { year: 2020, color: 'rose', row: 0, col: 3,
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Redesigned Thermofluids 3 course.' },
+      { year: 2021, color: 'rose', row: 0, col: 4,
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Two postdocs awarded Leverhulme Fellowships.' },
+      { year: 2022, color: 'rose', row: 1, col: 4,
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Appointed PDRA Champion.' },
+      { year: 2023, color: 'rose', row: 1, col: 3,
+        tip: 'Lecturer then Senior Lecturer, University of Edinburgh. Promoted 1 August 2023.' },
+      { year: 2024, color: 'copper', row: 1, col: 2,
+        tip: 'Senior Lecturer in Mechanical Engineering. ERC Starting Grant awarded August 2024.' },
+      { year: 2025, color: 'copper', row: 1, col: 1,
+        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research visits to Japan (Osaka, Tokyo, Tsukuba, Fukuoka).' },
+      { year: 2026, color: 'copper', row: 1, col: 0,
+        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh. Chair of 5th NEMD Conference and Summer School.' }
+    ];
+
+    var transitions = [
+      { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'lilac', toColor: 'rose',
+        label: 'LECTURER', labelSide: 1,
+        tip: 'Appointed Lecturer (Assistant Professor) in Mechanical Engineering, University of Edinburgh, September 2018.' },
+      { fromYear: 2023, toYear: 2024, frac: 0.67, fromColor: 'rose', toColor: 'copper',
+        label: 'SENIOR LECTURER', labelSide: 1,
+        tip: 'Promoted to Senior Lecturer (Associate Professor) in Mechanical Engineering, University of Edinburgh, 1 August 2023.' }
+    ];
+
+    var milestones = [
+      { yearFrac: 2018.75, side: 1,  label: 'First PhD student',
+        tip: 'Began supervising first PhD student (Sritay Mistry) at Edinburgh, September 2018.' },
+      { yearFrac: 2018.75, side: -1, label: 'BBC Scotland \u00b7 national press', url: 'https://www.bbc.co.uk/news/uk-scotland-edinburgh-east-fife-45471403',
+        tip: 'Acoustothermal atomization paper covered by BBC Scotland, The Times, Daily Express, Metro, The Sun, September 2018.' },
+      { yearFrac: 2019.08, side: 1,  label: 'EPSRC eCSE (\u00a3100K)', extraLen: 30,
+        tip: 'First PI grant: EPSRC Embedded CSE programme for efficient multi-scale simulations, January 2019.' },
+      { yearFrac: 2021.08, side: 1,  label: 'Leverhulme Fellows \u00d72',
+        tip: 'Both supervised postdocs (Datta, Perumanath) awarded Leverhulme Trust Early Career Fellowships, January 2021.' },
+      { yearFrac: 2021.17, side: -1, label: 'Nanobubble press', url: 'https://www.eurekalert.org/news-releases/691043',
+        tip: 'Acoustothermal nanobubble nucleation paper covered by EurekAlert, ScienceDaily, Phys.org, February 2021.' },
+      { yearFrac: 2022.75, side: 1,  label: 'PDRA Champion',
+        tip: 'Appointed PDRA Champion for the School of Engineering, advocate for postdoc welfare and career development, September 2022.' },
+      { yearFrac: 2023.58, side: 1,  label: 'Cicada press', url: 'https://theconversation.com/cicadas-could-hold-the-secret-to-self-cleaning-surfaces-new-study-207435',
+        tip: 'Self-cleaning cicada wing paper covered by The Conversation, Phys.org, TechXplore, July 2023.' },
+      { yearFrac: 2024.08, side: -1, label: 'ERC Evaluator \u00b7 EPSRC College',
+        tip: 'Appointed ERC Expert Evaluator and EPSRC Peer Review College member, January 2024.' },
+      { yearFrac: 2024.67, side: 1,  label: 'ERC Starting Grant (\u00a31.27M)',
+        tip: 'Awarded ERC Starting Grant NANO-COOL (2024\u20132029, \u00a31,270,000) for nanoscale cooling research, August 2024.' },
+      { yearFrac: 2026, side: 1,  label: 'NEMD Conference Chair', extraLen: 30,
+        tip: 'Chair of 5th NEMD Conference, Edinburgh, July 2026.' }
+    ];
+
+    // ===== Compute static positions =====
+    yearData.forEach(function(d) {
+      d.ex = X_PAD + d.col * COL_W;
+      d.ey = d.row === 0 ? ROW1_Y : ROW2_Y;
+    });
+
+    var yearMap = {};
+    yearData.forEach(function(d) { yearMap[d.year] = d; });
+
+    function spinePos(yearFrac) {
+      var yr = Math.floor(yearFrac);
+      var frac = yearFrac - yr;
+      var from = yearMap[yr];
+      var to = yearMap[yr + 1];
+      if (!from) return to ? { x: to.ex, y: to.ey } : { x: X_PAD, y: ROW1_Y };
+      if (!to || frac < 0.01) return { x: from.ex, y: from.ey };
+      return {
+        x: from.ex + frac * (to.ex - from.ex),
+        y: from.ey + frac * (to.ey - from.ey)
+      };
+    }
+
+    transitions.forEach(function(t) {
+      var from = yearMap[t.fromYear], to = yearMap[t.toYear];
+      t.fromNode = from; t.toNode = to;
+      t.ex = from.ex + t.frac * (to.ex - from.ex);
+      t.ey = from.ey + t.frac * (to.ey - from.ey);
+    });
+
+    // Milestone positions
+    var msGroups = {};
+    milestones.forEach(function(m) {
+      var key = Math.round(m.yearFrac * 4) + '_' + m.side;
+      if (!msGroups[key]) msGroups[key] = [];
+      msGroups[key].push(m);
+    });
+    milestones.forEach(function(m) {
+      var key = Math.round(m.yearFrac * 4) + '_' + m.side;
+      var group = msGroups[key];
+      var idx = group.indexOf(m);
+      var sp = spinePos(m.yearFrac);
+      m.spineX = sp.x; m.spineY = sp.y;
+      var extra = m.extraLen || 0;
+      m.ex = sp.x;
+      m.ey = sp.y + m.side * -(BRANCH_LEN + extra + idx * 30);
+      m.px = m.ex; m.py = m.ey;
+    });
+
+    // ===== SVG =====
+    var NS = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+    svg.setAttribute('aria-label', 'Interactive career timeline from 2017 PhD to present, rail network style');
+
+    // ===== Defs =====
+    var defs = document.createElementNS(NS, 'defs');
+
+    // Drop shadow for rail lines
+    var shadow = document.createElementNS(NS, 'filter');
+    shadow.id = 'rail-shadow';
+    shadow.setAttribute('x', '-10%'); shadow.setAttribute('y', '-10%');
+    shadow.setAttribute('width', '120%'); shadow.setAttribute('height', '130%');
+    var ds = document.createElementNS(NS, 'feDropShadow');
+    ds.setAttribute('dx', '0'); ds.setAttribute('dy', '1.5');
+    ds.setAttribute('stdDeviation', '2');
+    ds.setAttribute('flood-color', '#000000'); ds.setAttribute('flood-opacity', '0.25');
+    shadow.appendChild(ds);
+    defs.appendChild(shadow);
+
+    // Glow for hover
+    var glow = document.createElementNS(NS, 'filter');
+    glow.id = 'station-glow';
+    glow.setAttribute('x', '-50%'); glow.setAttribute('y', '-50%');
+    glow.setAttribute('width', '200%'); glow.setAttribute('height', '200%');
+    var gb = document.createElementNS(NS, 'feGaussianBlur');
+    gb.setAttribute('stdDeviation', '3'); gb.setAttribute('result', 'blur');
+    glow.appendChild(gb);
+    var merge = document.createElementNS(NS, 'feMerge');
+    var mn1 = document.createElementNS(NS, 'feMergeNode');
+    mn1.setAttribute('in', 'blur'); merge.appendChild(mn1);
+    var mn2 = document.createElementNS(NS, 'feMergeNode');
+    mn2.setAttribute('in', 'SourceGraphic'); merge.appendChild(mn2);
+    glow.appendChild(merge);
+    defs.appendChild(glow);
+
+    svg.appendChild(defs);
+
+    // Draw-order groups
+    var railGroup = document.createElementNS(NS, 'g');
+    railGroup.setAttribute('filter', 'url(#rail-shadow)');
+    var branchGroup = document.createElementNS(NS, 'g');
+    var stopGroup = document.createElementNS(NS, 'g');
+    var labelGroup = document.createElementNS(NS, 'g');
+    var msNodeGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(railGroup);
+    svg.appendChild(branchGroup);
+    svg.appendChild(stopGroup);
+    svg.appendChild(labelGroup);
+    svg.appendChild(msNodeGroup);
+
+    // ===== Helpers =====
+    function makeLine(x1, y1, x2, y2, color, width, opacity) {
+      var l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', x1.toFixed(1)); l.setAttribute('y1', y1.toFixed(1));
+      l.setAttribute('x2', x2.toFixed(1)); l.setAttribute('y2', y2.toFixed(1));
+      l.setAttribute('stroke', color);
+      l.setAttribute('stroke-width', width);
+      l.setAttribute('stroke-linecap', 'round');
+      if (opacity !== undefined) l.setAttribute('stroke-opacity', opacity);
+      return l;
+    }
+
+    function makeText(x, y, text, fill, size, family, opts) {
+      var t = document.createElementNS(NS, 'text');
+      t.setAttribute('x', x); t.setAttribute('y', y);
+      t.setAttribute('text-anchor', (opts && opts.anchor) || 'middle');
+      t.setAttribute('fill', fill);
+      t.setAttribute('font-family', family + ', ' + (family === 'Fraunces' ? 'serif' : 'sans-serif'));
+      t.setAttribute('font-size', size);
+      if (opts && opts.weight) t.setAttribute('font-weight', opts.weight);
+      if (opts && opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
+      t.textContent = text;
+      return t;
+    }
+
+    // Jagged-edge polygon: line body with zigzag at one end
+    // jagSide: 'end' = zigzag at (x2,y2), 'start' = zigzag at (x1,y1)
+    function makeJaggedPoly(x1, y1, x2, y2, color, jagSide) {
+      var segDx = x2 - x1, segDy = y2 - y1;
+      var len = Math.sqrt(segDx * segDx + segDy * segDy);
+      var dx = segDx / len, dy = segDy / len;
+      var px = -dy, py = dx;
+      var hw = LINE_W / 2;
+      var pts = [];
+
+      if (jagSide === 'end') {
+        // Straight left edge → straight top → zigzag right → straight bottom
+        pts.push((x1 + hw * px).toFixed(1) + ',' + (y1 + hw * py).toFixed(1));
+        // Zigzag at (x2, y2): top to bottom
+        for (var t = 0; t <= JAG_TEETH * 2; t++) {
+          var perpFrac = 1 - t / JAG_TEETH;
+          var perpOff = perpFrac * hw;
+          var jut = (t % 2 === 1) ? JAG_TOOTH : 0;
+          pts.push((x2 + jut * dx + perpOff * px).toFixed(1) + ',' +
+                   (y2 + jut * dy + perpOff * py).toFixed(1));
+        }
+        pts.push((x1 - hw * px).toFixed(1) + ',' + (y1 - hw * py).toFixed(1));
+      } else {
+        // Zigzag at (x1, y1): top to bottom → straight bottom → straight right → straight top
+        for (var t = 0; t <= JAG_TEETH * 2; t++) {
+          var perpFrac = 1 - t / JAG_TEETH;
+          var perpOff = perpFrac * hw;
+          var jut = (t % 2 === 1) ? -JAG_TOOTH : 0;
+          pts.push((x1 + jut * dx + perpOff * px).toFixed(1) + ',' +
+                   (y1 + jut * dy + perpOff * py).toFixed(1));
+        }
+        pts.push((x2 - hw * px).toFixed(1) + ',' + (y2 - hw * py).toFixed(1));
+        pts.push((x2 + hw * px).toFixed(1) + ',' + (y2 + hw * py).toFixed(1));
+      }
+
+      var poly = document.createElementNS(NS, 'polygon');
+      poly.setAttribute('points', pts.join(' '));
+      poly.setAttribute('fill', color);
+      return poly;
+    }
+
+    // ===== Tooltip =====
+    var wrapper = container.parentNode;
+    var tooltip = wrapper.querySelector('.career-tooltip');
+    if (!tooltip) tooltip = document.getElementById('career-tooltip');
+    var ttTitle = tooltip.querySelector('.ct-title');
+    var ttDesc = tooltip.querySelector('.ct-desc');
+
+    function showTip(title, desc) { ttTitle.textContent = title; ttDesc.textContent = desc; tooltip.classList.add('visible'); }
+    function moveTip(e) {
+      var cr = container.getBoundingClientRect();
+      tooltip.style.left = Math.min(e.clientX - cr.left + 12, cr.width - 260) + 'px';
+      tooltip.style.top = (e.clientY - cr.top - 55) + 'px';
+    }
+    function hideTip() { tooltip.classList.remove('visible'); }
+
+    // ===== Rail backbone (static) =====
+    var foldIdx = 4;
+
+    function findTransition(fromYear, toYear) {
+      for (var i = 0; i < transitions.length; i++) {
+        if (transitions[i].fromYear === fromYear && transitions[i].toYear === toYear) return transitions[i];
+      }
+      return null;
+    }
+
+    for (var i = 0; i < yearData.length - 1; i++) {
+      var from = yearData[i], to = yearData[i + 1];
+      var trans = findTransition(from.year, to.year);
+
+      if (i === foldIdx) {
+        // U-turn fold
+        var path = document.createElementNS(NS, 'path');
+        var fx = from.ex, fy1 = from.ey, fy2 = to.ey;
+        path.setAttribute('d',
+          'M ' + fx + ' ' + fy1 +
+          ' L ' + (fx + FOLD_EXT) + ' ' + fy1 +
+          ' A ' + FOLD_R + ' ' + FOLD_R + ' 0 0 1 ' + (fx + FOLD_EXT + FOLD_R) + ' ' + (fy1 + FOLD_R) +
+          ' L ' + (fx + FOLD_EXT + FOLD_R) + ' ' + (fy2 - FOLD_R) +
+          ' A ' + FOLD_R + ' ' + FOLD_R + ' 0 0 1 ' + (fx + FOLD_EXT) + ' ' + fy2 +
+          ' L ' + fx + ' ' + fy2);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', COLORS[from.color]);
+        path.setAttribute('stroke-width', LINE_W);
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        railGroup.appendChild(path);
+
+      } else if (trans) {
+        // Jagged break at transition
+        var mx = trans.ex, my = trans.ey;
+        var segDx = to.ex - from.ex, segDy = to.ey - from.ey;
+        var segLen = Math.sqrt(segDx * segDx + segDy * segDy);
+        var dx = segDx / segLen, dy = segDy / segLen;
+
+        // Old colour polygon: from node to gap edge, jagged at end
+        var oldEndX = mx - (JAG_GAP / 2) * dx;
+        var oldEndY = my - (JAG_GAP / 2) * dy;
+        railGroup.appendChild(makeJaggedPoly(from.ex, from.ey, oldEndX, oldEndY, COLORS[trans.fromColor], 'end'));
+
+        // New colour polygon: from gap edge to node, jagged at start
+        var newStartX = mx + (JAG_GAP / 2) * dx;
+        var newStartY = my + (JAG_GAP / 2) * dy;
+        railGroup.appendChild(makeJaggedPoly(newStartX, newStartY, to.ex, to.ey, COLORS[trans.toColor], 'start'));
+
+      } else {
+        railGroup.appendChild(makeLine(from.ex, from.ey, to.ex, to.ey, COLORS[from.color], LINE_W));
+      }
+    }
+
+    // ===== Stop circles: coloured fill, dark gap stroke =====
+    yearData.forEach(function(d) {
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + d.ex + ',' + d.ey + ')');
+      g.style.cursor = 'pointer';
+
+      // Coloured fill with dark stroke creating visible gap
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('r', STOP_R);
+      circ.setAttribute('fill', COLORS[d.color]);
+      circ.setAttribute('stroke', BG);
+      circ.setAttribute('stroke-width', STOP_STROKE);
+      g.appendChild(circ);
+
+      // Year label
+      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'Fraunces'));
+
+      // Role label
+      if (d.role) {
+        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'Inter', { weight: '600', spacing: '0.12em' }));
+      }
+
+      // Hover glow + tooltip
+      (function(d, g, circ) {
+        g.addEventListener('mouseenter', function() {
+          circ.setAttribute('filter', 'url(#station-glow)');
+          showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
+        });
+        g.addEventListener('mousemove', moveTip);
+        g.addEventListener('mouseleave', function() {
+          circ.removeAttribute('filter');
+          hideTip();
+        });
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', d.year + (d.role ? ', ' + d.role : '') + '. ' + d.tip);
+        g.addEventListener('focus', function() {
+          circ.setAttribute('filter', 'url(#station-glow)');
+          showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', function() {
+          circ.removeAttribute('filter');
+          hideTip();
+        });
+      })(d, g, circ);
+
+      stopGroup.appendChild(g);
+    });
+
+    // ===== Transition labels + hit areas =====
+    transitions.forEach(function(t) {
+      var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + t.ex.toFixed(1) + ',' + t.ey.toFixed(1) + ')');
+      g.style.cursor = 'pointer';
+
+      var hit = document.createElementNS(NS, 'circle');
+      hit.setAttribute('r', JAG_GAP / 2 + 8);
+      hit.setAttribute('fill', 'transparent');
+      hit.setAttribute('pointer-events', 'all');
+      g.appendChild(hit);
+
+      var labelY = t.labelSide > 0 ? -(LINE_W / 2 + 10) : (LINE_W / 2 + 16);
+      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'Inter', { weight: '700', spacing: '0.08em' }));
+
+      (function(t, g) {
+        g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
+        g.addEventListener('mousemove', moveTip);
+        g.addEventListener('mouseleave', hideTip);
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'img');
+        g.setAttribute('aria-label', t.label + '. ' + t.tip);
+        g.addEventListener('focus', function() {
+          showTip(t.label, t.tip);
+          var cr = container.getBoundingClientRect();
+          var r = g.getBoundingClientRect();
+          tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+          tooltip.style.top = (r.top - cr.top - 55) + 'px';
+        });
+        g.addEventListener('blur', hideTip);
+      })(t, g);
+
+      labelGroup.appendChild(g);
+    });
+
+    // ===== Milestones (dynamic) =====
+    var branchBonds = [];
+    milestones.forEach(function(m) {
+      var branch = makeLine(m.spineX, m.spineY, m.ex, m.ey, COLORS.neutral, BRANCH_W, 0.4);
+      branchGroup.appendChild(branch);
+      branchBonds.push({ el: branch, milestone: m });
+
+      var g = document.createElementNS(NS, 'g');
+      g.style.cursor = m.url ? 'pointer' : 'default';
+
+      var dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('r', MS_R);
+      dot.setAttribute('fill', COLORS.neutral);
+      dot.setAttribute('stroke', '#ffffff');
+      dot.setAttribute('stroke-width', '1');
+      dot.setAttribute('stroke-opacity', '0.5');
+      g.appendChild(dot);
+
+      var labelY = m.side > 0 ? -(MS_R + 6) : (MS_R + 12);
+      var anchor = 'middle';
+      if (m.ex > W - 120) anchor = 'end';
+      else if (m.ex < 120) anchor = 'start';
+      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'Inter', { anchor: anchor }));
+
+      if (m.url) {
+        g.addEventListener('click', function() { window.open(m.url, '_blank', 'noopener'); });
+      }
+
+      (function(m, g) {
+        if (m.tip) {
+          g.addEventListener('mouseenter', function() { showTip(m.label, m.tip); });
+          g.addEventListener('mousemove', moveTip);
+          g.addEventListener('mouseleave', hideTip);
+        }
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', m.url ? 'link' : 'img');
+        g.setAttribute('aria-label', m.label + (m.tip ? '. ' + m.tip : ''));
+        g.addEventListener('focus', function() {
+          if (m.tip) {
+            showTip(m.label, m.tip);
+            var cr = container.getBoundingClientRect();
+            var r = g.getBoundingClientRect();
+            tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
+            tooltip.style.top = (r.top - cr.top - 55) + 'px';
+          }
+        });
+        g.addEventListener('blur', hideTip);
+        g.addEventListener('keydown', function(e) {
+          if ((e.key === 'Enter' || e.key === ' ') && m.url) { e.preventDefault(); window.open(m.url, '_blank', 'noopener'); }
+        });
+      })(m, g);
+
+      m.el = g;
+      msNodeGroup.appendChild(g);
+    });
+
+    container.appendChild(svg);
+
+    // ===== Static render (no animation — rail map, not atoms) =====
+    milestones.forEach(function(m) {
+      m.el.setAttribute('transform', 'translate(' + m.ex.toFixed(1) + ',' + m.ey.toFixed(1) + ')');
+    });
+  });
+})();
+</script>
