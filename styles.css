@@ -712,7 +712,8 @@ html {
 }
 
 .career-tooltip {
-  max-width: 260px;
+  min-width: 240px;
+  max-width: 280px;
 }
 
 .career-tooltip .ct-title {
@@ -847,8 +848,8 @@ html {
 }
 
 .dc-period {
-  font-family: Inter, sans-serif;
-  font-size: 0.65rem;
+  font-family: "Fraunces", serif;
+  font-size: 0.7rem;
   color: #d4a03a;
   white-space: nowrap;
   flex-shrink: 0;

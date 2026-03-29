@@ -585,7 +585,7 @@ main .level2.revealed {
           { num: 7, title: 'Nanodroplets on vibrating surfaces', journal: 'Langmuir', year: 2018, img: 'images/papers/07-nanodroplet-vibrating.png', doi: 'https://doi.org/10.1021/acs.langmuir.8b02066' }
         ]
       },
-      { id: 'boil', label: 'Phase Change &\nBubble Dynamics', x: 510, y: 370, gradient: 'pd-boil', glowFill: 'rgba(220,65,48,0.3)', ringStroke: '#dc4130',
+      { id: 'boil', label: 'Boiling &\nEvaporation', x: 510, y: 370, gradient: 'pd-boil', glowFill: 'rgba(220,65,48,0.3)', ringStroke: '#dc4130',
         desc: 'Superheated liquid: vapour bubble nucleation, wettability effects, acoustothermal dynamics',
         boundary: 'vapor',
         narrative: 'Phase change at surfaces is central to cooling technologies from electronics to nuclear reactors. We study the molecular mechanisms of heterogeneous vapour bubble nucleation, how surface wettability controls bubble growth dynamics, and acoustically-driven nanobubble formation, bridging atomistic simulations with continuum theory.',
@@ -888,7 +888,7 @@ main .level2.revealed {
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('fill', '#c0c0c8');
         label.setAttribute('font-family', 'Inter, sans-serif');
-        label.setAttribute('font-size', '10');
+        label.setAttribute('font-size', '12');
         label.setAttribute('font-weight', '600');
         label.setAttribute('letter-spacing', '0.03em');
         label.textContent = line;
@@ -1369,7 +1369,7 @@ main .level2.revealed {
         lbl.setAttribute('text-anchor', 'middle');
         lbl.setAttribute('fill', '#e0e0e0');
         lbl.setAttribute('font-family', 'Inter, sans-serif');
-        lbl.setAttribute('font-size', '11');
+        lbl.setAttribute('font-size', '14');
         lbl.setAttribute('font-weight', '600');
         lbl.textContent = line;
         g.appendChild(lbl);
@@ -1381,7 +1381,7 @@ main .level2.revealed {
       scaleText.setAttribute('text-anchor', 'middle');
       scaleText.setAttribute('fill', '#9898b0');
       scaleText.setAttribute('font-family', 'Inter, sans-serif');
-      scaleText.setAttribute('font-size', '9');
+      scaleText.setAttribute('font-size', '11');
       scaleText.textContent = st.scales;
       g.appendChild(scaleText);
 
@@ -1450,15 +1450,40 @@ main .level2.revealed {
       svg.appendChild(g);
     });
 
-    // HPC underpinning badge
+    // HPC underpinning badge (with clickable links)
     var hpcText = document.createElementNS(NS, 'text');
     hpcText.setAttribute('x', W / 2); hpcText.setAttribute('y', H - 12);
     hpcText.setAttribute('text-anchor', 'middle');
-    hpcText.setAttribute('fill', 'rgba(200,200,210,0.3)');
     hpcText.setAttribute('font-family', 'Inter, sans-serif');
-    hpcText.setAttribute('font-size', '9');
+    hpcText.setAttribute('font-size', '11');
     hpcText.setAttribute('letter-spacing', '0.08em');
-    hpcText.textContent = 'ARCHER2 \u00b7 CIRRUS \u00b7 LOCAL GPU';
+    hpcText.setAttribute('fill', 'rgba(200,200,210,0.3)');
+
+    var hpcLinks = [
+      { text: 'ARCHER2', url: 'https://www.archer2.ac.uk/' },
+      { text: ' \u00b7 ', url: null },
+      { text: 'CIRRUS', url: 'https://www.cirrus.ac.uk/' },
+      { text: ' \u00b7 LOCAL GPU', url: null }
+    ];
+    hpcLinks.forEach(function(item) {
+      if (item.url) {
+        var a = document.createElementNS(NS, 'a');
+        a.setAttributeNS('http://www.w3.org/1999/xlink', 'href', item.url);
+        a.setAttribute('href', item.url);
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener');
+        var ts = document.createElementNS(NS, 'tspan');
+        ts.textContent = item.text;
+        ts.setAttribute('fill', 'rgba(212,160,58,0.4)');
+        ts.style.cursor = 'pointer';
+        a.appendChild(ts);
+        hpcText.appendChild(a);
+      } else {
+        var ts = document.createElementNS(NS, 'tspan');
+        ts.textContent = item.text;
+        hpcText.appendChild(ts);
+      }
+    });
     svg.appendChild(hpcText);
 
     var hpcLine = document.createElementNS(NS, 'line');
