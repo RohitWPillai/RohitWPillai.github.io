@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div id="talks-map-wrap">
 <div id="talks-map"></div>
-<div class="talks-controls"><div class="talks-timeline"><input type="range" id="talks-year-slider" class="talks-slider" min="2014" max="2027" value="2027" step="0.5"><span id="talks-year-display" class="talks-year-display">2027</span></div></div>
+<div class="talks-controls"><div class="talks-timeline"><button id="talks-replay" class="talks-replay" aria-label="Replay timeline">&#9654;</button><input type="range" id="talks-year-slider" class="talks-slider" min="2014" max="2027" value="2027" step="0.5"><span id="talks-year-display" class="talks-year-display">2027</span></div></div>
 </div>
 
 ---

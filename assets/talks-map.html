@@ -26,14 +26,14 @@
 
     /* ── Colours ── */
     var C = {
-      land: "rgba(120,136,168,0.10)",
-      landStroke: "rgba(180,190,210,0.50)",
+      land: "rgba(212,160,58,0.30)",
+      landStroke: "#b8892f",
       copper: "#c07050",   copperL: "#e8a080",   copperD: "#784030",
       rose:   "#a87080",   roseL:   "#d098a8",   roseD:   "#684050",
-      neutral: "#7888a8",  neutralL: "#a0aec0",   neutralD: "#4a5a6e",
+      neutral: "#689080",  neutralL: "#90b8a8",   neutralD: "#405850",
       copperGlow:  "rgba(192,112,80,0.25)",
       roseGlow:    "rgba(168,112,128,0.25)",
-      neutralGlow: "rgba(122,138,158,0.25)"
+      neutralGlow: "rgba(104,144,128,0.25)"
     };
 
     /* Determine highest talk type for a city (all items) */
@@ -235,6 +235,19 @@
     });
     defs.appendChild(hl);
 
+    /* Pin drop shadow */
+    var dsf = document.createElementNS(NS, "filter");
+    dsf.id = "tm-pin-shadow";
+    dsf.setAttribute("x", "-50%"); dsf.setAttribute("y", "-50%");
+    dsf.setAttribute("width", "200%"); dsf.setAttribute("height", "200%");
+    var ds = document.createElementNS(NS, "feDropShadow");
+    ds.setAttribute("dx", "0"); ds.setAttribute("dy", "1.5");
+    ds.setAttribute("stdDeviation", "2");
+    ds.setAttribute("flood-color", "#000");
+    ds.setAttribute("flood-opacity", "0.45");
+    dsf.appendChild(ds);
+    defs.appendChild(dsf);
+
     /* Inset clip path */
     var iclip = document.createElementNS(NS, "clipPath");
     iclip.id = "inset-clip";
@@ -322,6 +335,7 @@
       g.style.cursor = "pointer";
       g.style.opacity = "0";
       g.style.transition = "opacity 0.4s";
+      g.setAttribute("filter", "url(#tm-pin-shadow)");
       allDots.push(g);
 
       var tier = cityTier(city);
@@ -345,8 +359,8 @@
       var pin = document.createElementNS(NS, "path");
       pin.setAttribute("d", pinPath(pinH));
       pin.setAttribute("fill", fillId);
-      pin.setAttribute("stroke", solidColor);
-      pin.setAttribute("stroke-width", "0.5");
+      pin.setAttribute("stroke", "#1a1a2e");
+      pin.setAttribute("stroke-width", "1.2");
       g.appendChild(pin);
 
       /* Specular highlight on the head */
@@ -443,8 +457,16 @@
 
     /* ── Draw main land ── */
     function drawLand(rings) {
+      var d = ringsToPath(rings, px, py);
+      /* Coastline glow — wider, faded amber stroke behind main land */
+      var glow = document.createElementNS(NS, "path");
+      glow.setAttribute("d", d);
+      glow.setAttribute("fill", "none");
+      glow.setAttribute("stroke", "rgba(212,160,58,0.12)");
+      glow.setAttribute("stroke-width", "4");
+      landGroup.appendChild(glow);
       var path = document.createElementNS(NS, "path");
-      path.setAttribute("d", ringsToPath(rings, px, py));
+      path.setAttribute("d", d);
       path.setAttribute("fill", C.land);
       path.setAttribute("stroke", C.landStroke);
       path.setAttribute("stroke-width", "0.7");
@@ -460,7 +482,7 @@
     }
 
     /* ── Draw inset: UK & Europe (store dot references) ── */
-    function drawInset(rings) {
+    function drawInset(rings, countryRings) {
       /* Background */
       var bg = document.createElementNS(NS, "rect");
       bg.setAttribute("x", IX); bg.setAttribute("y", IY);
@@ -471,12 +493,29 @@
       /* Land clipped to inset */
       var clipped = document.createElementNS(NS, "g");
       clipped.setAttribute("clip-path", "url(#inset-clip)");
+      var id = ringsToPath(rings, ipx, ipy);
+      /* Inset coastline glow */
+      var iglow = document.createElementNS(NS, "path");
+      iglow.setAttribute("d", id);
+      iglow.setAttribute("fill", "none");
+      iglow.setAttribute("stroke", "rgba(212,160,58,0.12)");
+      iglow.setAttribute("stroke-width", "4");
+      clipped.appendChild(iglow);
       var lp = document.createElementNS(NS, "path");
-      lp.setAttribute("d", ringsToPath(rings, ipx, ipy));
-      lp.setAttribute("fill", "rgba(120,136,168,0.12)");
-      lp.setAttribute("stroke", "rgba(180,190,210,0.50)");
+      lp.setAttribute("d", id);
+      lp.setAttribute("fill", C.land);
+      lp.setAttribute("stroke", C.landStroke);
       lp.setAttribute("stroke-width", "0.7");
       clipped.appendChild(lp);
+      /* Country borders (inset only) */
+      if (countryRings) {
+        var cb = document.createElementNS(NS, "path");
+        cb.setAttribute("d", ringsToPath(countryRings, ipx, ipy));
+        cb.setAttribute("fill", "none");
+        cb.setAttribute("stroke", "rgba(184,137,47,0.55)");
+        cb.setAttribute("stroke-width", "1");
+        clipped.appendChild(cb);
+      }
       insetGroup.appendChild(clipped);
 
       /* European city dots */
@@ -662,6 +701,11 @@
 
     if (slider) {
       slider.addEventListener("pointerdown", function() { autoPlaying = false; });
+    }
+
+    var replayBtn = document.getElementById("talks-replay");
+    if (replayBtn) {
+      replayBtn.addEventListener("click", function() { runTimeline(); });
     }
 
     /* ── Global nearest-city hit test (handles overlapping pins) ── */
@@ -866,13 +910,18 @@
     /* ── Init ── */
     container.appendChild(svg);
 
-    fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json")
-      .then(function(r) { return r.json(); })
-      .then(function(topo) {
+    Promise.all([
+      fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json").then(function(r) { return r.json(); }),
+      fetch("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(function(r) { return r.json(); }).catch(function() { return null; })
+    ])
+      .then(function(results) {
+        var topo = results[0];
+        var countriesTopo = results[1];
         var rings = topoRings(topo, "land");
+        var countryRings = countriesTopo ? topoRings(countriesTopo, "countries") : null;
         drawLand(rings);
         renderDots();
-        drawInset(rings);
+        drawInset(rings, countryRings);
         addLegend();
         updateForYear(YEAR_MIN);
         // Autoplay when map scrolls into view (once), unless reduced motion preferred

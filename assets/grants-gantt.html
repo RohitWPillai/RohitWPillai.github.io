@@ -114,6 +114,18 @@
       rect.setAttribute('opacity', g.role === 'PI' ? '0.85' : '0.45');
       group.appendChild(rect);
 
+      // Bar outline (separate element so fill opacity doesn't dilute it)
+      var outline = document.createElementNS(NS, 'rect');
+      outline.setAttribute('x', x1);
+      outline.setAttribute('y', by);
+      outline.setAttribute('width', Math.max(x2 - x1, 8));
+      outline.setAttribute('height', BAR_H);
+      outline.setAttribute('rx', '4');
+      outline.setAttribute('fill', 'none');
+      outline.setAttribute('stroke', 'rgba(255,255,255,0.25)');
+      outline.setAttribute('stroke-width', '1');
+      group.appendChild(outline);
+
       // Role badge
       var badge = document.createElementNS(NS, 'text');
       badge.setAttribute('x', x1 + 6);
