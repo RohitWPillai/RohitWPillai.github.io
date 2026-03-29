@@ -497,7 +497,7 @@ html {
   margin: 0 auto 1.5rem;
   background: #1a1a2e;
   border-radius: 8px;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
   z-index: 12;
 }
 
@@ -505,55 +505,79 @@ html {
   display: block;
 }
 
-/* Timeline scrubber */
-.team-timeline {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  max-width: 500px;
-  margin: 0.5rem auto 0;
-  padding: 0 1rem;
-}
-
-.team-slider {
+/* Team year scrubber */
+.team-scrubber {
   flex: 1;
-  -webkit-appearance: none;
-  appearance: none;
+  position: relative;
+  padding: 0 20px;
+  overflow: visible;
+}
+.scrubber-track {
+  position: relative;
   height: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,0.1);
   border-radius: 2px;
-  outline: none;
   cursor: pointer;
 }
-
-.team-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
+.scrubber-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: rgba(212,160,58,0.25);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.scrubber-thumb {
+  position: absolute;
+  top: 50%;
   width: 18px;
   height: 18px;
   border-radius: 50%;
   background: var(--amber);
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(212, 160, 58, 0.4);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  box-shadow: 0 0 8px rgba(212,160,58,0.4);
+  z-index: 2;
+  transition: box-shadow 0.15s;
 }
-
-.team-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--amber);
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(212, 160, 58, 0.4);
+.scrubber-thumb:active {
+  cursor: grabbing;
+  box-shadow: 0 0 14px rgba(212,160,58,0.6);
 }
-
-.team-year-display {
-  font-family: "Fraunces", serif;
-  font-size: 1.4rem;
-  font-variation-settings: 'opsz' 144;
-  color: var(--amber);
-  min-width: 4.2rem;
+.scrubber-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  user-select: none;
+  overflow: visible;
+}
+.scrubber-tick {
+  font-family: Inter, sans-serif;
+  font-size: 0.65rem;
+  color: #9898b0;
+  cursor: pointer;
   text-align: center;
-  flex-shrink: 0;
+  flex: 1;
+  position: relative;
+  transition: color 0.2s;
+}
+.scrubber-tick::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 5px;
+  background: rgba(255,255,255,0.15);
+}
+.scrubber-tick.active {
+  color: var(--amber);
+  font-weight: 600;
+}
+.scrubber-tick.active::before {
+  background: rgba(212,160,58,0.5);
 }
 
 /* ===== Shared tooltip base ===== */
@@ -622,19 +646,17 @@ html {
   font-style: italic;
 }
 
-/* Team controls: timeline + member count */
+/* Team controls: scrubber + member count */
 .team-controls {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   max-width: 560px;
   margin: 0.5rem auto 0;
 }
 
-.team-controls .team-timeline {
-  margin: 0;
-  flex: 1;
+.team-controls .team-scrubber {
+  width: 100%;
 }
 
 .team-member-count {
@@ -643,8 +665,7 @@ html {
   font-variation-settings: 'opsz' 72;
   color: #c0c0c8;
   white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 5.5rem;
+  margin-top: 0.3rem;
 }
 
 /* Role legend */
@@ -675,9 +696,9 @@ html {
 }
 
 .legend-copper { background: #c07050; }
-.legend-lilac { background: #9088a0; }
-.legend-slate { background: #7888a8; }
-.legend-neutral { background: #888078; }
+.legend-lilac { background: #8878b4; }
+.legend-slate { background: #5e8db8; }
+.legend-neutral { background: #689080; }
 
 /* ===== Career Timeline ===== */
 #career-timeline-wrap {
@@ -892,6 +913,26 @@ html {
   width: 100%;
   margin: 0.3rem auto 0;
   padding: 0 1rem;
+}
+.talks-replay {
+  background: none;
+  border: 1px solid rgba(212,160,58,0.35);
+  border-radius: 4px;
+  color: #d4a03a;
+  font-size: 0.75rem;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.talks-replay:hover {
+  background: rgba(212,160,58,0.15);
+  border-color: rgba(212,160,58,0.6);
 }
 .talks-slider {
   flex: 1;
