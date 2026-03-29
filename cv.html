@@ -621,35 +621,42 @@ main .level2.revealed {
 <script>
 (function() {
   'use strict';
-
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   document.addEventListener('DOMContentLoaded', function() {
-    var container = document.getElementById('career-timeline');
+    var container = document.getElementById('career-timeline-rail') || document.getElementById('career-timeline');
     if (!container) return;
 
     // ===== Configuration =====
     var W = 750, H = 480;
-    var YEAR_R = 15;
-    var TRANS_R = 10;
-    var MILESTONE_R = 8;
-    var BROWNIAN = 0.10, SPRING_K = 0.015, DAMPING = 0.88;
+    var LINE_W = 8;
+    var STOP_R = 11;
+    var STOP_STROKE = 3.5;
+    var MS_R = 4;
+    var BRANCH_W = 2;
+    var JAG_GAP = 12;       // nominal gap between trough edges
+    var JAG_TOOTH = 4;      // tooth depth into gap
+    var JAG_TEETH = 3;      // number of teeth per side
+    var FOLD_EXT = 20;
+    var FOLD_R = 45;
+    // No Brownian motion — static rail map (not atoms)
     var ROW1_Y = 130, ROW2_Y = 350;
     var X_PAD = 80;
     var COLS = 5;
     var COL_W = (W - 2 * X_PAD) / (COLS - 1);
     var BRANCH_LEN = 60;
+    var BG = '#1a1a2e';
+    var MUTED = '#9898b0';
 
     var COLORS = {
-      slate:   { light: '#8eb4d8', base: '#5e8db8', dark: '#3a5a78' },
-      lilac:   { light: '#b098d4', base: '#8878b4', dark: '#584874' },
-      rose:    { light: '#d098a8', base: '#a87080', dark: '#684050' },
-      copper:  { light: '#e8a080', base: '#c07050', dark: '#784030' },
-      neutral: { light: '#8a8a9a', base: '#5a5a6e', dark: '#3a3a4e' }
+      slate:   '#5e8db8',
+      lilac:   '#8878b4',
+      rose:    '#a87080',
+      copper:  '#c07050',
+      neutral: '#689080'
     };
 
-    // ===== Year spine =====
-    // Colors: slate=PhD, lilac=Postdoc, rose=Lecturer, copper=Senior Lecturer
+    // ===== Data =====
     var yearData = [
       { year: 2017, color: 'slate', role: 'PHD \u00b7 MELBOURNE', row: 0, col: 0,
         tip: 'PhD in Chemical & Biomolecular Engineering, University of Melbourne. Completed December 2017.' },
@@ -673,7 +680,6 @@ main .level2.revealed {
         tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh. Chair of 5th NEMD Conference and Summer School.' }
     ];
 
-    // ===== Transitions on the spine =====
     var transitions = [
       { fromYear: 2018, toYear: 2019, frac: 0.75, fromColor: 'lilac', toColor: 'rose',
         label: 'LECTURER', labelSide: 1,
@@ -683,9 +689,6 @@ main .level2.revealed {
         tip: 'Promoted to Senior Lecturer (Associate Professor) in Mechanical Engineering, University of Edinburgh, 1 August 2023.' }
     ];
 
-    // ===== Milestones =====
-    // yearFrac = year + month/12 (Jan=1/12, Sep=9/12, etc.)
-    // Positioned at exact fractional spine position; branch above (side=1) or below (side=-1)
     var milestones = [
       { yearFrac: 2018.75, side: 1,  label: 'First PhD student',
         tip: 'Began supervising first PhD student (Sritay Mistry) at Edinburgh, September 2018.' },
@@ -709,60 +712,52 @@ main .level2.revealed {
         tip: 'Chair of 5th NEMD Conference, Edinburgh, July 2026.' }
     ];
 
-    // ===== Compute year positions =====
+    // ===== Compute static positions =====
     yearData.forEach(function(d) {
       d.ex = X_PAD + d.col * COL_W;
       d.ey = d.row === 0 ? ROW1_Y : ROW2_Y;
-      d.px = d.ex; d.py = d.ey;
-      d.vx = 0; d.vy = 0;
     });
 
     var yearMap = {};
     yearData.forEach(function(d) { yearMap[d.year] = d; });
 
-    // Interpolate a position on the spine from current year node positions
     function spinePos(yearFrac) {
       var yr = Math.floor(yearFrac);
       var frac = yearFrac - yr;
       var from = yearMap[yr];
       var to = yearMap[yr + 1];
-      if (!from) return to || { px: X_PAD, py: ROW1_Y };
-      if (!to || frac < 0.01) return { px: from.px, py: from.py };
+      if (!from) return to ? { x: to.ex, y: to.ey } : { x: X_PAD, y: ROW1_Y };
+      if (!to || frac < 0.01) return { x: from.ex, y: from.ey };
       return {
-        px: from.px + frac * (to.px - from.px),
-        py: from.py + frac * (to.py - from.py)
+        x: from.ex + frac * (to.ex - from.ex),
+        y: from.ey + frac * (to.ey - from.ey)
       };
     }
 
-    // Compute transition positions
     transitions.forEach(function(t) {
       var from = yearMap[t.fromYear], to = yearMap[t.toYear];
       t.fromNode = from; t.toNode = to;
       t.ex = from.ex + t.frac * (to.ex - from.ex);
       t.ey = from.ey + t.frac * (to.ey - from.ey);
-      t.mx = t.ex; t.my = t.ey;
     });
 
-    // Compute milestone equilibrium positions
-    // Group milestones by (approximate yearFrac, side) for stacking
+    // Milestone positions
     var msGroups = {};
     milestones.forEach(function(m) {
-      var key = Math.round(m.yearFrac * 4) + '_' + m.side; // quarter-year buckets
+      var key = Math.round(m.yearFrac * 4) + '_' + m.side;
       if (!msGroups[key]) msGroups[key] = [];
       msGroups[key].push(m);
     });
-
     milestones.forEach(function(m) {
       var key = Math.round(m.yearFrac * 4) + '_' + m.side;
       var group = msGroups[key];
       var idx = group.indexOf(m);
       var sp = spinePos(m.yearFrac);
-      m.spineEx = sp.px; m.spineEy = sp.py;
+      m.spineX = sp.x; m.spineY = sp.y;
       var extra = m.extraLen || 0;
-      m.ex = sp.px;
-      m.ey = sp.py + m.side * -(BRANCH_LEN + extra + idx * 30);
+      m.ex = sp.x;
+      m.ey = sp.y + m.side * -(BRANCH_LEN + extra + idx * 30);
       m.px = m.ex; m.py = m.ey;
-      m.vx = 0; m.vy = 0;
     });
 
     // ===== SVG =====
@@ -773,34 +768,124 @@ main .level2.revealed {
     svg.style.width = '100%';
     svg.style.height = 'auto';
     svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Interactive career timeline from 2017 PhD to present, with milestones');
+    svg.setAttribute('aria-label', 'Interactive career timeline from 2017 PhD to present, rail network style');
 
+    // ===== Defs =====
     var defs = document.createElementNS(NS, 'defs');
-    Object.keys(COLORS).forEach(function(key) {
-      var c = COLORS[key];
-      var g = document.createElementNS(NS, 'radialGradient');
-      g.id = 'cv-sphere-' + key;
-      g.setAttribute('cx', '0.35'); g.setAttribute('cy', '0.35'); g.setAttribute('r', '0.65');
-      [{ o: '0%', c: c.light }, { o: '45%', c: c.base }, { o: '100%', c: c.dark }].forEach(function(s) {
-        var st = document.createElementNS(NS, 'stop');
-        st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-        g.appendChild(st);
-      });
-      defs.appendChild(g);
-    });
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'cv-specular';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.55' }, { o: '30%', a: '0.18' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
+
+    // Drop shadow for rail lines
+    var shadow = document.createElementNS(NS, 'filter');
+    shadow.id = 'rail-shadow';
+    shadow.setAttribute('x', '-10%'); shadow.setAttribute('y', '-10%');
+    shadow.setAttribute('width', '120%'); shadow.setAttribute('height', '130%');
+    var ds = document.createElementNS(NS, 'feDropShadow');
+    ds.setAttribute('dx', '0'); ds.setAttribute('dy', '1.5');
+    ds.setAttribute('stdDeviation', '2');
+    ds.setAttribute('flood-color', '#000000'); ds.setAttribute('flood-opacity', '0.25');
+    shadow.appendChild(ds);
+    defs.appendChild(shadow);
+
+    // Glow for hover
+    var glow = document.createElementNS(NS, 'filter');
+    glow.id = 'station-glow';
+    glow.setAttribute('x', '-50%'); glow.setAttribute('y', '-50%');
+    glow.setAttribute('width', '200%'); glow.setAttribute('height', '200%');
+    var gb = document.createElementNS(NS, 'feGaussianBlur');
+    gb.setAttribute('stdDeviation', '3'); gb.setAttribute('result', 'blur');
+    glow.appendChild(gb);
+    var merge = document.createElementNS(NS, 'feMerge');
+    var mn1 = document.createElementNS(NS, 'feMergeNode');
+    mn1.setAttribute('in', 'blur'); merge.appendChild(mn1);
+    var mn2 = document.createElementNS(NS, 'feMergeNode');
+    mn2.setAttribute('in', 'SourceGraphic'); merge.appendChild(mn2);
+    glow.appendChild(merge);
+    defs.appendChild(glow);
+
     svg.appendChild(defs);
 
-    // Tooltip
-    var tooltip = document.getElementById('career-tooltip');
+    // Draw-order groups
+    var railGroup = document.createElementNS(NS, 'g');
+    railGroup.setAttribute('filter', 'url(#rail-shadow)');
+    var branchGroup = document.createElementNS(NS, 'g');
+    var stopGroup = document.createElementNS(NS, 'g');
+    var labelGroup = document.createElementNS(NS, 'g');
+    var msNodeGroup = document.createElementNS(NS, 'g');
+    svg.appendChild(railGroup);
+    svg.appendChild(branchGroup);
+    svg.appendChild(stopGroup);
+    svg.appendChild(labelGroup);
+    svg.appendChild(msNodeGroup);
+
+    // ===== Helpers =====
+    function makeLine(x1, y1, x2, y2, color, width, opacity) {
+      var l = document.createElementNS(NS, 'line');
+      l.setAttribute('x1', x1.toFixed(1)); l.setAttribute('y1', y1.toFixed(1));
+      l.setAttribute('x2', x2.toFixed(1)); l.setAttribute('y2', y2.toFixed(1));
+      l.setAttribute('stroke', color);
+      l.setAttribute('stroke-width', width);
+      l.setAttribute('stroke-linecap', 'round');
+      if (opacity !== undefined) l.setAttribute('stroke-opacity', opacity);
+      return l;
+    }
+
+    function makeText(x, y, text, fill, size, family, opts) {
+      var t = document.createElementNS(NS, 'text');
+      t.setAttribute('x', x); t.setAttribute('y', y);
+      t.setAttribute('text-anchor', (opts && opts.anchor) || 'middle');
+      t.setAttribute('fill', fill);
+      t.setAttribute('font-family', family + ', ' + (family === 'Fraunces' ? 'serif' : 'sans-serif'));
+      t.setAttribute('font-size', size);
+      if (opts && opts.weight) t.setAttribute('font-weight', opts.weight);
+      if (opts && opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
+      t.textContent = text;
+      return t;
+    }
+
+    // Jagged-edge polygon: line body with zigzag at one end
+    // jagSide: 'end' = zigzag at (x2,y2), 'start' = zigzag at (x1,y1)
+    function makeJaggedPoly(x1, y1, x2, y2, color, jagSide) {
+      var segDx = x2 - x1, segDy = y2 - y1;
+      var len = Math.sqrt(segDx * segDx + segDy * segDy);
+      var dx = segDx / len, dy = segDy / len;
+      var px = -dy, py = dx;
+      var hw = LINE_W / 2;
+      var pts = [];
+
+      if (jagSide === 'end') {
+        // Straight left edge → straight top → zigzag right → straight bottom
+        pts.push((x1 + hw * px).toFixed(1) + ',' + (y1 + hw * py).toFixed(1));
+        // Zigzag at (x2, y2): top to bottom
+        for (var t = 0; t <= JAG_TEETH * 2; t++) {
+          var perpFrac = 1 - t / JAG_TEETH;
+          var perpOff = perpFrac * hw;
+          var jut = (t % 2 === 1) ? JAG_TOOTH : 0;
+          pts.push((x2 + jut * dx + perpOff * px).toFixed(1) + ',' +
+                   (y2 + jut * dy + perpOff * py).toFixed(1));
+        }
+        pts.push((x1 - hw * px).toFixed(1) + ',' + (y1 - hw * py).toFixed(1));
+      } else {
+        // Zigzag at (x1, y1): top to bottom → straight bottom → straight right → straight top
+        for (var t = 0; t <= JAG_TEETH * 2; t++) {
+          var perpFrac = 1 - t / JAG_TEETH;
+          var perpOff = perpFrac * hw;
+          var jut = (t % 2 === 1) ? -JAG_TOOTH : 0;
+          pts.push((x1 + jut * dx + perpOff * px).toFixed(1) + ',' +
+                   (y1 + jut * dy + perpOff * py).toFixed(1));
+        }
+        pts.push((x2 - hw * px).toFixed(1) + ',' + (y2 - hw * py).toFixed(1));
+        pts.push((x2 + hw * px).toFixed(1) + ',' + (y2 + hw * py).toFixed(1));
+      }
+
+      var poly = document.createElementNS(NS, 'polygon');
+      poly.setAttribute('points', pts.join(' '));
+      poly.setAttribute('fill', color);
+      return poly;
+    }
+
+    // ===== Tooltip =====
+    var wrapper = container.parentNode;
+    var tooltip = wrapper.querySelector('.career-tooltip');
+    if (!tooltip) tooltip = document.getElementById('career-tooltip');
     var ttTitle = tooltip.querySelector('.ct-title');
     var ttDesc = tooltip.querySelector('.ct-desc');
 
@@ -812,13 +897,7 @@ main .level2.revealed {
     }
     function hideTip() { tooltip.classList.remove('visible'); }
 
-    var bondGroup = document.createElementNS(NS, 'g');
-    svg.appendChild(bondGroup);
-    var nodeGroup = document.createElementNS(NS, 'g');
-    svg.appendChild(nodeGroup);
-
-    // ===== Spine bonds (split at transitions) =====
-    var spineBonds = [];
+    // ===== Rail backbone (static) =====
     var foldIdx = 4;
 
     function findTransition(fromYear, toYear) {
@@ -829,141 +908,121 @@ main .level2.revealed {
     }
 
     for (var i = 0; i < yearData.length - 1; i++) {
-      var trans = findTransition(yearData[i].year, yearData[i + 1].year);
+      var from = yearData[i], to = yearData[i + 1];
+      var trans = findTransition(from.year, to.year);
 
       if (i === foldIdx) {
-        var curve = document.createElementNS(NS, 'path');
-        curve.setAttribute('stroke', COLORS[yearData[i].color].base);
-        curve.setAttribute('stroke-width', '2.5');
-        curve.setAttribute('stroke-opacity', '0.35');
-        curve.setAttribute('fill', 'none');
-        bondGroup.appendChild(curve);
-        spineBonds.push({ el: curve, from: yearData[i], to: yearData[i + 1], isCurve: true });
-      } else if (trans) {
-        var line1 = document.createElementNS(NS, 'line');
-        line1.setAttribute('stroke', COLORS[trans.fromColor].base);
-        line1.setAttribute('stroke-width', '2.5');
-        line1.setAttribute('stroke-opacity', '0.35');
-        bondGroup.appendChild(line1);
-        spineBonds.push({ el: line1, from: yearData[i], toTrans: trans, isSplitA: true });
+        // U-turn fold
+        var path = document.createElementNS(NS, 'path');
+        var fx = from.ex, fy1 = from.ey, fy2 = to.ey;
+        path.setAttribute('d',
+          'M ' + fx + ' ' + fy1 +
+          ' L ' + (fx + FOLD_EXT) + ' ' + fy1 +
+          ' A ' + FOLD_R + ' ' + FOLD_R + ' 0 0 1 ' + (fx + FOLD_EXT + FOLD_R) + ' ' + (fy1 + FOLD_R) +
+          ' L ' + (fx + FOLD_EXT + FOLD_R) + ' ' + (fy2 - FOLD_R) +
+          ' A ' + FOLD_R + ' ' + FOLD_R + ' 0 0 1 ' + (fx + FOLD_EXT) + ' ' + fy2 +
+          ' L ' + fx + ' ' + fy2);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', COLORS[from.color]);
+        path.setAttribute('stroke-width', LINE_W);
+        path.setAttribute('stroke-linecap', 'round');
+        path.setAttribute('stroke-linejoin', 'round');
+        railGroup.appendChild(path);
 
-        var line2 = document.createElementNS(NS, 'line');
-        line2.setAttribute('stroke', COLORS[trans.toColor].base);
-        line2.setAttribute('stroke-width', '2.5');
-        line2.setAttribute('stroke-opacity', '0.35');
-        bondGroup.appendChild(line2);
-        spineBonds.push({ el: line2, fromTrans: trans, to: yearData[i + 1], isSplitB: true });
+      } else if (trans) {
+        // Jagged break at transition
+        var mx = trans.ex, my = trans.ey;
+        var segDx = to.ex - from.ex, segDy = to.ey - from.ey;
+        var segLen = Math.sqrt(segDx * segDx + segDy * segDy);
+        var dx = segDx / segLen, dy = segDy / segLen;
+
+        // Old colour polygon: from node to gap edge, jagged at end
+        var oldEndX = mx - (JAG_GAP / 2) * dx;
+        var oldEndY = my - (JAG_GAP / 2) * dy;
+        railGroup.appendChild(makeJaggedPoly(from.ex, from.ey, oldEndX, oldEndY, COLORS[trans.fromColor], 'end'));
+
+        // New colour polygon: from gap edge to node, jagged at start
+        var newStartX = mx + (JAG_GAP / 2) * dx;
+        var newStartY = my + (JAG_GAP / 2) * dy;
+        railGroup.appendChild(makeJaggedPoly(newStartX, newStartY, to.ex, to.ey, COLORS[trans.toColor], 'start'));
+
       } else {
-        var line = document.createElementNS(NS, 'line');
-        line.setAttribute('stroke', COLORS[yearData[i].color].base);
-        line.setAttribute('stroke-width', '2.5');
-        line.setAttribute('stroke-opacity', '0.35');
-        bondGroup.appendChild(line);
-        spineBonds.push({ el: line, from: yearData[i], to: yearData[i + 1] });
+        railGroup.appendChild(makeLine(from.ex, from.ey, to.ex, to.ey, COLORS[from.color], LINE_W));
       }
     }
 
-    // Milestone branch bonds (from spine anchor to milestone)
-    var branchBonds = [];
-    milestones.forEach(function(m) {
-      var line = document.createElementNS(NS, 'line');
-      line.setAttribute('stroke', COLORS.neutral.base);
-      line.setAttribute('stroke-width', '1');
-      line.setAttribute('stroke-opacity', '0.25');
-      bondGroup.appendChild(line);
-      branchBonds.push({ el: line, milestone: m });
-    });
-
-    // ===== Year nodes =====
+    // ===== Stop circles: coloured fill, dark gap stroke =====
     yearData.forEach(function(d) {
       var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + d.ex + ',' + d.ey + ')');
       g.style.cursor = 'pointer';
+
+      // Coloured fill with dark stroke creating visible gap
       var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', YEAR_R);
-      circ.setAttribute('fill', 'url(#cv-sphere-' + d.color + ')');
+      circ.setAttribute('r', STOP_R);
+      circ.setAttribute('fill', COLORS[d.color]);
+      circ.setAttribute('stroke', BG);
+      circ.setAttribute('stroke-width', STOP_STROKE);
       g.appendChild(circ);
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', YEAR_R);
-      spec.setAttribute('fill', 'url(#cv-specular)');
-      g.appendChild(spec);
 
-      var yearText = document.createElementNS(NS, 'text');
-      yearText.setAttribute('x', '0');
-      yearText.setAttribute('y', YEAR_R + 18);
-      yearText.setAttribute('text-anchor', 'middle');
-      yearText.setAttribute('fill', COLORS[d.color].base);
-      yearText.setAttribute('font-family', '"Fraunces", serif');
-      yearText.setAttribute('font-size', '16');
-      yearText.textContent = d.year;
-      g.appendChild(yearText);
+      // Year label
+      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'Fraunces'));
 
+      // Role label
       if (d.role) {
-        var roleText = document.createElementNS(NS, 'text');
-        roleText.setAttribute('x', '0');
-        roleText.setAttribute('y', YEAR_R + 32);
-        roleText.setAttribute('text-anchor', 'middle');
-        roleText.setAttribute('fill', '#9898b0');
-        roleText.setAttribute('font-family', 'Inter, sans-serif');
-        roleText.setAttribute('font-size', '11');
-        roleText.setAttribute('font-weight', '600');
-        roleText.setAttribute('letter-spacing', '0.08em');
-        roleText.textContent = d.role;
-        g.appendChild(roleText);
+        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'Inter', { weight: '600', spacing: '0.12em' }));
       }
 
-      (function(d, g) {
-        g.addEventListener('mouseenter', function() { showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip); });
+      // Hover glow + tooltip
+      (function(d, g, circ) {
+        g.addEventListener('mouseenter', function() {
+          circ.setAttribute('filter', 'url(#station-glow)');
+          showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
+        });
         g.addEventListener('mousemove', moveTip);
-        g.addEventListener('mouseleave', hideTip);
-        // Keyboard accessibility
+        g.addEventListener('mouseleave', function() {
+          circ.removeAttribute('filter');
+          hideTip();
+        });
         g.setAttribute('tabindex', '0');
         g.setAttribute('role', 'img');
         g.setAttribute('aria-label', d.year + (d.role ? ', ' + d.role : '') + '. ' + d.tip);
         g.addEventListener('focus', function() {
+          circ.setAttribute('filter', 'url(#station-glow)');
           showTip(d.year + (d.role ? ', ' + d.role : ''), d.tip);
           var cr = container.getBoundingClientRect();
           var r = g.getBoundingClientRect();
           tooltip.style.left = Math.min(r.left - cr.left + r.width / 2, cr.width - 260) + 'px';
           tooltip.style.top = (r.top - cr.top - 55) + 'px';
         });
-        g.addEventListener('blur', hideTip);
-      })(d, g);
+        g.addEventListener('blur', function() {
+          circ.removeAttribute('filter');
+          hideTip();
+        });
+      })(d, g, circ);
 
-      d.el = g;
-      nodeGroup.appendChild(g);
+      stopGroup.appendChild(g);
     });
 
-    // ===== Transition markers =====
+    // ===== Transition labels + hit areas =====
     transitions.forEach(function(t) {
       var g = document.createElementNS(NS, 'g');
+      g.setAttribute('transform', 'translate(' + t.ex.toFixed(1) + ',' + t.ey.toFixed(1) + ')');
       g.style.cursor = 'pointer';
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', TRANS_R);
-      circ.setAttribute('fill', 'url(#cv-sphere-' + t.toColor + ')');
-      g.appendChild(circ);
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', TRANS_R);
-      spec.setAttribute('fill', 'url(#cv-specular)');
-      g.appendChild(spec);
 
-      var labelY = t.labelSide > 0 ? -(TRANS_R + 8) : (TRANS_R + 14);
-      var labelText = document.createElementNS(NS, 'text');
-      labelText.setAttribute('x', '0');
-      labelText.setAttribute('y', labelY);
-      labelText.setAttribute('text-anchor', 'middle');
-      labelText.setAttribute('fill', COLORS[t.toColor].base);
-      labelText.setAttribute('font-family', 'Inter, sans-serif');
-      labelText.setAttribute('font-size', '11');
-      labelText.setAttribute('font-weight', '600');
-      labelText.setAttribute('letter-spacing', '0.08em');
-      labelText.textContent = t.label;
-      g.appendChild(labelText);
+      var hit = document.createElementNS(NS, 'circle');
+      hit.setAttribute('r', JAG_GAP / 2 + 8);
+      hit.setAttribute('fill', 'transparent');
+      hit.setAttribute('pointer-events', 'all');
+      g.appendChild(hit);
+
+      var labelY = t.labelSide > 0 ? -(LINE_W / 2 + 10) : (LINE_W / 2 + 16);
+      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'Inter', { weight: '700', spacing: '0.08em' }));
 
       (function(t, g) {
         g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
         g.addEventListener('mousemove', moveTip);
         g.addEventListener('mouseleave', hideTip);
-        // Keyboard accessibility
         g.setAttribute('tabindex', '0');
         g.setAttribute('role', 'img');
         g.setAttribute('aria-label', t.label + '. ' + t.tip);
@@ -977,51 +1036,43 @@ main .level2.revealed {
         g.addEventListener('blur', hideTip);
       })(t, g);
 
-      t.markerEl = g;
-      nodeGroup.appendChild(g);
+      labelGroup.appendChild(g);
     });
 
-    // ===== Milestone nodes =====
+    // ===== Milestones (dynamic) =====
+    var branchBonds = [];
     milestones.forEach(function(m) {
+      var branch = makeLine(m.spineX, m.spineY, m.ex, m.ey, COLORS.neutral, BRANCH_W, 0.4);
+      branchGroup.appendChild(branch);
+      branchBonds.push({ el: branch, milestone: m });
+
       var g = document.createElementNS(NS, 'g');
       g.style.cursor = m.url ? 'pointer' : 'default';
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', MILESTONE_R);
-      circ.setAttribute('fill', 'url(#cv-sphere-neutral)');
-      g.appendChild(circ);
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', MILESTONE_R);
-      spec.setAttribute('fill', 'url(#cv-specular)');
-      g.appendChild(spec);
 
-      var labelY = m.side > 0 ? -(MILESTONE_R + 7) : (MILESTONE_R + 13);
-      var labelText = document.createElementNS(NS, 'text');
-      labelText.setAttribute('x', '0');
-      labelText.setAttribute('y', labelY);
-      // Edge-aware text anchor: right-align near right edge, left-align near left edge
+      var dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('r', MS_R);
+      dot.setAttribute('fill', COLORS.neutral);
+      dot.setAttribute('stroke', '#ffffff');
+      dot.setAttribute('stroke-width', '1');
+      dot.setAttribute('stroke-opacity', '0.5');
+      g.appendChild(dot);
+
+      var labelY = m.side > 0 ? -(MS_R + 6) : (MS_R + 12);
       var anchor = 'middle';
       if (m.ex > W - 120) anchor = 'end';
       else if (m.ex < 120) anchor = 'start';
-      labelText.setAttribute('text-anchor', anchor);
-      labelText.setAttribute('fill', m.url ? '#c07050' : '#c0c0c8');
-      labelText.setAttribute('font-family', 'Inter, sans-serif');
-      labelText.setAttribute('font-size', '12');
-      labelText.textContent = m.label;
-      g.appendChild(labelText);
+      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'Inter', { anchor: anchor }));
 
       if (m.url) {
         g.addEventListener('click', function() { window.open(m.url, '_blank', 'noopener'); });
       }
-      if (m.tip) {
-        (function(m, g) {
+
+      (function(m, g) {
+        if (m.tip) {
           g.addEventListener('mouseenter', function() { showTip(m.label, m.tip); });
           g.addEventListener('mousemove', moveTip);
           g.addEventListener('mouseleave', hideTip);
-        })(m, g);
-      }
-
-      // Keyboard accessibility
-      (function(m, g) {
+        }
         g.setAttribute('tabindex', '0');
         g.setAttribute('role', m.url ? 'link' : 'img');
         g.setAttribute('aria-label', m.label + (m.tip ? '. ' + m.tip : ''));
@@ -1041,91 +1092,15 @@ main .level2.revealed {
       })(m, g);
 
       m.el = g;
-      nodeGroup.appendChild(g);
+      msNodeGroup.appendChild(g);
     });
 
     container.appendChild(svg);
 
-    // ===== Physics =====
-    var running = true;
-    var physNodes = yearData.concat(milestones);
-
-    function physics() {
-      physNodes.forEach(function(n) {
-        n.vx += -SPRING_K * (n.px - n.ex);
-        n.vy += -SPRING_K * (n.py - n.ey);
-        n.vx += (Math.random() - 0.5) * BROWNIAN;
-        n.vy += (Math.random() - 0.5) * BROWNIAN;
-        n.vx *= DAMPING;
-        n.vy *= DAMPING;
-        n.px += n.vx;
-        n.py += n.vy;
-      });
-    }
-
-    function render() {
-      // Year nodes
-      yearData.forEach(function(n) {
-        n.el.setAttribute('transform', 'translate(' + n.px.toFixed(1) + ',' + n.py.toFixed(1) + ')');
-      });
-
-      // Milestone nodes
-      milestones.forEach(function(n) {
-        n.el.setAttribute('transform', 'translate(' + n.px.toFixed(1) + ',' + n.py.toFixed(1) + ')');
-      });
-
-      // Transition markers (interpolated on spine)
-      transitions.forEach(function(t) {
-        var mx = t.fromNode.px + t.frac * (t.toNode.px - t.fromNode.px);
-        var my = t.fromNode.py + t.frac * (t.toNode.py - t.fromNode.py);
-        t.mx = mx; t.my = my;
-        t.markerEl.setAttribute('transform', 'translate(' + mx.toFixed(1) + ',' + my.toFixed(1) + ')');
-      });
-
-      // Spine bonds
-      spineBonds.forEach(function(b) {
-        if (b.isCurve) {
-          var cx = Math.max(b.from.px, b.to.px) + 40;
-          var cy = (b.from.py + b.to.py) / 2;
-          b.el.setAttribute('d', 'M ' + b.from.px.toFixed(1) + ' ' + b.from.py.toFixed(1) +
-            ' Q ' + cx.toFixed(1) + ' ' + b.from.py.toFixed(1) +
-            ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) +
-            ' Q ' + cx.toFixed(1) + ' ' + b.to.py.toFixed(1) +
-            ' ' + b.to.px.toFixed(1) + ' ' + b.to.py.toFixed(1));
-        } else if (b.isSplitA) {
-          b.el.setAttribute('x1', b.from.px.toFixed(1)); b.el.setAttribute('y1', b.from.py.toFixed(1));
-          b.el.setAttribute('x2', b.toTrans.mx.toFixed(1)); b.el.setAttribute('y2', b.toTrans.my.toFixed(1));
-        } else if (b.isSplitB) {
-          b.el.setAttribute('x1', b.fromTrans.mx.toFixed(1)); b.el.setAttribute('y1', b.fromTrans.my.toFixed(1));
-          b.el.setAttribute('x2', b.to.px.toFixed(1)); b.el.setAttribute('y2', b.to.py.toFixed(1));
-        } else {
-          b.el.setAttribute('x1', b.from.px.toFixed(1)); b.el.setAttribute('y1', b.from.py.toFixed(1));
-          b.el.setAttribute('x2', b.to.px.toFixed(1)); b.el.setAttribute('y2', b.to.py.toFixed(1));
-        }
-      });
-
-      // Milestone branch bonds (from interpolated spine position)
-      branchBonds.forEach(function(b) {
-        var sp = spinePos(b.milestone.yearFrac);
-        b.el.setAttribute('x1', sp.px.toFixed(1)); b.el.setAttribute('y1', sp.py.toFixed(1));
-        b.el.setAttribute('x2', b.milestone.px.toFixed(1)); b.el.setAttribute('y2', b.milestone.py.toFixed(1));
-      });
-    }
-
-    function loop() {
-      if (!running) return;
-      physics();
-      render();
-      requestAnimationFrame(loop);
-    }
-
-    document.addEventListener('visibilitychange', function() {
-      if (document.hidden) { running = false; }
-      else { running = true; requestAnimationFrame(loop); }
+    // ===== Static render (no animation — rail map, not atoms) =====
+    milestones.forEach(function(m) {
+      m.el.setAttribute('transform', 'translate(' + m.ex.toFixed(1) + ',' + m.ey.toFixed(1) + ')');
     });
-
-    render();
-    requestAnimationFrame(loop);
   });
 })();
 </script>
