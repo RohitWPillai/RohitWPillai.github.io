@@ -1096,12 +1096,12 @@ html {
   background: var(--surface);
   border-radius: 10px;
   padding: 1rem 1.2rem;
-  border-left: 3px solid var(--amber);
+  border-left: 3px solid #c07050;
   transition: border-color 0.2s ease, transform 0.2s ease;
 }
 
 .press-card:hover {
-  border-color: #e8b94d;
+  border-color: #e8a080;
   transform: translateY(-2px);
 }
 
@@ -1109,7 +1109,7 @@ html {
   font-family: "Fraunces", serif;
   font-size: 1.3rem;
   font-variation-settings: 'opsz' 144;
-  color: var(--amber);
+  color: #c07050;
   margin-bottom: 0.3rem;
 }
 
