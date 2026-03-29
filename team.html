@@ -170,8 +170,18 @@ ul.task-list li input[type="checkbox"] {
 
 </div>
 <div class="team-controls">
-<div class="team-timeline">
-<input type="range" id="team-year-slider" class="team-slider" min="2018" max="2026" value="2026" step="0.5"><span id="team-year-display" class="team-year-display">2026</span>
+<div id="team-scrubber" class="team-scrubber">
+<div id="scrubber-track" class="scrubber-track">
+<div id="scrubber-fill" class="scrubber-fill">
+
+</div>
+<div id="scrubber-thumb" class="scrubber-thumb">
+
+</div>
+</div>
+<div id="scrubber-ticks" class="scrubber-ticks">
+
+</div>
 </div>
 <span id="team-member-count" class="team-member-count"></span>
 </div>
@@ -572,9 +582,9 @@ main .level2.revealed {
 
     var COLORS = {
       copper:  { light: '#e8a080', base: '#c07050', dark: '#784030', glow: 'rgba(192,112,80,0.3)' },
-      lilac:   { light: '#b8b0c0', base: '#9088a0', dark: '#585068', glow: 'rgba(144,136,160,0.3)' },
-      slate:   { light: '#a0b0c8', base: '#7888a8', dark: '#4a5870', glow: 'rgba(120,136,168,0.3)' },
-      neutral: { light: '#b0a898', base: '#888078', dark: '#504840', glow: 'rgba(136,128,120,0.3)' }
+      lilac:   { light: '#b098d4', base: '#8878b4', dark: '#584874', glow: 'rgba(136,120,180,0.3)' },
+      slate:   { light: '#8eb4d8', base: '#5e8db8', dark: '#3a5a78', glow: 'rgba(94,141,184,0.3)' },
+      neutral: { light: '#90b8a8', base: '#689080', dark: '#405850', glow: 'rgba(104,144,128,0.3)' }
     };
 
     // ===== Member data (sorted by startYear for clockwise chronological layout) =====
@@ -1175,21 +1185,70 @@ main .level2.revealed {
       }
     });
 
-    // ===== Slider =====
-    var slider = document.getElementById('team-year-slider');
-    var yearDisplay = document.getElementById('team-year-display');
+    // ===== Custom year scrubber =====
+    var scrubber = document.getElementById('team-scrubber');
+    var scrubTrack = document.getElementById('scrubber-track');
+    var scrubFill = document.getElementById('scrubber-fill');
+    var scrubThumb = document.getElementById('scrubber-thumb');
+    var scrubTicks = document.getElementById('scrubber-ticks');
+    var scrubYear = YEAR_MAX;
 
-    function formatYear(y) {
-      return String(Math.floor(y));
+    function scrubSetYear(year) {
+      year = Math.max(YEAR_MIN, Math.min(YEAR_MAX, Math.round(year)));
+      scrubYear = year;
+      var pct = (year - YEAR_MIN) / (YEAR_MAX - YEAR_MIN) * 100;
+      if (scrubThumb) scrubThumb.style.left = pct + '%';
+      if (scrubFill) scrubFill.style.width = pct + '%';
+      if (scrubTicks) {
+        var ticks = scrubTicks.children;
+        for (var i = 0; i < ticks.length; i++) {
+          var ty = YEAR_MIN + i;
+          ticks[i].classList.toggle('active', ty <= year);
+        }
+      }
+      updateForYear(year);
     }
 
-    if (slider) {
-      slider.setAttribute('step', '0.5');
-      slider.addEventListener('input', function() {
-        var year = parseFloat(this.value);
-        if (yearDisplay) yearDisplay.textContent = formatYear(year);
-        updateForYear(year);
+    function scrubFromX(clientX) {
+      var rect = scrubTrack.getBoundingClientRect();
+      var frac = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      scrubSetYear(Math.round(YEAR_MIN + frac * (YEAR_MAX - YEAR_MIN)));
+    }
+
+    var numTicks = YEAR_MAX - YEAR_MIN + 1;
+    var trackInset = 50 / numTicks; // percent to inset track so edges align with first/last tick centers
+    if (scrubTrack) {
+      scrubTrack.style.marginLeft = trackInset + '%';
+      scrubTrack.style.marginRight = trackInset + '%';
+    }
+
+    if (scrubTicks) {
+      for (var sy = YEAR_MIN; sy <= YEAR_MAX; sy++) {
+        var tick = document.createElement('span');
+        tick.className = 'scrubber-tick';
+        tick.textContent = String(sy);
+        tick.dataset.year = sy;
+        tick.addEventListener('click', function() { scrubSetYear(parseInt(this.dataset.year)); });
+        scrubTicks.appendChild(tick);
+      }
+    }
+
+    if (scrubTrack) {
+      scrubTrack.addEventListener('click', function(e) { scrubFromX(e.clientX); });
+    }
+
+    var scrubDragging = false;
+    if (scrubThumb) {
+      scrubThumb.addEventListener('pointerdown', function(e) {
+        scrubDragging = true;
+        scrubThumb.setPointerCapture(e.pointerId);
+        e.preventDefault();
       });
+      scrubThumb.addEventListener('pointermove', function(e) {
+        if (scrubDragging) scrubFromX(e.clientX);
+      });
+      scrubThumb.addEventListener('pointerup', function() { scrubDragging = false; });
+      scrubThumb.addEventListener('pointercancel', function() { scrubDragging = false; });
     }
 
     // ===== Animation loop =====
@@ -1262,9 +1321,7 @@ main .level2.revealed {
     });
 
     // ===== Init: show current team =====
-    updateForYear(YEAR_MAX);
-    if (slider) slider.value = YEAR_MAX;
-    if (yearDisplay) yearDisplay.textContent = formatYear(YEAR_MAX);
+    scrubSetYear(YEAR_MAX);
     // Snap all visible members to their positions immediately (no animation on load)
     members.forEach(function(m) {
       if (m.state !== 'unborn') {
