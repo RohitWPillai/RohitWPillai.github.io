@@ -1,389 +1,107 @@
 <script>
 (function() {
   'use strict';
-
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
   document.addEventListener('DOMContentLoaded', function() {
     var container = document.getElementById('service-timeline');
     if (!container) return;
 
-    // ===== Configuration =====
-    var W = 700, H = 460;
-    var LEAD_R = 7, SERV_R = 5;
-    var BROWNIAN = 0.03, SPRING_K = 0.018, DAMPING = 0.92;
-
+    // ===== Prestige palette =====
     var COLORS = {
-      copper: { light: '#e8a080', base: '#c07050', dark: '#784030' },
-      rose:   { light: '#d098a8', base: '#a87080', dark: '#684050' },
-      slate:  { light: '#8eb4d8', base: '#5e8db8', dark: '#3a5a78' }
+      copper: { base: '#c07050', light: '#e8a080', dark: '#784030', border: '#c07050' },
+      rose:   { base: '#a87080', light: '#d098a8', dark: '#684050', border: '#a87080' },
+      lilac:  { base: '#8878b4', light: '#b098d4', dark: '#584874', border: '#8878b4' },
+      slate:  { base: '#5e8db8', light: '#8eb4d8', dark: '#3a5a78', border: '#5e8db8' }
     };
 
-    // ===== Role data (enriched) =====
-    var roles = [
-      // --- Review & Examination (top-left) ---
-      { id: 'erc',  label: 'ERC Evaluator (2024–)',  tier: 'lead', group: 0,
-        title: 'ERC Expert Evaluator',
-        body: 'European Research Council',
-        desc: 'Panel evaluation of Starting and Consolidator Grant proposals across physical sciences and engineering.',
-        period: '2024–present' },
-      { id: 'epsr', label: 'EPSRC College (2024–)',  tier: 'lead', group: 0,
-        title: 'EPSRC Peer Review College',
-        body: 'UK Engineering & Physical Sciences Research Council',
-        desc: 'Review proposals and serve on funding panels for UK research grants.',
-        period: '2024–present' },
-      { id: 'exam', label: 'PhD Examiner (2024–)',   tier: 'lead', group: 0,
-        title: 'External PhD Examiner',
-        body: 'Imperial College London (2024) · Brunel University (2026)',
-        desc: 'Examine doctoral theses and conduct viva voce examinations.',
-        period: '2024–present' },
-
-      // --- Conference Organisation (top-right) ---
-      { id: 'chair', label: 'NEMD Chair (2026)',    tier: 'lead', group: 1,
-        title: 'Conference Chair, NEMD 2026',
-        body: '5th NEMD Conference, Edinburgh',
-        desc: 'Chair of international conference on non-equilibrium molecular dynamics. 200+ delegates, 6 invited speakers.',
-        period: 'July 2026' },
-      { id: 'mnf',   label: 'MNF 2025',      tier: 'serv', group: 1,
-        title: 'Organising Committee, MNF 2025',
-        body: 'Micro & Nano Flows Conference',
-        desc: 'Member of organising committee for biennial international conference.',
-        period: '2025' },
-      { id: 'sig',   label: 'NEMD 2024',      tier: 'serv', group: 1,
-        title: 'Organising Committee, 3rd NEMD Conference',
-        body: '3rd NEMD Conference, London',
-        desc: 'Member of organising committee for international conference on non-equilibrium molecular dynamics.',
-        period: '2024' },
-      { id: 'ecr',   label: 'UKFN ECR 2018',      tier: 'serv', group: 1,
-        title: 'Co-organiser, UKFN ECR 2018',
-        body: 'UK Fluids Network Early Career Researcher Event',
-        desc: 'Co-organised networking and skills event for ECRs in fluid mechanics.',
-        period: '2018' },
-
-      // --- Committees & Advocacy (bottom-centre) ---
-      { id: 'pdra', label: 'PDRA Champion (2022–)',   tier: 'mid', group: 2,
-        title: 'PDRA Champion',
-        body: 'School of Engineering, University of Edinburgh',
-        desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.',
-        period: '2022–present' },
-      { id: 'stf',  label: 'Staff Dev (2022–24)',       tier: 'mid', group: 2,
-        title: 'Staff Development Co-chair',
-        body: 'School of Engineering, University of Edinburgh',
-        desc: 'Co-chaired committee on staff training, mentoring schemes, and professional development.',
-        period: '2022–2024' },
-      { id: 'pac',  label: 'People & Culture', tier: 'serv', group: 2,
-        title: 'People & Culture Committee',
-        body: 'School of Engineering, University of Edinburgh',
-        desc: 'Committee advising on workplace culture, staff wellbeing, and HR policy.',
-        period: 'ongoing' },
-      { id: 'di',   label: 'D&I Committee',    tier: 'serv', group: 2,
-        title: 'Diversity & Inclusion Committee',
-        body: 'School of Engineering, University of Edinburgh',
-        desc: 'Athena SWAN action plan, EDI training, and inclusive recruitment practices.',
-        period: 'ongoing' }
+    // ===== Categories and roles =====
+    var categories = [
+      { title: 'Review & Examination', roles: [
+        { title: 'ERC Expert Evaluator', body: 'European Research Council', desc: 'Panel evaluation of Starting and Consolidator Grant proposals across physical sciences and engineering.', period: '2024\u2013present', tier: 'copper' },
+        { title: 'EPSRC Peer Review College', body: 'UK Engineering & Physical Sciences Research Council', desc: 'Review proposals and serve on funding panels for UK research grants.', period: '2024\u2013present', tier: 'copper' },
+        { title: 'External PhD Examiner', body: 'Imperial College London (2024) \u00b7 Brunel University (2026)', desc: 'Examine doctoral theses and conduct viva voce examinations.', period: '2024\u2013present', tier: 'rose' }
+      ]},
+      { title: 'Conference Organisation', roles: [
+        { title: 'Conference Chair, NEMD 2026', body: '5th NEMD Conference, University of Edinburgh', desc: 'Chair of international conference on non-equilibrium molecular dynamics, covering multiphase flows, heat transfer, nucleation, and machine learning potentials.', period: '6\u201310 July 2026', tier: 'copper' },
+        { title: 'NEMD Summer School Director', body: 'University of Edinburgh / ARCHER2', desc: 'Two-day intensive school (40 participants) on NEMD fundamentals and machine learning potentials, with hands-on LAMMPS simulations on ARCHER2.', period: '6\u20137 July 2026', tier: 'rose' },
+        { title: 'Organising Committee, MNF 2025', body: 'Micro & Nano Flows Conference', desc: 'Member of organising committee for biennial international conference.', period: '2025', tier: 'lilac' },
+        { title: 'Organising Committee, NEMD 2024', body: '3rd NEMD Conference, London', desc: 'Member of organising committee for international conference on non-equilibrium molecular dynamics.', period: '2024', tier: 'lilac' },
+        { title: 'Co-organiser, UKFN ECR 2018', body: 'UK Fluids Network Early Career Researcher Event', desc: 'Co-organised networking and skills event for ECRs in fluid mechanics.', period: '2018', tier: 'slate' }
+      ]},
+      { title: 'Committees & Advocacy', roles: [
+        { title: 'PDRA Champion', body: 'School of Engineering, University of Edinburgh', desc: 'Advocate for postdoctoral researchers: welfare, career development, policy input at school level.', period: '2022\u2013present', tier: 'rose' },
+        { title: 'Staff Development Co-chair', body: 'School of Engineering, University of Edinburgh', desc: 'Co-chaired committee on staff training, mentoring schemes, and professional development.', period: '2022\u20132024', tier: 'rose' },
+        { title: 'People & Culture Committee', body: 'School of Engineering, University of Edinburgh', desc: 'Committee advising on workplace culture, staff wellbeing, and HR policy.', period: 'ongoing', tier: 'slate' },
+        { title: 'Diversity & Inclusion Committee', body: 'School of Engineering, University of Edinburgh', desc: 'Athena SWAN action plan, EDI training, and inclusive recruitment practices.', period: 'ongoing', tier: 'slate' }
+      ]},
+      { title: 'Teaching & Mentoring', roles: [
+        { title: 'Course Organiser, Thermofluids 3', body: 'School of Engineering, University of Edinburgh', desc: 'Redesigned third-year undergraduate course: MOOC-style videos, design-focused labs, physical demonstrations.', period: '2020\u20132024', tier: 'copper' },
+        { title: 'BEng/MEng Project Supervision', body: 'School of Engineering, University of Edinburgh', desc: '2\u20133 final-year projects annually on molecular dynamics, nanoscale heat transfer, and surface acoustics.', period: '2019\u2013present', tier: 'rose' },
+        { title: 'Engineering Mathematics 2A', body: 'School of Engineering, University of Edinburgh', desc: 'Second-year course covering differential equations and linear algebra for engineers.', period: '2018\u20132023', tier: 'lilac' },
+        { title: 'Personal Tutoring', body: 'School of Engineering, University of Edinburgh', desc: 'Academic guidance and pastoral support for undergraduate students across all years.', period: '2018\u2013present', tier: 'lilac' }
+      ]}
     ];
 
-    // Constellation bonds — connect related roles within each group
-    var bonds = [
-      // Review & Examination
-      ['erc', 'epsr'], ['epsr', 'exam'], ['erc', 'exam'],
-      // Conference Organisation
-      ['chair', 'mnf'], ['mnf', 'sig'], ['sig', 'ecr'],
-      // Committees & Advocacy
-      ['pdra', 'stf'], ['stf', 'pac'], ['pac', 'di'], ['pdra', 'pac']
-    ];
+    // ===== Build HTML cards =====
+    var grid = document.createElement('div');
+    grid.className = 'service-dossier';
 
-    // Cluster positions
-    var CLUSTERS = [
-      { cx: 190, cy: 145 },   // Review & Examination — top-left
-      { cx: 530, cy: 145 },   // Conference Organisation — top-right
-      { cx: 350, cy: 310 }    // Committees & Advocacy — bottom-centre
-    ];
+    categories.forEach(function(cat) {
+      var col = document.createElement('div');
+      col.className = 'dossier-column';
 
-    // Constellation labels
-    var CLUSTER_LABELS = [
-      'Review & Examination',
-      'Conference Organisation',
-      'Committees & Advocacy'
-    ];
-    var CLUSTER_LABEL_POS = [
-      { x: CLUSTERS[0].cx, y: CLUSTERS[0].cy - 95 },
-      { x: CLUSTERS[1].cx, y: CLUSTERS[1].cy - 105 },
-      { x: CLUSTERS[2].cx, y: CLUSTERS[2].cy + 110 }
-    ];
+      var heading = document.createElement('div');
+      heading.className = 'dossier-heading';
+      heading.textContent = cat.title;
+      col.appendChild(heading);
 
-    // Distribute roles within each cluster
-    var groupCounts = [0, 0, 0];
-    var groupIndices = [0, 0, 0];
-    roles.forEach(function(r) { groupCounts[r.group]++; });
+      cat.roles.forEach(function(role) {
+        var c = COLORS[role.tier];
+        var card = document.createElement('div');
+        card.className = 'dossier-card';
+        card.style.borderLeftColor = c.border;
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'listitem');
+        card.setAttribute('aria-label', role.title + ', ' + role.body + ', ' + role.period);
 
-    roles.forEach(function(r) {
-      var cl = CLUSTERS[r.group];
-      var n = groupCounts[r.group];
-      var i = groupIndices[r.group]++;
-      var angle = -Math.PI / 2 + i * (2 * Math.PI / n);
-      var spread = n <= 3 ? 50 : 60;
-      r.ex = cl.cx + spread * Math.cos(angle);
-      r.ey = cl.cy + spread * Math.sin(angle);
-      r.px = r.ex; r.py = r.ey;
-      r.vx = 0; r.vy = 0;
-      r.cluster = cl;
-      r.color = r.tier === 'lead' ? 'copper' : r.tier === 'mid' ? 'rose' : 'slate';
-      r.r = r.tier === 'lead' ? LEAD_R : r.tier === 'mid' ? 6 : SERV_R;
+        // Tier dot (only for copper/rose — lead/mid-senior)
+        var titleRow = document.createElement('div');
+        titleRow.className = 'dc-title-row';
+        if (role.tier === 'copper' || role.tier === 'rose') {
+          var dot = document.createElement('span');
+          dot.className = 'dc-dot';
+          dot.style.background = c.base;
+          titleRow.appendChild(dot);
+        }
+        var titleEl = document.createElement('span');
+        titleEl.className = 'dc-title';
+        titleEl.textContent = role.title;
+        titleRow.appendChild(titleEl);
+
+        var periodEl = document.createElement('span');
+        periodEl.className = 'dc-period';
+        periodEl.textContent = role.period;
+        titleRow.appendChild(periodEl);
+
+        card.appendChild(titleRow);
+
+        var bodyEl = document.createElement('div');
+        bodyEl.className = 'dc-body';
+        bodyEl.textContent = role.body;
+        card.appendChild(bodyEl);
+
+        // Expandable detail (shown on hover/focus)
+        var detail = document.createElement('div');
+        detail.className = 'dc-detail';
+        detail.textContent = role.desc;
+        card.appendChild(detail);
+
+        col.appendChild(card);
+      });
+
+      grid.appendChild(col);
     });
 
-    var byId = {};
-    roles.forEach(function(r) { byId[r.id] = r; });
-
-    // ===== SVG =====
-    var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
-    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    svg.style.width = '100%';
-    svg.style.height = 'auto';
-    svg.style.display = 'block';
-    svg.setAttribute('aria-label', 'Service roles constellation: review, conferences, and committee roles');
-
-    // Defs
-    var defs = document.createElementNS(NS, 'defs');
-    Object.keys(COLORS).forEach(function(key) {
-      var c = COLORS[key];
-      var g = document.createElementNS(NS, 'radialGradient');
-      g.id = 'svc-star-' + key;
-      g.setAttribute('cx', '0.35'); g.setAttribute('cy', '0.35'); g.setAttribute('r', '0.65');
-      [{ o: '0%', c: c.light }, { o: '45%', c: c.base }, { o: '100%', c: c.dark }].forEach(function(s) {
-        var st = document.createElementNS(NS, 'stop');
-        st.setAttribute('offset', s.o); st.setAttribute('stop-color', s.c);
-        g.appendChild(st);
-      });
-      defs.appendChild(g);
-      var gg = document.createElementNS(NS, 'radialGradient');
-      gg.id = 'svc-glow-' + key;
-      [{ o: '0%', a: '0.18' }, { o: '50%', a: '0.05' }, { o: '100%', a: '0' }].forEach(function(s) {
-        var st = document.createElementNS(NS, 'stop');
-        st.setAttribute('offset', s.o); st.setAttribute('stop-color', c.base); st.setAttribute('stop-opacity', s.a);
-        gg.appendChild(st);
-      });
-      defs.appendChild(gg);
-    });
-    var hl = document.createElementNS(NS, 'radialGradient');
-    hl.id = 'svc-specular';
-    hl.setAttribute('cx', '0.30'); hl.setAttribute('cy', '0.30'); hl.setAttribute('r', '0.40');
-    [{ o: '0%', a: '0.6' }, { o: '30%', a: '0.2' }, { o: '100%', a: '0' }].forEach(function(s) {
-      var st = document.createElementNS(NS, 'stop');
-      st.setAttribute('offset', s.o); st.setAttribute('stop-color', 'white'); st.setAttribute('stop-opacity', s.a);
-      hl.appendChild(st);
-    });
-    defs.appendChild(hl);
-    svg.appendChild(defs);
-
-    // Layers
-    var bondLayer = document.createElementNS(NS, 'g');
-    svg.appendChild(bondLayer);
-    var nodeLayer = document.createElementNS(NS, 'g');
-    svg.appendChild(nodeLayer);
-    var labelLayer = document.createElementNS(NS, 'g');
-    svg.appendChild(labelLayer);
-
-    // Constellation group labels
-    CLUSTER_LABELS.forEach(function(text, i) {
-      var pos = CLUSTER_LABEL_POS[i];
-      var t = document.createElementNS(NS, 'text');
-      t.setAttribute('x', pos.x); t.setAttribute('y', pos.y);
-      t.setAttribute('text-anchor', 'middle');
-      t.setAttribute('fill', '#555568');
-      t.setAttribute('font-family', '"Fraunces", serif');
-      t.setAttribute('font-size', '13');
-      t.setAttribute('font-style', 'italic');
-      t.setAttribute('letter-spacing', '0.04em');
-      t.textContent = text;
-      labelLayer.appendChild(t);
-    });
-
-    // Bonds
-    var bondEls = [];
-    bonds.forEach(function(b) {
-      var line = document.createElementNS(NS, 'line');
-      line.setAttribute('stroke', '#555568');
-      line.setAttribute('stroke-width', '1');
-      line.setAttribute('stroke-opacity', '0.2');
-      bondLayer.appendChild(line);
-      bondEls.push({ el: line, a: byId[b[0]], b: byId[b[1]] });
-    });
-
-    // Tooltip elements
-    var tooltip = document.getElementById('service-tooltip');
-    var ttTitle = tooltip.querySelector('.st-title');
-    var ttBody  = tooltip.querySelector('.st-body');
-    var ttDesc  = tooltip.querySelector('.st-desc');
-    var ttPeriod = tooltip.querySelector('.st-period');
-
-    // Star nodes
-    roles.forEach(function(r) {
-      var g = document.createElementNS(NS, 'g');
-      g.style.cursor = 'pointer';
-
-      if (r.tier === 'lead') {
-        var glow = document.createElementNS(NS, 'circle');
-        glow.setAttribute('r', r.r * 3);
-        glow.setAttribute('fill', 'url(#svc-glow-' + r.color + ')');
-        g.appendChild(glow);
-      }
-
-      var circ = document.createElementNS(NS, 'circle');
-      circ.setAttribute('r', r.r);
-      circ.setAttribute('fill', 'url(#svc-star-' + r.color + ')');
-      g.appendChild(circ);
-      var spec = document.createElementNS(NS, 'circle');
-      spec.setAttribute('r', r.r);
-      spec.setAttribute('fill', 'url(#svc-specular)');
-      g.appendChild(spec);
-
-      r.el = g;
-      r.circEl = circ;
-      r.specEl = spec;
-      nodeLayer.appendChild(g);
-
-      // Role label below star
-      var text = document.createElementNS(NS, 'text');
-      text.setAttribute('fill', r.tier === 'lead' ? '#c07050' : r.tier === 'mid' ? '#a87080' : '#9098a8');
-      text.setAttribute('font-family', 'Inter, sans-serif');
-      text.setAttribute('font-size', r.tier === 'lead' ? '11' : '10');
-      text.setAttribute('font-weight', r.tier === 'lead' ? '500' : '400');
-      text.textContent = r.label;
-      r.labelEl = text;
-      labelLayer.appendChild(text);
-
-      // Hover
-      g.addEventListener('mouseenter', function() {
-        circ.setAttribute('r', r.r + 3);
-        spec.setAttribute('r', r.r + 3);
-        bondEls.forEach(function(be) {
-          if (be.a === r || be.b === r) {
-            be.el.setAttribute('stroke', COLORS[r.color].base);
-            be.el.setAttribute('stroke-opacity', '0.6');
-            be.el.setAttribute('stroke-width', '2');
-          }
-        });
-        ttTitle.textContent = r.title;
-        ttBody.textContent = r.body;
-        ttDesc.textContent = r.desc;
-        ttPeriod.textContent = r.period;
-        tooltip.classList.add('visible');
-      });
-      g.addEventListener('mousemove', function(e) {
-        var cr = container.getBoundingClientRect();
-        tooltip.style.left = Math.min(e.clientX - cr.left + 12, cr.width - 280) + 'px';
-        tooltip.style.top = (e.clientY - cr.top - 60) + 'px';
-      });
-      g.addEventListener('mouseleave', function() {
-        circ.setAttribute('r', r.r);
-        spec.setAttribute('r', r.r);
-        bondEls.forEach(function(be) {
-          if (be.a === r || be.b === r) {
-            be.el.setAttribute('stroke', '#555568');
-            be.el.setAttribute('stroke-opacity', '0.2');
-            be.el.setAttribute('stroke-width', '1');
-          }
-        });
-        tooltip.classList.remove('visible');
-      });
-
-      // Keyboard accessibility
-      g.setAttribute('tabindex', '0');
-      g.setAttribute('role', 'img');
-      g.setAttribute('aria-label', r.title + ', ' + r.body + ', ' + r.period);
-      g.addEventListener('focus', function() {
-        circ.setAttribute('r', r.r + 3);
-        spec.setAttribute('r', r.r + 3);
-        bondEls.forEach(function(be) {
-          if (be.a === r || be.b === r) {
-            be.el.setAttribute('stroke', COLORS[r.color].base);
-            be.el.setAttribute('stroke-opacity', '0.6');
-            be.el.setAttribute('stroke-width', '2');
-          }
-        });
-        ttTitle.textContent = r.title;
-        ttBody.textContent = r.body;
-        ttDesc.textContent = r.desc;
-        ttPeriod.textContent = r.period;
-        tooltip.classList.add('visible');
-        var cr = container.getBoundingClientRect();
-        var br = g.getBoundingClientRect();
-        tooltip.style.left = Math.min(br.left - cr.left + br.width / 2, cr.width - 280) + 'px';
-        tooltip.style.top = (br.top - cr.top - 60) + 'px';
-      });
-      g.addEventListener('blur', function() {
-        circ.setAttribute('r', r.r);
-        spec.setAttribute('r', r.r);
-        bondEls.forEach(function(be) {
-          if (be.a === r || be.b === r) {
-            be.el.setAttribute('stroke', '#555568');
-            be.el.setAttribute('stroke-opacity', '0.2');
-            be.el.setAttribute('stroke-width', '1');
-          }
-        });
-        tooltip.classList.remove('visible');
-      });
-    });
-
-    container.appendChild(svg);
-
-    // ===== Physics =====
-    var running = true;
-
-    function physics() {
-      roles.forEach(function(r) {
-        r.vx += -SPRING_K * (r.px - r.ex) + (Math.random() - 0.5) * BROWNIAN;
-        r.vy += -SPRING_K * (r.py - r.ey) + (Math.random() - 0.5) * BROWNIAN;
-        r.vx *= DAMPING; r.vy *= DAMPING;
-        r.px += r.vx; r.py += r.vy;
-      });
-    }
-
-    var LABEL_R = 20; // offset past the star edge
-
-    function render() {
-      bondEls.forEach(function(b) {
-        b.el.setAttribute('x1', b.a.px.toFixed(1)); b.el.setAttribute('y1', b.a.py.toFixed(1));
-        b.el.setAttribute('x2', b.b.px.toFixed(1)); b.el.setAttribute('y2', b.b.py.toFixed(1));
-      });
-      roles.forEach(function(r) {
-        r.el.setAttribute('transform', 'translate(' + r.px.toFixed(1) + ',' + r.py.toFixed(1) + ')');
-
-        // Position label radially outward from cluster centre
-        var dx = r.px - r.cluster.cx;
-        var dy = r.py - r.cluster.cy;
-        var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        var nx = dx / dist, ny = dy / dist;
-        var lx = r.px + nx * LABEL_R;
-        var ly = r.py + ny * LABEL_R;
-
-        r.labelEl.setAttribute('x', lx.toFixed(1));
-        // Vertical nudge: shift down when label is beside star, not below it
-        r.labelEl.setAttribute('y', (ly + 4).toFixed(1));
-
-        if (nx > 0.3) r.labelEl.setAttribute('text-anchor', 'start');
-        else if (nx < -0.3) r.labelEl.setAttribute('text-anchor', 'end');
-        else r.labelEl.setAttribute('text-anchor', 'middle');
-      });
-    }
-
-    function loop() {
-      if (!running) return;
-      physics();
-      render();
-      requestAnimationFrame(loop);
-    }
-
-    document.addEventListener('visibilitychange', function() {
-      if (document.hidden) { running = false; }
-      else { running = true; requestAnimationFrame(loop); }
-    });
-
-    render();
-    requestAnimationFrame(loop);
+    container.appendChild(grid);
   });
 })();
 </script>
