@@ -1,7 +1,7 @@
 ---
 title: "CV"
 include-after-body:
-  - assets/career-timeline.html
+  - assets/career-timeline-rail.html
   - assets/grants-gantt.html
   - assets/service-timeline.html
   - assets/talks-map.html
