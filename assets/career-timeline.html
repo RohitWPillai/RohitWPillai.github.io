@@ -9,7 +9,7 @@
     if (!container) return;
 
     // ===== Configuration =====
-    var W = 800, H = 480;
+    var W = 750, H = 480;
     var YEAR_R = 15;
     var TRANS_R = 10;
     var MILESTONE_R = 8;
@@ -38,19 +38,19 @@
       { year: 2019, color: 'rose', row: 0, col: 2,
         tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. First full year as independent PI.' },
       { year: 2020, color: 'rose', row: 0, col: 3,
-        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Redesigned Thermofluids 3 course.' },
       { year: 2021, color: 'rose', row: 0, col: 4,
-        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Two postdocs awarded Leverhulme Fellowships.' },
       { year: 2022, color: 'rose', row: 1, col: 4,
-        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh.' },
+        tip: 'Lecturer in Mechanical Engineering, University of Edinburgh. Appointed PDRA Champion.' },
       { year: 2023, color: 'rose', row: 1, col: 3,
         tip: 'Lecturer then Senior Lecturer, University of Edinburgh. Promoted 1 August 2023.' },
       { year: 2024, color: 'copper', row: 1, col: 2,
         tip: 'Senior Lecturer in Mechanical Engineering. ERC Starting Grant awarded August 2024.' },
       { year: 2025, color: 'copper', row: 1, col: 1,
-        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' },
+        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh. Research visits to Japan (Osaka, Tokyo, Tsukuba, Fukuoka).' },
       { year: 2026, color: 'copper', row: 1, col: 0,
-        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh.' }
+        tip: 'Senior Lecturer in Mechanical Engineering, University of Edinburgh. Chair of 5th NEMD Conference and Summer School.' }
     ];
 
     // ===== Transitions on the spine =====
@@ -273,7 +273,7 @@
       yearText.setAttribute('text-anchor', 'middle');
       yearText.setAttribute('fill', COLORS[d.color].base);
       yearText.setAttribute('font-family', '"Fraunces", serif');
-      yearText.setAttribute('font-size', '14');
+      yearText.setAttribute('font-size', '16');
       yearText.textContent = d.year;
       g.appendChild(yearText);
 
@@ -284,7 +284,7 @@
         roleText.setAttribute('text-anchor', 'middle');
         roleText.setAttribute('fill', '#9898b0');
         roleText.setAttribute('font-family', 'Inter, sans-serif');
-        roleText.setAttribute('font-size', '9');
+        roleText.setAttribute('font-size', '11');
         roleText.setAttribute('font-weight', '600');
         roleText.setAttribute('letter-spacing', '0.08em');
         roleText.textContent = d.role;
@@ -333,7 +333,7 @@
       labelText.setAttribute('text-anchor', 'middle');
       labelText.setAttribute('fill', COLORS[t.toColor].base);
       labelText.setAttribute('font-family', 'Inter, sans-serif');
-      labelText.setAttribute('font-size', '9');
+      labelText.setAttribute('font-size', '11');
       labelText.setAttribute('font-weight', '600');
       labelText.setAttribute('letter-spacing', '0.08em');
       labelText.textContent = t.label;
@@ -385,7 +385,7 @@
       labelText.setAttribute('text-anchor', anchor);
       labelText.setAttribute('fill', m.url ? '#c07050' : '#c0c0c8');
       labelText.setAttribute('font-family', 'Inter, sans-serif');
-      labelText.setAttribute('font-size', '11');
+      labelText.setAttribute('font-size', '12');
       labelText.textContent = m.label;
       g.appendChild(labelText);
 
