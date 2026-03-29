@@ -59,7 +59,7 @@ header-includes: |
       <span class="intro-card-desc">Thermal conductance at solid–liquid interfaces, surface wetting and self-cleaning, and nanomaterial-enhanced cooling</span>
     </div>
     <div class="intro-card">
-      <span class="intro-card-title">Phase Change & Bubble Dynamics</span>
+      <span class="intro-card-title">Boiling & Evaporation</span>
       <span class="intro-card-desc">Vapour bubble nucleation, wettability effects on boiling, and acoustothermal nanobubble dynamics</span>
     </div>
   </div>
