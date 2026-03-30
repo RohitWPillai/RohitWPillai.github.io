@@ -207,10 +207,13 @@ div.quarto-about-solana.md-sim-active {
     border-radius: 16px 16px 0 0;
     max-height: 50vh;
     overflow-y: auto;
-    transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s 0.35s;
+    visibility: hidden;
   }
   .md-sim-panel.open {
     bottom: 0;
     right: 0;
+    visibility: visible;
+    transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
   }
 }
