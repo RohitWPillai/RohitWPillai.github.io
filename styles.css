@@ -4,6 +4,50 @@
    Dark mode only
    ============================================ */
 
+/* ===== Page Transitions (MPA View Transitions API) ===== */
+@view-transition {
+  navigation: auto;
+}
+
+/* Navbar persists across pages */
+.navbar {
+  view-transition-name: navbar;
+}
+
+/* Page title morphs between pages */
+h1.title, .title {
+  view-transition-name: page-title;
+}
+
+/* Cross-fade with subtle slide */
+::view-transition-old(page-title) {
+  animation: vt-fade-out 0.25s ease-out forwards;
+}
+::view-transition-new(page-title) {
+  animation: vt-fade-in 0.25s ease-in 0.1s forwards;
+  opacity: 0;
+}
+::view-transition-old(root) {
+  animation: vt-fade-out 0.2s ease-out forwards;
+}
+::view-transition-new(root) {
+  animation: vt-fade-in 0.2s ease-in 0.05s forwards;
+  opacity: 0;
+}
+
+@keyframes vt-fade-out {
+  to { opacity: 0; }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+}
+
 /* ===== CSS Variables ===== */
 :root {
   --slate: #c9cad4;
@@ -288,6 +332,7 @@ html {
 .title .pub-scholar:hover {
   color: var(--amber);
 }
+
 
 @media (max-width: 576px) {
   .pub-stats { gap: 1.5rem; }
