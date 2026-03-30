@@ -5,6 +5,7 @@ include-after-body:
   - assets/grants-gantt.html
   - assets/service-timeline.html
   - assets/talks-map.html
+  - assets/cv-scroll-reveal.html
 ---
 
 <script>

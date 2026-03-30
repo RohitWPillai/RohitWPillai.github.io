@@ -1,0 +1,97 @@
+<script>
+/* CV Scroll-Driven Reveal — staggered inner-element animations per section */
+(function() {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var STAGGER = 80;
+    var DURATION = 500;
+    var BASE_DELAY = 250;
+    var viewH = window.innerHeight;
+
+    function isAboveFold(el) {
+      return el.getBoundingClientRect().top < viewH;
+    }
+
+    function revealImmediate(els) {
+      for (var i = 0; i < els.length; i++) {
+        els[i].style.opacity = '1';
+        els[i].style.transform = 'none';
+      }
+    }
+
+    function staggerReveal(els, wrap, opts) {
+      var stagger = (opts && opts.stagger) || STAGGER;
+      var duration = (opts && opts.duration) || DURATION;
+      var easing = (opts && opts.easing) || 'cubic-bezier(0.25,0.46,0.45,0.94)';
+
+      if (isAboveFold(wrap)) { revealImmediate(els); return; }
+
+      new IntersectionObserver(function(entries, obs) {
+        for (var j = 0; j < entries.length; j++) {
+          if (entries[j].isIntersecting) {
+            obs.disconnect();
+            for (var i = 0; i < els.length; i++) {
+              (function(el, delay) {
+                setTimeout(function() {
+                  el.style.transition = 'opacity ' + duration + 'ms ' + easing +
+                    ', transform ' + duration + 'ms ' + easing;
+                  el.style.opacity = '1';
+                  el.style.transform = 'none';
+                }, delay);
+              })(els[i], BASE_DELAY + i * stagger);
+            }
+            break;
+          }
+        }
+      }, { threshold: 0.12 }).observe(wrap);
+    }
+
+    // ===== Grants Gantt: bars slide in from left =====
+    var ganttWrap = document.getElementById('grants-gantt-wrap');
+    var ganttSvg = ganttWrap && ganttWrap.querySelector('svg');
+    if (ganttSvg) {
+      var bars = ganttSvg.querySelectorAll('g[tabindex]');
+      for (var i = 0; i < bars.length; i++) {
+        bars[i].style.opacity = '0';
+        bars[i].style.transform = 'translateX(-30px)';
+      }
+      staggerReveal(bars, ganttWrap, { stagger: 80 });
+    }
+
+    // ===== Talks Map: SVG scales up =====
+    var talksMap = document.getElementById('talks-map');
+    var talksSvg = talksMap && talksMap.querySelector('svg');
+    if (talksSvg) {
+      talksSvg.style.opacity = '0';
+      talksSvg.style.transform = 'scale(0.96)';
+      talksSvg.style.transformOrigin = 'center center';
+      staggerReveal([talksSvg], document.getElementById('talks-map-wrap'),
+        { duration: 600, stagger: 0, easing: 'ease-out' });
+    }
+
+    // ===== Service Timeline: columns stagger from below =====
+    var serviceWrap = document.getElementById('service-timeline-wrap');
+    var columns = serviceWrap ? serviceWrap.querySelectorAll('.dossier-column') : [];
+    if (columns.length) {
+      for (var i = 0; i < columns.length; i++) {
+        columns[i].style.opacity = '0';
+        columns[i].style.transform = 'translateY(25px)';
+      }
+      staggerReveal(columns, serviceWrap, { stagger: 120, easing: 'ease-out' });
+    }
+
+    // ===== Press Cards: stagger from below =====
+    var pressWrap = document.querySelector('.press-cards');
+    var pressCards = pressWrap ? pressWrap.querySelectorAll('.press-card') : [];
+    if (pressCards.length) {
+      for (var i = 0; i < pressCards.length; i++) {
+        pressCards[i].style.opacity = '0';
+        pressCards[i].style.transform = 'translateY(20px)';
+      }
+      staggerReveal(pressCards, pressWrap, { stagger: 120, easing: 'ease-out' });
+    }
+  });
+})();
+</script>
