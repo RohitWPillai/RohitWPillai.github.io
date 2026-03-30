@@ -84,8 +84,8 @@
     nanoClrDark:  [212, 160, 58],
     nanoClrLight: [80, 85, 110],
 
-    // --- Mouse ---
-    mouseR: 100, mouseHeat: 0.15,
+    // --- Mouse (cursor heat source with velocity rescaling) ---
+    mouseR: 50, mouseHeat: 4.5, mouseSigma: 22,
 
     // --- Performance ---
     maxFrameMs: 22, minScale: 0.4,
@@ -633,16 +633,7 @@
       p.ax += (Math.random() - 0.5) * localKick * 2;
       p.ay += (Math.random() - 0.5) * localKick * 2;
 
-      // Mouse heat source
-      if (mouseActive) {
-        var mdx = p.x - mx, mdy = p.y - my;
-        var md2 = mdx * mdx + mdy * mdy, mr2 = CFG.mouseR * CFG.mouseR;
-        if (md2 < mr2) {
-          var mf = 1 - Math.sqrt(md2) / CFG.mouseR;
-          p.ax += (Math.random() - 0.5) * CFG.mouseHeat * mf * 2;
-          p.ay += (Math.random() - 0.5) * CFG.mouseHeat * mf * 2;
-        }
-      }
+      // (Mouse heat source moved to post-integration velocity kick with rescaling)
 
       // Cap total acceleration
       var aMag2 = p.ax * p.ax + p.ay * p.ay;
@@ -671,6 +662,44 @@
       if (p.y > interfaceY - 2) {
         p.y = interfaceY - 2;
         p.vy = -Math.abs(p.vy) * 0.5;
+      }
+    }
+
+    // --- Cursor heat source (velocity kicks + KE rescaling) ---
+    if (mouseActive) {
+      var keBefore = 0;
+      for (var i = 0; i < n; i++) {
+        keBefore += fluid[i].vx * fluid[i].vx + fluid[i].vy * fluid[i].vy;
+      }
+      keBefore *= 0.5;
+
+      var cr2 = CFG.mouseR * CFG.mouseR;
+      var sig2c = 2 * CFG.mouseSigma * CFG.mouseSigma;
+      for (var i = 0; i < n; i++) {
+        var p = fluid[i];
+        var cdx = p.x - mx, cdy = p.y - my;
+        if (cdx > W * 0.5) cdx -= W; else if (cdx < -W * 0.5) cdx += W;
+        var cd2 = cdx * cdx + cdy * cdy;
+        if (cd2 < cr2) {
+          var w = Math.exp(-cd2 / sig2c);
+          var kick = CFG.mouseHeat * w;
+          p.vx += (Math.random() - 0.5) * kick * 2;
+          p.vy += (Math.random() - 0.5) * kick * 2;
+        }
+      }
+
+      var keAfter = 0;
+      for (var i = 0; i < n; i++) {
+        keAfter += fluid[i].vx * fluid[i].vx + fluid[i].vy * fluid[i].vy;
+      }
+      keAfter *= 0.5;
+
+      if (keAfter > 0.01 && keBefore > 0.01) {
+        var keScale = Math.sqrt(keBefore / keAfter);
+        for (var i = 0; i < n; i++) {
+          fluid[i].vx *= keScale;
+          fluid[i].vy *= keScale;
+        }
       }
     }
 

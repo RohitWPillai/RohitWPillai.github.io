@@ -72,6 +72,21 @@ document.addEventListener('DOMContentLoaded', function() {
     solana.parentNode.insertBefore(intro, solana.nextSibling);
     intro.style.display = '';
   }
+  if (intro) {
+    var hint = document.createElement('div');
+    hint.id = 'scroll-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.innerHTML = '<svg width="28" height="16" viewBox="0 0 28 16" fill="none"><path d="M2 2 L14 13 L26 2" stroke="#c9cad4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    intro.parentNode.insertBefore(hint, intro);
+    hint.addEventListener('click', function() {
+      intro.scrollIntoView({ behavior: 'smooth' });
+    });
+    var hidden = false;
+    window.addEventListener('scroll', function() {
+      if (hidden) return;
+      if (window.scrollY > 80) { hint.style.opacity = '0'; hidden = true; }
+    }, { passive: true });
+  }
   var themeIds = ['ice', 'heat', 'boil'];
   document.querySelectorAll('.intro-card').forEach(function(card, i) {
     if (!themeIds[i]) return;

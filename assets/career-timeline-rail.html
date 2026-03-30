@@ -181,6 +181,28 @@
     glow.appendChild(merge);
     defs.appendChild(glow);
 
+    // Train glow filter
+    var trainGlow = document.createElementNS(NS, 'filter');
+    trainGlow.id = 'train-glow';
+    trainGlow.setAttribute('x', '-150%'); trainGlow.setAttribute('y', '-150%');
+    trainGlow.setAttribute('width', '400%'); trainGlow.setAttribute('height', '400%');
+    var tgb = document.createElementNS(NS, 'feGaussianBlur');
+    tgb.setAttribute('stdDeviation', '5'); tgb.setAttribute('result', 'blur');
+    trainGlow.appendChild(tgb);
+    var tgFlood = document.createElementNS(NS, 'feFlood');
+    tgFlood.setAttribute('flood-color', '#d4a03a'); tgFlood.setAttribute('flood-opacity', '0.7');
+    tgFlood.setAttribute('result', 'color');
+    trainGlow.appendChild(tgFlood);
+    var tgComp = document.createElementNS(NS, 'feComposite');
+    tgComp.setAttribute('in', 'color'); tgComp.setAttribute('in2', 'blur'); tgComp.setAttribute('operator', 'in');
+    tgComp.setAttribute('result', 'glow');
+    trainGlow.appendChild(tgComp);
+    var tgMerge = document.createElementNS(NS, 'feMerge');
+    var tgm1 = document.createElementNS(NS, 'feMergeNode'); tgm1.setAttribute('in', 'glow'); tgMerge.appendChild(tgm1);
+    var tgm2 = document.createElementNS(NS, 'feMergeNode'); tgm2.setAttribute('in', 'SourceGraphic'); tgMerge.appendChild(tgm2);
+    trainGlow.appendChild(tgMerge);
+    defs.appendChild(trainGlow);
+
     svg.appendChild(defs);
 
     // Draw-order groups
@@ -190,11 +212,16 @@
     var stopGroup = document.createElementNS(NS, 'g');
     var labelGroup = document.createElementNS(NS, 'g');
     var msNodeGroup = document.createElementNS(NS, 'g');
+    var trainGroup = document.createElementNS(NS, 'g');
     svg.appendChild(railGroup);
     svg.appendChild(branchGroup);
     svg.appendChild(stopGroup);
     svg.appendChild(labelGroup);
     svg.appendChild(msNodeGroup);
+    svg.appendChild(trainGroup);
+
+    // Animation element collection
+    var railEls = [], stationEls = [], transEls = [], msElPairs = [], allAnimatable = [];
 
     // ===== Helpers =====
     function makeLine(x1, y1, x2, y2, color, width, opacity) {
@@ -290,9 +317,9 @@
     for (var i = 0; i < yearData.length - 1; i++) {
       var from = yearData[i], to = yearData[i + 1];
       var trans = findTransition(from.year, to.year);
+      var segEls = [];
 
       if (i === foldIdx) {
-        // U-turn fold
         var path = document.createElementNS(NS, 'path');
         var fx = from.ex, fy1 = from.ey, fy2 = to.ey;
         path.setAttribute('d',
@@ -308,27 +335,32 @@
         path.setAttribute('stroke-linecap', 'round');
         path.setAttribute('stroke-linejoin', 'round');
         railGroup.appendChild(path);
+        segEls.push(path);
 
       } else if (trans) {
-        // Jagged break at transition
         var mx = trans.ex, my = trans.ey;
         var segDx = to.ex - from.ex, segDy = to.ey - from.ey;
         var segLen = Math.sqrt(segDx * segDx + segDy * segDy);
         var dx = segDx / segLen, dy = segDy / segLen;
-
-        // Old colour polygon: from node to gap edge, jagged at end
         var oldEndX = mx - (JAG_GAP / 2) * dx;
         var oldEndY = my - (JAG_GAP / 2) * dy;
-        railGroup.appendChild(makeJaggedPoly(from.ex, from.ey, oldEndX, oldEndY, COLORS[trans.fromColor], 'end'));
-
-        // New colour polygon: from gap edge to node, jagged at start
+        var p1 = makeJaggedPoly(from.ex, from.ey, oldEndX, oldEndY, COLORS[trans.fromColor], 'end');
+        railGroup.appendChild(p1);
+        segEls.push(p1);
         var newStartX = mx + (JAG_GAP / 2) * dx;
         var newStartY = my + (JAG_GAP / 2) * dy;
-        railGroup.appendChild(makeJaggedPoly(newStartX, newStartY, to.ex, to.ey, COLORS[trans.toColor], 'start'));
+        var p2 = makeJaggedPoly(newStartX, newStartY, to.ex, to.ey, COLORS[trans.toColor], 'start');
+        railGroup.appendChild(p2);
+        segEls.push(p2);
 
       } else {
-        railGroup.appendChild(makeLine(from.ex, from.ey, to.ex, to.ey, COLORS[from.color], LINE_W));
+        var line = makeLine(from.ex, from.ey, to.ex, to.ey, COLORS[from.color], LINE_W);
+        railGroup.appendChild(line);
+        segEls.push(line);
       }
+
+      railEls.push(segEls);
+      segEls.forEach(function(el) { allAnimatable.push(el); });
     }
 
     // ===== Stop circles: coloured fill, dark gap stroke =====
@@ -382,6 +414,8 @@
       })(d, g, circ);
 
       stopGroup.appendChild(g);
+      stationEls.push(g);
+      allAnimatable.push(g);
     });
 
     // ===== Transition labels + hit areas =====
@@ -417,6 +451,8 @@
       })(t, g);
 
       labelGroup.appendChild(g);
+      transEls.push(g);
+      allAnimatable.push(g);
     });
 
     // ===== Milestones (dynamic) =====
@@ -473,14 +509,198 @@
 
       m.el = g;
       msNodeGroup.appendChild(g);
+      msElPairs.push({ branch: branch, node: g });
+      allAnimatable.push(branch);
+      allAnimatable.push(g);
     });
 
     container.appendChild(svg);
 
-    // ===== Static render (no animation — rail map, not atoms) =====
+    // Position milestones
     milestones.forEach(function(m) {
       m.el.setAttribute('transform', 'translate(' + m.ex.toFixed(1) + ',' + m.ey.toFixed(1) + ')');
     });
+
+    // ===== Train dot + trail =====
+    var TRAIL_COUNT = 12;
+    var trailCircles = [];
+    for (var ti = TRAIL_COUNT - 1; ti >= 0; ti--) {
+      var tc = document.createElementNS(NS, 'circle');
+      tc.setAttribute('r', String(5 - ti * 0.3));
+      tc.setAttribute('fill', '#d4a03a');
+      tc.setAttribute('opacity', String(0.35 * (1 - ti / TRAIL_COUNT)));
+      tc.style.display = 'none';
+      trainGroup.appendChild(tc);
+      trailCircles.push(tc);
+    }
+    var trainDot = document.createElementNS(NS, 'circle');
+    trainDot.setAttribute('r', '7');
+    trainDot.setAttribute('fill', '#d4a03a');
+    trainDot.setAttribute('filter', 'url(#train-glow)');
+    trainGroup.appendChild(trainDot);
+    trainGroup.style.display = 'none';
+
+    // ===== Path waypoints =====
+    var pathWaypoints = [];
+    var pathDist = 0;
+    pathWaypoints.push({ x: yearData[0].ex, y: yearData[0].ey, dist: 0, si: 0 });
+
+    for (var pi = 0; pi < yearData.length - 1; pi++) {
+      var pf = yearData[pi], pt = yearData[pi + 1];
+      if (pi === foldIdx) {
+        var extX = pf.ex + FOLD_EXT;
+        pathDist += FOLD_EXT;
+        pathWaypoints.push({ x: extX, y: pf.ey, dist: pathDist });
+        var cx1 = extX, cy1 = pf.ey + FOLD_R, arcLen = Math.PI * FOLD_R / 2;
+        for (var s = 1; s <= 12; s++) {
+          var angle = -Math.PI / 2 + s * (Math.PI / 2) / 12;
+          pathDist += arcLen / 12;
+          pathWaypoints.push({ x: cx1 + FOLD_R * Math.cos(angle), y: cy1 + FOLD_R * Math.sin(angle), dist: pathDist });
+        }
+        var vertLen = (pt.ey - FOLD_R) - (pf.ey + FOLD_R);
+        pathDist += vertLen;
+        pathWaypoints.push({ x: extX + FOLD_R, y: pt.ey - FOLD_R, dist: pathDist });
+        var cx2 = extX, cy2 = pt.ey - FOLD_R;
+        for (var s = 1; s <= 12; s++) {
+          var angle = s * (Math.PI / 2) / 12;
+          pathDist += arcLen / 12;
+          pathWaypoints.push({ x: cx2 + FOLD_R * Math.cos(angle), y: cy2 + FOLD_R * Math.sin(angle), dist: pathDist });
+        }
+        pathDist += FOLD_EXT;
+        pathWaypoints.push({ x: pt.ex, y: pt.ey, dist: pathDist, si: pi + 1 });
+      } else {
+        var pdx = pt.ex - pf.ex, pdy = pt.ey - pf.ey;
+        pathDist += Math.sqrt(pdx * pdx + pdy * pdy);
+        pathWaypoints.push({ x: pt.ex, y: pt.ey, dist: pathDist, si: pi + 1 });
+      }
+    }
+    var totalPathDist = pathWaypoints[pathWaypoints.length - 1].dist;
+
+    var stationDists = [];
+    pathWaypoints.forEach(function(p) { if (p.si !== undefined) stationDists[p.si] = p.dist; });
+
+    function posAtDist(d) {
+      if (d <= 0) return pathWaypoints[0];
+      if (d >= totalPathDist) return pathWaypoints[pathWaypoints.length - 1];
+      for (var j = 1; j < pathWaypoints.length; j++) {
+        if (d <= pathWaypoints[j].dist) {
+          var f = (d - pathWaypoints[j - 1].dist) / (pathWaypoints[j].dist - pathWaypoints[j - 1].dist);
+          return { x: pathWaypoints[j - 1].x + f * (pathWaypoints[j].x - pathWaypoints[j - 1].x),
+                   y: pathWaypoints[j - 1].y + f * (pathWaypoints[j].y - pathWaypoints[j - 1].y) };
+        }
+      }
+      return pathWaypoints[pathWaypoints.length - 1];
+    }
+
+    function yearFracToDist(yf) {
+      var yr = Math.floor(yf), frac = yf - yr;
+      for (var j = 0; j < yearData.length; j++) {
+        if (yearData[j].year === yr) {
+          if (j + 1 < yearData.length && frac > 0.001)
+            return stationDists[j] + frac * (stationDists[j + 1] - stationDists[j]);
+          return stationDists[j];
+        }
+      }
+      return 0;
+    }
+
+    // ===== Reveal schedule =====
+    var revealSchedule = [];
+    yearData.forEach(function(d, i) {
+      revealSchedule.push({ dist: stationDists[i], elements: [stationEls[i]] });
+    });
+    railEls.forEach(function(segEls, i) {
+      revealSchedule.push({ dist: stationDists[i], elements: segEls });
+    });
+    transitions.forEach(function(t, i) {
+      revealSchedule.push({ dist: yearFracToDist(t.fromYear + (t.toYear - t.fromYear) * t.frac), elements: [transEls[i]] });
+    });
+    milestones.forEach(function(m, i) {
+      revealSchedule.push({ dist: yearFracToDist(m.yearFrac), elements: [msElPairs[i].branch, msElPairs[i].node] });
+    });
+    revealSchedule.sort(function(a, b) { return a.dist - b.dist; });
+
+    // ===== Animation engine =====
+    var TRAVEL_SPEED = 750;
+    var STATION_PAUSE = 200;
+    var animId = null;
+    var trailPositions = [];
+
+    function moveTrainTo(x, y) {
+      trainDot.setAttribute('cx', x.toFixed(1));
+      trainDot.setAttribute('cy', y.toFixed(1));
+      trailPositions.unshift({ x: x, y: y });
+      if (trailPositions.length > TRAIL_COUNT) trailPositions.length = TRAIL_COUNT;
+      for (var j = 0; j < trailCircles.length; j++) {
+        if (j < trailPositions.length) {
+          trailCircles[j].setAttribute('cx', trailPositions[j].x.toFixed(1));
+          trailCircles[j].setAttribute('cy', trailPositions[j].y.toFixed(1));
+          trailCircles[j].style.display = '';
+        }
+      }
+    }
+
+    function playAnimation() {
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+      allAnimatable.forEach(function(el) { el.style.transition = 'none'; el.style.opacity = '0'; });
+      trainGroup.style.display = '';
+      trailPositions = [];
+      trailCircles.forEach(function(tc) { tc.style.display = 'none'; });
+      var startPos = posAtDist(0);
+      moveTrainTo(startPos.x, startPos.y);
+
+      var revealIdx = 0, nextStationIdx = 0, travelElapsed = 0, lastTime = null;
+      var pausing = false, pauseEnd = 0;
+
+      function step(ts) {
+        if (!lastTime) lastTime = ts;
+        if (pausing) {
+          if (ts >= pauseEnd) { pausing = false; lastTime = ts; }
+          animId = requestAnimationFrame(step);
+          return;
+        }
+        var dt = ts - lastTime;
+        lastTime = ts;
+        travelElapsed += dt;
+        var currentDist = travelElapsed * TRAVEL_SPEED / 1000;
+        if (currentDist > totalPathDist) currentDist = totalPathDist;
+
+        var pos = posAtDist(currentDist);
+        moveTrainTo(pos.x, pos.y);
+
+        while (revealIdx < revealSchedule.length && currentDist >= revealSchedule[revealIdx].dist) {
+          revealSchedule[revealIdx].elements.forEach(function(el) {
+            el.style.transition = 'opacity 200ms ease';
+            el.style.opacity = '1';
+          });
+          revealIdx++;
+        }
+
+        if (nextStationIdx < stationDists.length && currentDist >= stationDists[nextStationIdx]) {
+          pausing = true;
+          pauseEnd = ts + STATION_PAUSE;
+          nextStationIdx++;
+        }
+
+        if (currentDist >= totalPathDist) {
+          setTimeout(function() { trainGroup.style.display = 'none'; }, 400);
+          return;
+        }
+        animId = requestAnimationFrame(step);
+      }
+      animId = requestAnimationFrame(step);
+    }
+
+    // Play when timeline scrolls into view
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          observer.disconnect();
+          playAnimation();
+        }
+      });
+    }, { threshold: 0.3 });
+    observer.observe(container);
   });
 })();
 </script>
