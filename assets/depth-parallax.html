@@ -1,0 +1,130 @@
+<script>
+/* Depth Parallax on Ambient Dust — background layer with scroll-responsive draw offset */
+(function() {
+  'use strict';
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* Wait for the ambient-dust canvas to exist */
+  var CHECK_INTERVAL = 100;
+  var MAX_WAIT = 3000;
+  var elapsed = 0;
+
+  var timer = setInterval(function() {
+    elapsed += CHECK_INTERVAL;
+    if (elapsed > MAX_WAIT) { clearInterval(timer); return; }
+
+    var fgCanvas = document.querySelector('canvas[aria-hidden="true"]');
+    if (!fgCanvas) return;
+    clearInterval(timer);
+
+    /* Skip homepage (simulation has its own particles) */
+    if (document.querySelector('.quarto-about-solana')) return;
+
+    /* ── Background dust layer (z-index 9, behind foreground at 10) ── */
+    var bgCanvas = document.createElement('canvas');
+    bgCanvas.style.cssText = 'position:fixed;inset:0;z-index:9;pointer-events:none;';
+    bgCanvas.setAttribute('aria-hidden', 'true');
+    document.body.insertBefore(bgCanvas, fgCanvas);
+
+    var bgCtx = bgCanvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var W = window.innerWidth, H = window.innerHeight;
+
+    function resizeBg() {
+      dpr = window.devicePixelRatio || 1;
+      W = window.innerWidth; H = window.innerHeight;
+      bgCanvas.width = W * dpr;
+      bgCanvas.height = H * dpr;
+      bgCanvas.style.width = W + 'px';
+      bgCanvas.style.height = H + 'px';
+      bgCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resizeBg();
+
+    /* Phong sphere renderer (matches ambient-dust style) */
+    function buildSphere(c, sz) {
+      var oc = document.createElement('canvas');
+      oc.width = sz; oc.height = sz;
+      var ox = oc.getContext('2d');
+      var cx = sz / 2, cy = sz / 2, r = sz / 2 - 1;
+      var lo = [Math.max(0,c[0]-55), Math.max(0,c[1]-55), Math.max(0,c[2]-55)];
+      var mid = [Math.min(255,c[0]+15), Math.min(255,c[1]+15), Math.min(255,c[2]+15)];
+      var g1 = ox.createRadialGradient(cx-r*0.15, cy-r*0.15, 0, cx, cy, r);
+      g1.addColorStop(0, 'rgb('+mid[0]+','+mid[1]+','+mid[2]+')');
+      g1.addColorStop(0.6, 'rgb('+c[0]+','+c[1]+','+c[2]+')');
+      g1.addColorStop(1, 'rgb('+lo[0]+','+lo[1]+','+lo[2]+')');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI*2); ox.fillStyle = g1; ox.fill();
+      var g2 = ox.createRadialGradient(cx, cy, r*0.55, cx, cy, r);
+      g2.addColorStop(0, 'rgba(0,0,0,0)');
+      g2.addColorStop(0.7, 'rgba(0,0,0,0.04)');
+      g2.addColorStop(1, 'rgba(0,0,0,0.32)');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI*2); ox.fillStyle = g2; ox.fill();
+      var hx = cx-r*0.32, hy = cy-r*0.34;
+      var g3 = ox.createRadialGradient(hx, hy, 0, hx, hy, r*0.45);
+      g3.addColorStop(0, 'rgba(255,255,255,0.92)');
+      g3.addColorStop(0.12, 'rgba(255,255,255,0.55)');
+      g3.addColorStop(0.4, 'rgba(255,255,255,0.10)');
+      g3.addColorStop(1, 'rgba(255,255,255,0)');
+      ox.beginPath(); ox.arc(cx, cy, r, 0, Math.PI*2); ox.fillStyle = g3; ox.fill();
+      return oc;
+    }
+
+    var BG_N = 10;
+    var BG_R = 6;
+    var PARALLAX_FACTOR = 0.08;
+
+    var bgSprite = buildSphere([200, 60, 45], 64);
+    var bgParticles = [];
+    for (var i = 0; i < BG_N; i++) {
+      bgParticles.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        alpha: 0.15 + Math.random() * 0.10
+      });
+    }
+
+    var bgRunning = true;
+
+    function bgLoop() {
+      if (!bgRunning) return;
+      bgCtx.clearRect(0, 0, W, H);
+
+      var scrollOff = (window.scrollY || 0) * PARALLAX_FACTOR;
+
+      for (var i = 0; i < bgParticles.length; i++) {
+        var p = bgParticles[i];
+        p.vx += (Math.random() - 0.5) * 0.5;
+        p.vy += (Math.random() - 0.5) * 0.5;
+        p.vx *= 0.92;
+        p.vy *= 0.92;
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < -30) p.x = W + 30;
+        if (p.x > W + 30) p.x = -30;
+        if (p.y < -30) p.y = H + 30;
+        if (p.y > H + 30) p.y = -30;
+
+        var drawY = ((p.y + scrollOff) % (H + 60)) - 30;
+        if (drawY < -30) drawY += H + 60;
+
+        bgCtx.globalAlpha = p.alpha;
+        var d = BG_R * 2;
+        bgCtx.drawImage(bgSprite, p.x - BG_R, drawY - BG_R, d, d);
+      }
+      bgCtx.globalAlpha = 1;
+      requestAnimationFrame(bgLoop);
+    }
+
+    requestAnimationFrame(bgLoop);
+    window.addEventListener('resize', resizeBg);
+
+    document.addEventListener('visibilitychange', function() {
+      bgRunning = !document.hidden;
+      if (bgRunning) requestAnimationFrame(bgLoop);
+    });
+  }, CHECK_INTERVAL);
+})();
+</script>
