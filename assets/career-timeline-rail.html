@@ -677,6 +677,10 @@
         }
 
         if (nextStationIdx < stationDists.length && currentDist >= stationDists[nextStationIdx]) {
+          // Snap to exact station distance to prevent cumulative overshoot
+          travelElapsed = stationDists[nextStationIdx] * 1000 / TRAVEL_SPEED;
+          var snapPos = posAtDist(stationDists[nextStationIdx]);
+          moveTrainTo(snapPos.x, snapPos.y);
           pausing = true;
           pauseEnd = ts + STATION_PAUSE;
           nextStationIdx++;
