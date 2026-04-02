@@ -544,7 +544,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     var BG_N = 10;
-    var BG_R = 6;
+    var BG_R = 3;
     var PARALLAX_FACTOR = 0.08;
 
     var bgSprite = buildSphere([200, 60, 45], 64);
@@ -766,6 +766,16 @@ main .level2.revealed {
 
     // --- Mouse (cursor heat source with velocity rescaling) ---
     mouseR: 50, mouseHeat: 4.5, mouseSigma: 22,
+
+    // --- Cursor spotlight (visual only) ---
+    spotR: 18, spotHotR: 3,
+    spotClr: [212, 160, 58],   // amber
+    spotAlpha: 0.25, spotHotAlpha: 0.4,
+
+    // --- Wall atom cursor kick ---
+    wallKickFrac: 0.15,       // kick strength as fraction of fluid mouseHeat
+    wallSpringK: 0.08,        // spring-back stiffness
+    wallSpringDamp: 0.90,     // displacement damping per frame
 
     // --- Performance ---
     maxFrameMs: 22, minScale: 0.4,
@@ -992,7 +1002,8 @@ main .level2.revealed {
       var xOff = (row % 2) * sp * 0.5;
       var x = xOff;
       while (x < W + CFG.wallR) {
-        wallAtoms.push({ x: x, y: y, phase: Math.random() * Math.PI * 2 });
+        wallAtoms.push({ x: x, y: y, phase: Math.random() * Math.PI * 2,
+                         dx: 0, dy: 0, dvx: 0, dvy: 0 });
         x += sp;
       }
     }
@@ -1381,6 +1392,33 @@ main .level2.revealed {
           fluid[i].vy *= keScale;
         }
       }
+
+      // --- Wall atom cursor kick (displacement with spring-back) ---
+      var wKick = CFG.mouseHeat * CFG.wallKickFrac;
+      var wR2 = CFG.mouseR * CFG.mouseR;
+      var wSig2 = 2 * CFG.mouseSigma * CFG.mouseSigma;
+      for (var i = 0; i < wallAtoms.length; i++) {
+        var wa = wallAtoms[i];
+        var wdx = wa.x - mx, wdy = wa.y - my;
+        if (wdx > W * 0.5) wdx -= W; else if (wdx < -W * 0.5) wdx += W;
+        var wd2 = wdx * wdx + wdy * wdy;
+        if (wd2 < wR2) {
+          var ww = Math.exp(-wd2 / wSig2);
+          wa.dvx += (Math.random() - 0.5) * wKick * ww * 2;
+          wa.dvy += (Math.random() - 0.5) * wKick * ww * 2;
+        }
+      }
+    }
+
+    // --- Wall atom spring-back (runs every frame, even without mouse) ---
+    for (var i = 0; i < wallAtoms.length; i++) {
+      var wa = wallAtoms[i];
+      wa.dvx -= CFG.wallSpringK * wa.dx;
+      wa.dvy -= CFG.wallSpringK * wa.dy;
+      wa.dvx *= CFG.wallSpringDamp;
+      wa.dvy *= CFG.wallSpringDamp;
+      wa.dx += wa.dvx;
+      wa.dy += wa.dvy;
     }
 
     // --- Vapor maintenance ---
@@ -1488,8 +1526,8 @@ main .level2.revealed {
       ctx.globalAlpha = CFG.wallAlpha;
       for (var i = 0; i < wallAtoms.length; i++) {
         var wa = wallAtoms[i];
-        var vx = Math.sin(t * 0.003 + wa.phase) * CFG.wallVibAmp;
-        var vy = Math.cos(t * 0.004 + wa.phase * 1.3) * CFG.wallVibAmp;
+        var vx = Math.sin(t * 0.003 + wa.phase) * CFG.wallVibAmp + wa.dx;
+        var vy = Math.cos(t * 0.004 + wa.phase * 1.3) * CFG.wallVibAmp + wa.dy;
         ctx.drawImage(wc, wa.x + vx - wr, wa.y + vy - wr, wd, wd);
       }
       ctx.globalAlpha = 1;
@@ -1623,13 +1661,36 @@ main .level2.revealed {
         ctx.moveTo(m0x, m0y);
         for (var w = 0; w < nP; w++) {
           var nx = (w + 1) % nP;
-          var mx = (pts[w].x + pts[nx].x) / 2;
-          var my = (pts[w].y + pts[nx].y) / 2;
-          ctx.quadraticCurveTo(pts[w].x, pts[w].y, mx, my);
+          var bmx = (pts[w].x + pts[nx].x) / 2;
+          var bmy = (pts[w].y + pts[nx].y) / 2;
+          ctx.quadraticCurveTo(pts[w].x, pts[w].y, bmx, bmy);
         }
         ctx.closePath();
         ctx.stroke();
       }
+    }
+
+    // --- Cursor spotlight (amber glow at mouse position) ---
+    // Note: ctx has setTransform(dpr, ...) so all coords are CSS pixels, not canvas pixels
+    if (mouseActive) {
+      var sc = CFG.spotClr;
+
+      var sg1 = ctx.createRadialGradient(mx, my, CFG.spotHotR, mx, my, CFG.spotR);
+      sg1.addColorStop(0, 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',' + CFG.spotAlpha + ')');
+      sg1.addColorStop(0.5, 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',' + (CFG.spotAlpha * 0.4) + ')');
+      sg1.addColorStop(1, 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',0)');
+      ctx.fillStyle = sg1;
+      ctx.beginPath();
+      ctx.arc(mx, my, CFG.spotR, 0, Math.PI * 2);
+      ctx.fill();
+
+      var sg2 = ctx.createRadialGradient(mx, my, 0, mx, my, CFG.spotHotR);
+      sg2.addColorStop(0, 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',' + CFG.spotHotAlpha + ')');
+      sg2.addColorStop(1, 'rgba(' + sc[0] + ',' + sc[1] + ',' + sc[2] + ',0)');
+      ctx.fillStyle = sg2;
+      ctx.beginPath();
+      ctx.arc(mx, my, CFG.spotHotR, 0, Math.PI * 2);
+      ctx.fill();
     }
   }
 
