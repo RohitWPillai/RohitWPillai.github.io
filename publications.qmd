@@ -3,7 +3,7 @@ title: "Publications"
 ---
 
 <div class="pub-stats">
-<div class="pub-stat"><span class="pub-count" data-target="20">0</span><span class="pub-label">Journal Articles</span></div>
+<div class="pub-stat"><span class="pub-count" data-target="21">0</span><span class="pub-label">Journal Articles</span></div>
 <div class="pub-stat"><span class="pub-count" data-target="1">0</span><span class="pub-label">Book Chapter</span></div>
 </div>
 
@@ -67,6 +67,19 @@ Submitted to <a href="https://www.sciencedirect.com/journal/international-journa
 ---
 
 ## Journal Articles
+
+### 2026
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/21-freezing-under-motion.jpg" alt="Freezing under motion: surface vibrations suppress ice nucleation in water nanofilms">
+<div class="pub-text">
+
+[21] **Freezing under Motion: How Surface Vibrations Suppress Ice Nucleation in Water Nanofilms**
+Chen P, Sullivan P, <u>Pillai R</u>, Datta S
+<a href="https://pubs.aip.org/aip/jcp"><em>The Journal of Chemical Physics</em></a> 165, 024703 (2026) | [DOI](https://doi.org/10.1063/5.0335640) | [Data](https://datashare.ed.ac.uk/handle/10283/9233)
+
+</div>
+</div>
 
 ### 2025
 
