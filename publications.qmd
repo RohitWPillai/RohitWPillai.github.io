@@ -230,7 +230,7 @@ Nikiforidis V-M, Datta S, Borg MK, <u>Pillai R</u>
 <div class="pub-text">
 
 [8] **Coupling Molecular Dynamics and Direct Simulation Monte Carlo using a general and high-performance code coupling library**
-Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
+Longshaw SM, <u>Pillai R</u>, Gibelli L, Emerson DR, Lockerby DA
 <a href="https://www.sciencedirect.com/journal/computers-and-fluids"><em>Computers &amp; Fluids</em></a> 213, 104726 (2020) | [DOI](https://doi.org/10.1016/j.compfluid.2020.104726)
 
 </div>
@@ -268,7 +268,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 
 [5] **Electrophoretically mediated partial coalescence of a charged microdrop**
 <u>Pillai R</u>, Berry JD, Harvie DJE, Davidson MR
-<a href="https://www.sciencedirect.com/journal/chemical-engineering-science"><em>Chemical Engineering Science</em></a> 169, 28–45 (2017) | [DOI](https://doi.org/10.1016/j.ces.2016.07.048)
+<a href="https://www.sciencedirect.com/journal/chemical-engineering-science"><em>Chemical Engineering Science</em></a> 169, 273–283 (2017) | [DOI](https://doi.org/10.1016/j.ces.2016.07.022)
 
 </div>
 </div>
@@ -292,7 +292,7 @@ Longshaw SL, Emerson DR, <u>Pillai R</u>, Gibelli L, Lockerby DA
 
 [3] **Numerical simulation of two-fluid flow of electrolyte solution with charged deforming interfaces**
 Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
-<a href="https://www.sciencedirect.com/journal/applied-mathematical-modelling"><em>Applied Mathematical Modelling</em></a> 40, 1989–2001 (2016) | [DOI](https://doi.org/10.1016/j.apm.2015.09.021)
+<a href="https://www.sciencedirect.com/journal/applied-mathematical-modelling"><em>Applied Mathematical Modelling</em></a> 40, 1989–2001 (2016) | [DOI](https://doi.org/10.1016/j.apm.2015.09.011)
 
 </div>
 </div>
