@@ -4,11 +4,6 @@
 .DS_Store
 **/*.quarto_ipynb
 CLAUDE.md
-.claude-agents/
-.claude-rules/
+.claude*
 handoffs/
-PROJECT_CONTEXT.md
-COLOUR-SYSTEM.md
-UPDATES.md
-TODO.md
-posts/claude-code-academic-workflows/
+*.agent-run-log*
