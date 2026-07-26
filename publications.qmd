@@ -3,7 +3,7 @@ title: "Publications"
 ---
 
 <div class="pub-stats">
-<div class="pub-stat"><span class="pub-count" data-target="21">0</span><span class="pub-label">Journal Articles</span></div>
+<div class="pub-stat"><span class="pub-count" data-target="22">0</span><span class="pub-label">Journal Articles</span></div>
 <div class="pub-stat"><span class="pub-count" data-target="1">0</span><span class="pub-label">Book Chapter</span></div>
 </div>
 
@@ -51,24 +51,20 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-## Preprints
-
-<div class="pub-card">
-<img class="pub-thumb" src="images/papers/preprint-liquid-utilisation.jpg" alt="The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance">
-<div class="pub-text">
-
-**The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance at Metal/Water Interfaces**
-El-Rifai A, Merabia S, Hulikal Chakrapani T, <u>Pillai R</u>
-Submitted to <a href="https://www.sciencedirect.com/journal/international-journal-of-heat-and-mass-transfer"><em>International Journal of Heat and Mass Transfer</em></a> (2026) | <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6479492">Preprint</a>
-
-</div>
-</div>
-
----
-
 ## Journal Articles
 
 ### 2026
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/22-liquid-utilisation.jpg" alt="The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance at Metal/Water Interfaces">
+<div class="pub-text">
+
+[22] **The Liquid Utilisation Bottleneck in Interfacial Thermal Conductance at Metal/Water Interfaces**
+El-Rifai A, Hulikal Chakrapani T, Merabia S, <u>Pillai R</u>
+<a href="https://www.sciencedirect.com/journal/international-journal-of-heat-and-mass-transfer"><em>International Journal of Heat and Mass Transfer</em></a> 271, 129290 (2026) | [DOI](https://doi.org/10.1016/j.ijheatmasstransfer.2026.129290) | [Data](https://datashare.ed.ac.uk/handle/10283/9244)
+
+</div>
+</div>
 
 <div class="pub-card">
 <img class="pub-thumb" src="images/papers/21-freezing-under-motion.jpg" alt="Freezing under motion: surface vibrations suppress ice nucleation in water nanofilms">
