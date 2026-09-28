@@ -830,6 +830,7 @@
     /* +/- zoom buttons */
     container.style.position = "relative";
     var zoomCtrl = document.createElement("div");
+    zoomCtrl.className = "talks-zoom";
     zoomCtrl.style.cssText = "position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:2px;z-index:5;";
     [{ label: "+", factor: 1.5 }, { label: "\u2212", factor: 1 / 1.5 }].forEach(function(b) {
       var btn = document.createElement("button");
