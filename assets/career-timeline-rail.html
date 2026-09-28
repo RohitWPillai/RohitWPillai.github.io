@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -240,7 +243,7 @@
       t.setAttribute('x', x); t.setAttribute('y', y);
       t.setAttribute('text-anchor', (opts && opts.anchor) || 'middle');
       t.setAttribute('fill', fill);
-      t.setAttribute('font-family', family + ', ' + (family === 'Fraunces' ? 'serif' : 'sans-serif'));
+      t.setAttribute('font-family', family === 'display' ? FONT_DISPLAY : FONT_BODY);
       t.setAttribute('font-size', size);
       if (opts && opts.weight) t.setAttribute('font-weight', opts.weight);
       if (opts && opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
@@ -378,11 +381,11 @@
       g.appendChild(circ);
 
       // Year label
-      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'Fraunces'));
+      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'display'));
 
       // Role label
       if (d.role) {
-        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'Inter', { weight: '600', spacing: '0.12em' }));
+        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'body', { weight: '600', spacing: '0.12em' }));
       }
 
       // Hover glow + tooltip
@@ -431,7 +434,7 @@
       g.appendChild(hit);
 
       var labelY = t.labelSide > 0 ? -(LINE_W / 2 + 10) : (LINE_W / 2 + 16);
-      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'Inter', { weight: '700', spacing: '0.08em' }));
+      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'body', { weight: '700', spacing: '0.08em' }));
 
       (function(t, g) {
         g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
@@ -477,7 +480,7 @@
       var anchor = 'middle';
       if (m.ex > W - 120) anchor = 'end';
       else if (m.ex < 120) anchor = 'start';
-      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'Inter', { anchor: anchor }));
+      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'body', { anchor: anchor }));
 
       if (m.url) {
         g.addEventListener('click', function() { window.open(m.url, '_blank', 'noopener'); });

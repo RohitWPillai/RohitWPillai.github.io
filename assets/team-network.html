@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -230,7 +233,7 @@
       txt.setAttribute('text-anchor', 'middle');
       txt.setAttribute('dy', '0.35em');
       txt.setAttribute('fill', 'rgba(200,200,216,0.50)');
-      txt.setAttribute('font-family', 'Inter, sans-serif');
+      txt.setAttribute('font-family', FONT_BODY);
       txt.setAttribute('font-size', '9');
       txt.setAttribute('font-weight', '700');
       txt.setAttribute('letter-spacing', '0.2em');
@@ -350,7 +353,7 @@
       text.setAttribute('y', m.r + 16);
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#c0c0c8');
-      text.setAttribute('font-family', 'Inter, sans-serif');
+      text.setAttribute('font-family', FONT_BODY);
       text.setAttribute('font-size', m.id === 'rp' ? '13' : '11');
       text.setAttribute('font-weight', m.id === 'rp' ? '600' : '400');
       if (m.id === 'rp') text.setAttribute('fill', '#e8e8ec');
@@ -363,7 +366,7 @@
         sub.setAttribute('y', m.r + 30);
         sub.setAttribute('text-anchor', 'middle');
         sub.setAttribute('fill', COLORS.copper.base);
-        sub.setAttribute('font-family', 'Inter, sans-serif');
+        sub.setAttribute('font-family', FONT_BODY);
         sub.setAttribute('font-size', '9');
         sub.setAttribute('font-weight', '600');
         sub.setAttribute('letter-spacing', '0.1em');

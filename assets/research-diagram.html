@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -156,7 +159,7 @@
       t.setAttribute('x', x); t.setAttribute('y', y);
       t.setAttribute('text-anchor', opts.anchor || 'middle');
       t.setAttribute('fill', opts.fill || '#c0c0c8');
-      t.setAttribute('font-family', opts.font || 'Inter, sans-serif');
+      t.setAttribute('font-family', opts.font || FONT_BODY);
       t.setAttribute('font-size', opts.size || '12');
       if (opts.weight) t.setAttribute('font-weight', opts.weight);
       if (opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
@@ -171,9 +174,9 @@
     svg.appendChild(makePath(VAPOR_FILL, 'rgba(220,65,48,0.04)'));
 
     // ===== Phase labels =====
-    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: '"Fraunces", serif', spacing: '0.15em' }));
-    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(220,65,48,0.18)', font: '"Fraunces", serif', spacing: '0.15em' }));
+    svg.appendChild(makeText(155, 130, 'SOLID', { size: '28', weight: '700', fill: 'rgba(70,135,215,0.22)', font: FONT_DISPLAY, spacing: '0.15em' }));
+    svg.appendChild(makeText(530, 85, 'LIQUID', { size: '28', weight: '700', fill: 'rgba(100,190,170,0.22)', font: FONT_DISPLAY, spacing: '0.15em' }));
+    svg.appendChild(makeText(640, 430, 'VAPOUR', { size: '28', weight: '700', fill: 'rgba(220,65,48,0.18)', font: FONT_DISPLAY, spacing: '0.15em' }));
 
     // ===== Axes =====
     var axG = document.createElementNS(NS, 'g');
@@ -353,7 +356,7 @@
         label.setAttribute('y', MARKER_R + 18 + i * 14);
         label.setAttribute('text-anchor', 'middle');
         label.setAttribute('fill', '#c0c0c8');
-        label.setAttribute('font-family', 'Inter, sans-serif');
+        label.setAttribute('font-family', FONT_BODY);
         label.setAttribute('font-size', '12');
         label.setAttribute('font-weight', '600');
         label.setAttribute('letter-spacing', '0.03em');

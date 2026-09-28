@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -254,7 +257,7 @@
         lbl.setAttribute('y', NODE_R + 18 + i * 14);
         lbl.setAttribute('text-anchor', 'middle');
         lbl.setAttribute('fill', '#e0e0e0');
-        lbl.setAttribute('font-family', 'Inter, sans-serif');
+        lbl.setAttribute('font-family', FONT_BODY);
         lbl.setAttribute('font-size', '14');
         lbl.setAttribute('font-weight', '600');
         lbl.textContent = line;
@@ -266,7 +269,7 @@
       scaleText.setAttribute('y', NODE_R + 18 + lines.length * 14);
       scaleText.setAttribute('text-anchor', 'middle');
       scaleText.setAttribute('fill', '#9898b0');
-      scaleText.setAttribute('font-family', 'Inter, sans-serif');
+      scaleText.setAttribute('font-family', FONT_BODY);
       scaleText.setAttribute('font-size', '11');
       scaleText.textContent = st.scales;
       g.appendChild(scaleText);
@@ -340,7 +343,7 @@
     var hpcText = document.createElementNS(NS, 'text');
     hpcText.setAttribute('x', W / 2); hpcText.setAttribute('y', H - 12);
     hpcText.setAttribute('text-anchor', 'middle');
-    hpcText.setAttribute('font-family', 'Inter, sans-serif');
+    hpcText.setAttribute('font-family', FONT_BODY);
     hpcText.setAttribute('font-size', '11');
     hpcText.setAttribute('letter-spacing', '0.08em');
     hpcText.setAttribute('fill', 'rgba(200,200,210,0.3)');

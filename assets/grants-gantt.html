@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -53,7 +56,7 @@
       text.setAttribute('y', HEADER_H - 10);
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#9898b0');
-      text.setAttribute('font-family', '"Fraunces", serif');
+      text.setAttribute('font-family', FONT_DISPLAY);
       text.setAttribute('font-size', '15');
       text.setAttribute('font-weight', '500');
       text.textContent = y;
@@ -74,7 +77,7 @@
     nowLabel.setAttribute('y', H - 2);
     nowLabel.setAttribute('text-anchor', 'middle');
     nowLabel.setAttribute('fill', '#d4a03a');
-    nowLabel.setAttribute('font-family', 'Inter, sans-serif');
+    nowLabel.setAttribute('font-family', FONT_BODY);
     nowLabel.setAttribute('font-size', '11');
     nowLabel.setAttribute('letter-spacing', '0.05em');
     nowLabel.textContent = 'NOW';
@@ -134,7 +137,7 @@
       badge.setAttribute('y', by + BAR_H / 2);
       badge.setAttribute('dy', '0.35em');
       badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
-      badge.setAttribute('font-family', 'Inter, sans-serif');
+      badge.setAttribute('font-family', FONT_BODY);
       badge.setAttribute('font-size', '11');
       badge.setAttribute('font-weight', '700');
       badge.setAttribute('letter-spacing', '0.06em');
@@ -148,7 +151,7 @@
       titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
       titleEl.setAttribute('fill', g.role === 'PI' ? '#c07050' : '#9098a8');
-      titleEl.setAttribute('font-family', 'Inter, sans-serif');
+      titleEl.setAttribute('font-family', FONT_BODY);
       titleEl.setAttribute('font-size', '13');
       titleEl.setAttribute('font-weight', '500');
       titleEl.textContent = g.short;

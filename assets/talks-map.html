@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   "use strict";
   document.addEventListener("DOMContentLoaded", function() {
@@ -378,7 +381,7 @@
         lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
         lbl.setAttribute("fill", C.copper);
-        lbl.setAttribute("font-family", '"Fraunces", serif');
+        lbl.setAttribute("font-family", FONT_DISPLAY);
         lbl.setAttribute("font-size", "11");
         lbl.textContent = city.city;
         g.appendChild(lbl);
@@ -543,7 +546,7 @@
       var label = document.createElementNS(NS, "text");
       label.setAttribute("x", String(IX + 8)); label.setAttribute("y", String(IY + IH - 8));
       label.setAttribute("fill", "rgba(136,136,152,0.5)");
-      label.setAttribute("font-family", "Inter, sans-serif");
+      label.setAttribute("font-family", FONT_BODY);
       label.setAttribute("font-size", "9");
       label.textContent = "UK & Europe";
       insetGroup.appendChild(label);

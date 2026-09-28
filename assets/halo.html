@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 document.addEventListener('DOMContentLoaded', function() {
   'use strict';
 
@@ -126,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Text element
     var text = document.createElementNS(ns, 'text');
     text.setAttribute('fill', '#2d3047');
-    text.setAttribute('font-family', 'Inter, sans-serif');
+    text.setAttribute('font-family', FONT_BODY);
     text.setAttribute('font-size', '15');
     text.setAttribute('font-weight', '600');
     text.setAttribute('letter-spacing', '2.5');

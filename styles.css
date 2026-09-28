@@ -62,7 +62,7 @@ h1.title, .title {
 
 /* ===== Global Typography ===== */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-body-system);
   font-size: 0.95rem;
   line-height: 1.65;
 }
@@ -75,7 +75,7 @@ body {
 }
 
 .navbar-brand, .navbar-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--slate) !important;
@@ -128,7 +128,7 @@ body {
 
 /* ===== Headings ===== */
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-weight: 400;
   color: #e8e8ec;
   letter-spacing: -0.02em;
@@ -302,7 +302,7 @@ html {
 }
 
 .pub-count {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 400;
   color: var(--amber);
@@ -598,7 +598,7 @@ html {
   overflow: visible;
 }
 .scrubber-tick {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.65rem;
   color: #9898b0;
   cursor: pointer;
@@ -663,7 +663,7 @@ html {
 }
 
 .team-tooltip .tt-name {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #e8e8ec;
   margin-bottom: 0.15rem;
@@ -705,7 +705,7 @@ html {
 }
 
 .team-member-count {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   font-variation-settings: 'opsz' 72;
   color: #c0c0c8;
@@ -722,7 +722,7 @@ html {
   margin-top: 8px;
   font-size: 0.72rem;
   color: #9898b0;
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -762,7 +762,7 @@ html {
 }
 
 .career-tooltip .ct-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   color: #e8e8ec;
   margin-bottom: 0.15rem;
@@ -790,7 +790,7 @@ html {
 }
 
 .grants-tooltip .gt-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   color: #e8e8ec;
   margin-bottom: 0.15rem;
@@ -806,7 +806,7 @@ html {
 }
 
 .grants-tooltip .gt-value {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #e8e8ec;
 }
@@ -839,7 +839,7 @@ html {
 }
 
 .dossier-heading {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   font-style: italic;
   color: #d4a03a;
@@ -884,7 +884,7 @@ html {
 }
 
 .dc-title {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -893,7 +893,7 @@ html {
 }
 
 .dc-period {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   color: #d4a03a;
   white-space: nowrap;
@@ -901,7 +901,7 @@ html {
 }
 
 .dc-body {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body-system);
   font-size: 0.65rem;
   color: rgba(255,255,255,0.45);
   margin-top: 0.15rem;
@@ -909,7 +909,7 @@ html {
 }
 
 .dc-detail {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.7rem;
   color: #b0b0bc;
   line-height: 1.4;
@@ -939,7 +939,7 @@ html {
 }
 
 .talks-tooltip .tt-city {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   font-weight: 500;
   margin-bottom: 0.3rem;
@@ -985,7 +985,7 @@ html {
   justify-content: center;
   gap: 1.2rem;
   margin-top: 0.4rem;
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: #c0c0c8;
   text-transform: uppercase;
@@ -1005,7 +1005,7 @@ html {
 
 .talks-summary {
   text-align: center;
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.78rem;
   color: #9898b0;
   margin-top: 0.5rem;
@@ -1076,7 +1076,7 @@ html {
   box-shadow: 0 0 8px rgba(212, 160, 58, 0.4);
 }
 .talks-year-display {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   font-variation-settings: 'opsz' 144;
   color: var(--amber);
@@ -1104,7 +1104,7 @@ html {
 }
 
 .service-cat-label {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   color: #d4a03a;
   margin-bottom: 0.5rem;
@@ -1118,7 +1118,7 @@ html {
 }
 
 .service-pill {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 500;
   padding: 0.25rem 0.6rem;
@@ -1152,7 +1152,7 @@ html {
 }
 
 .press-year {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   font-variation-settings: 'opsz' 144;
   color: #c07050;
@@ -1217,7 +1217,7 @@ html {
 
 
 .research-tooltip .rt-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: #e8e8ec;
   margin-bottom: 0.3rem;
@@ -1261,7 +1261,7 @@ html {
 }
 .research-panel .rp-close:hover { color: var(--amber); }
 .research-panel .rp-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: #e8e8ec;
   margin: 0 0 0.5rem;
@@ -1336,7 +1336,7 @@ html {
   max-width: 270px;
 }
 .methods-tooltip .mt-title {
-  font-family: "Fraunces", serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
   color: #e8e8ec;
   margin-bottom: 0.3rem;

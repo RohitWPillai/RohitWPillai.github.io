@@ -1,4 +1,7 @@
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -272,7 +275,7 @@
       yearText.setAttribute('y', YEAR_R + 18);
       yearText.setAttribute('text-anchor', 'middle');
       yearText.setAttribute('fill', COLORS[d.color].base);
-      yearText.setAttribute('font-family', '"Fraunces", serif');
+      yearText.setAttribute('font-family', FONT_DISPLAY);
       yearText.setAttribute('font-size', '16');
       yearText.textContent = d.year;
       g.appendChild(yearText);
@@ -283,7 +286,7 @@
         roleText.setAttribute('y', YEAR_R + 32);
         roleText.setAttribute('text-anchor', 'middle');
         roleText.setAttribute('fill', '#9898b0');
-        roleText.setAttribute('font-family', 'Inter, sans-serif');
+        roleText.setAttribute('font-family', FONT_BODY);
         roleText.setAttribute('font-size', '11');
         roleText.setAttribute('font-weight', '600');
         roleText.setAttribute('letter-spacing', '0.08em');
@@ -332,7 +335,7 @@
       labelText.setAttribute('y', labelY);
       labelText.setAttribute('text-anchor', 'middle');
       labelText.setAttribute('fill', COLORS[t.toColor].base);
-      labelText.setAttribute('font-family', 'Inter, sans-serif');
+      labelText.setAttribute('font-family', FONT_BODY);
       labelText.setAttribute('font-size', '11');
       labelText.setAttribute('font-weight', '600');
       labelText.setAttribute('letter-spacing', '0.08em');
@@ -384,7 +387,7 @@
       else if (m.ex < 120) anchor = 'start';
       labelText.setAttribute('text-anchor', anchor);
       labelText.setAttribute('fill', m.url ? '#c07050' : '#c0c0c8');
-      labelText.setAttribute('font-family', 'Inter, sans-serif');
+      labelText.setAttribute('font-family', FONT_BODY);
       labelText.setAttribute('font-size', '12');
       labelText.textContent = m.label;
       g.appendChild(labelText);
