@@ -46,7 +46,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-27fc1a79a1a2596aa369fd8d925402e5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-da2a7833dc762e1fdf27ade5eac6690b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -83,7 +83,7 @@ ul.task-list li input[type="checkbox"] {
 </head><body class="nav-fixed quarto-light"><a class="visually-hidden-focusable" href="#quarto-content">Skip to content</a>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&amp;family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&amp;display=swap" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -752,6 +752,9 @@ main .level2.revealed {
 })();
 </script>
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -993,7 +996,7 @@ main .level2.revealed {
       t.setAttribute('x', x); t.setAttribute('y', y);
       t.setAttribute('text-anchor', (opts && opts.anchor) || 'middle');
       t.setAttribute('fill', fill);
-      t.setAttribute('font-family', family + ', ' + (family === 'Fraunces' ? 'serif' : 'sans-serif'));
+      t.setAttribute('font-family', family === 'display' ? FONT_DISPLAY : FONT_BODY);
       t.setAttribute('font-size', size);
       if (opts && opts.weight) t.setAttribute('font-weight', opts.weight);
       if (opts && opts.spacing) t.setAttribute('letter-spacing', opts.spacing);
@@ -1131,11 +1134,11 @@ main .level2.revealed {
       g.appendChild(circ);
 
       // Year label
-      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'Fraunces'));
+      g.appendChild(makeText(0, STOP_R + 18, d.year, COLORS[d.color], 18, 'display'));
 
       // Role label
       if (d.role) {
-        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'Inter', { weight: '600', spacing: '0.12em' }));
+        g.appendChild(makeText(0, STOP_R + 32, d.role, MUTED, 10, 'body', { weight: '600', spacing: '0.12em' }));
       }
 
       // Hover glow + tooltip
@@ -1184,7 +1187,7 @@ main .level2.revealed {
       g.appendChild(hit);
 
       var labelY = t.labelSide > 0 ? -(LINE_W / 2 + 10) : (LINE_W / 2 + 16);
-      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'Inter', { weight: '700', spacing: '0.08em' }));
+      g.appendChild(makeText(0, labelY, t.label, COLORS[t.toColor], 11, 'body', { weight: '700', spacing: '0.08em' }));
 
       (function(t, g) {
         g.addEventListener('mouseenter', function() { showTip(t.label, t.tip); });
@@ -1230,7 +1233,7 @@ main .level2.revealed {
       var anchor = 'middle';
       if (m.ex > W - 120) anchor = 'end';
       else if (m.ex < 120) anchor = 'start';
-      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'Inter', { anchor: anchor }));
+      g.appendChild(makeText(0, labelY, m.label, m.url ? COLORS.copper : '#c0c0c8', 11, 'body', { anchor: anchor }));
 
       if (m.url) {
         g.addEventListener('click', function() { window.open(m.url, '_blank', 'noopener'); });
@@ -1462,6 +1465,9 @@ main .level2.revealed {
 })();
 </script>
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   'use strict';
 
@@ -1516,7 +1522,7 @@ main .level2.revealed {
       text.setAttribute('y', HEADER_H - 10);
       text.setAttribute('text-anchor', 'middle');
       text.setAttribute('fill', '#9898b0');
-      text.setAttribute('font-family', '"Fraunces", serif');
+      text.setAttribute('font-family', FONT_DISPLAY);
       text.setAttribute('font-size', '15');
       text.setAttribute('font-weight', '500');
       text.textContent = y;
@@ -1537,7 +1543,7 @@ main .level2.revealed {
     nowLabel.setAttribute('y', H - 2);
     nowLabel.setAttribute('text-anchor', 'middle');
     nowLabel.setAttribute('fill', '#d4a03a');
-    nowLabel.setAttribute('font-family', 'Inter, sans-serif');
+    nowLabel.setAttribute('font-family', FONT_BODY);
     nowLabel.setAttribute('font-size', '11');
     nowLabel.setAttribute('letter-spacing', '0.05em');
     nowLabel.textContent = 'NOW';
@@ -1597,7 +1603,7 @@ main .level2.revealed {
       badge.setAttribute('y', by + BAR_H / 2);
       badge.setAttribute('dy', '0.35em');
       badge.setAttribute('fill', g.role === 'PI' ? '#1a1a2e' : '#c0c0c8');
-      badge.setAttribute('font-family', 'Inter, sans-serif');
+      badge.setAttribute('font-family', FONT_BODY);
       badge.setAttribute('font-size', '11');
       badge.setAttribute('font-weight', '700');
       badge.setAttribute('letter-spacing', '0.06em');
@@ -1611,7 +1617,7 @@ main .level2.revealed {
       titleEl.setAttribute('dy', '0.35em');
       titleEl.setAttribute('text-anchor', 'start');
       titleEl.setAttribute('fill', g.role === 'PI' ? '#c07050' : '#9098a8');
-      titleEl.setAttribute('font-family', 'Inter, sans-serif');
+      titleEl.setAttribute('font-family', FONT_BODY);
       titleEl.setAttribute('font-size', '13');
       titleEl.setAttribute('font-weight', '500');
       titleEl.textContent = g.short;
@@ -1772,6 +1778,9 @@ main .level2.revealed {
 })();
 </script>
 <script>
+  // Site fonts, from --font-display / --font-body (set in assets/theme-dark.scss)
+  var FONT_DISPLAY = getComputedStyle(document.documentElement).getPropertyValue('--font-display').trim() || 'serif';
+  var FONT_BODY = getComputedStyle(document.documentElement).getPropertyValue('--font-body').trim() || 'sans-serif';
 (function() {
   "use strict";
   document.addEventListener("DOMContentLoaded", function() {
@@ -2151,7 +2160,7 @@ main .level2.revealed {
         lbl.setAttribute("x", String(rh + 4)); lbl.setAttribute("y", String(cy2 + 3));
         lbl.setAttribute("text-anchor", "start");
         lbl.setAttribute("fill", C.copper);
-        lbl.setAttribute("font-family", '"Fraunces", serif');
+        lbl.setAttribute("font-family", FONT_DISPLAY);
         lbl.setAttribute("font-size", "11");
         lbl.textContent = city.city;
         g.appendChild(lbl);
@@ -2316,7 +2325,7 @@ main .level2.revealed {
       var label = document.createElementNS(NS, "text");
       label.setAttribute("x", String(IX + 8)); label.setAttribute("y", String(IY + IH - 8));
       label.setAttribute("fill", "rgba(136,136,152,0.5)");
-      label.setAttribute("font-family", "Inter, sans-serif");
+      label.setAttribute("font-family", FONT_BODY);
       label.setAttribute("font-size", "9");
       label.textContent = "UK & Europe";
       insetGroup.appendChild(label);
