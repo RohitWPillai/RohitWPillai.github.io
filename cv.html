@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section id="career-timeline" class="level2">
 <h2 class="anchored" data-anchor-id="career-timeline">Career Timeline</h2>
 <div id="career-timeline-wrap">
-<div id="career-timeline">
+<div id="career-timeline-rail">
 
 </div>
 <div class="career-legend">
@@ -2609,6 +2609,7 @@ main .level2.revealed {
     /* +/- zoom buttons */
     container.style.position = "relative";
     var zoomCtrl = document.createElement("div");
+    zoomCtrl.className = "talks-zoom";
     zoomCtrl.style.cssText = "position:absolute;bottom:12px;right:12px;display:flex;flex-direction:column;gap:2px;z-index:5;";
     [{ label: "+", factor: 1.5 }, { label: "\u2212", factor: 1 / 1.5 }].forEach(function(b) {
       var btn = document.createElement("button");

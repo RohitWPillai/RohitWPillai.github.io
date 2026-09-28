@@ -707,7 +707,7 @@ main .level2.revealed {
           { num: 'B1', title: 'Icephobic surfaces: bridging experiments and simulations', journal: 'Springer', year: 2022, img: 'images/papers/book-icephobic-surfaces.jpg', doi: 'https://doi.org/10.1007/978-3-030-82992-6_8' }
         ]
       },
-      { id: 'heat', label: 'Interfacial Thermofluids', x: 470, y: 140, gradient: 'pd-heat', glowFill: 'rgba(77,170,136,0.3)', ringStroke: '#4daa88',
+      { id: 'heat', label: 'Interfacial\nThermofluids', x: 470, y: 140, gradient: 'pd-heat', glowFill: 'rgba(77,170,136,0.3)', ringStroke: '#4daa88',
         desc: 'Thermal conductance at solid\u2013liquid interfaces, surface wetting and self-cleaning, nanomaterial-enhanced cooling',
         boundary: 'fusion',
         narrative: 'The behaviour of liquids at solid surfaces governs both heat transfer and fluid transport at the nanoscale. We investigate spectral mechanisms of interfacial thermal conductance and nanomaterial-enhanced cooling strategies through our ERC-funded NANO-COOL programme, alongside the interfacial fluid dynamics that drive phenomena like contaminant removal from nature\u2019s self-cleaning surfaces.',
@@ -890,7 +890,7 @@ main .level2.revealed {
     tpDot.setAttribute('cx', TP.x); tpDot.setAttribute('cy', TP.y);
     tpDot.setAttribute('r', '4'); tpDot.setAttribute('fill', 'rgba(200,200,210,0.4)');
     svg.appendChild(tpDot);
-    svg.appendChild(makeText(TP.x, TP.y - 10, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.45)' }));
+    svg.appendChild(makeText(TP.x + 8, TP.y + 14, 'triple point', { size: '9', fill: 'rgba(200,200,210,0.45)', anchor: 'start' }));
 
     var cpDot = document.createElementNS(NS, 'circle');
     cpDot.setAttribute('cx', CP.x); cpDot.setAttribute('cy', CP.y);

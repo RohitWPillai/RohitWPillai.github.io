@@ -733,6 +733,12 @@ html {
   gap: 5px;
 }
 
+@media (max-width: 576px) {
+  /* phones: legend items wrap whole ("Senior Lecturer" stays on one line) */
+  .team-legend, .career-legend { flex-wrap: wrap; row-gap: 4px; }
+  .team-legend .legend-item, .career-legend .legend-item { white-space: nowrap; }
+}
+
 .legend-dot {
   width: 9px;
   height: 9px;
@@ -748,7 +754,7 @@ html {
 /* ===== Career Timeline ===== */
 #career-timeline-wrap {
   position: relative;
-  max-width: 750px;
+  max-width: none;   /* full content width, as the timeline was drawn before it moved into this box */
   margin: 0 auto 1rem;
   background: #1a1a2e;
   border-radius: 8px;
@@ -1001,6 +1007,13 @@ html {
   height: 8px;
   border-radius: 50%;
   display: inline-block;
+}
+
+@media (max-width: 576px) {
+  /* phones: legend items wrap whole; zoom buttons move to the map's empty top-left corner, off the legend */
+  .talks-legend { flex-wrap: wrap; gap: 0.3rem 0.9rem; padding: 0 0.5rem; }
+  .talks-legend .legend-item { white-space: nowrap; }
+  .talks-zoom { top: 10px; left: 10px; bottom: auto !important; right: auto !important; }
 }
 
 .talks-summary {
