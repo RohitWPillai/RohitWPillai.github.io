@@ -46,6 +46,7 @@ format:
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..700&family=Literata:ital,opsz,wght@0,7..72,300..700;1,7..72,300..700&display=swap" rel="stylesheet">
+          <script data-goatcounter="https://rpillai.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
     include-after-body:
       - assets/ambient-dust.html
       - assets/depth-parallax.html
