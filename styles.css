@@ -74,6 +74,13 @@ body {
   border-bottom: none;
 }
 
+/* Once the page is scrolled the header blurs what is behind it, so it never prints over content */
+.headroom--not-top {
+  background: rgba(26, 26, 46, 0.72);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
 .navbar-brand, .navbar-title {
   font-family: var(--font-display);
   font-size: 1.5rem;
@@ -871,7 +878,7 @@ html {
 
 .dossier-card:hover .dc-detail,
 .dossier-card:focus-visible .dc-detail {
-  max-height: 80px;
+  max-height: 200px;
   opacity: 1;
   margin-top: 0.35rem;
 }
