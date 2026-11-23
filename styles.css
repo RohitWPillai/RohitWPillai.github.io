@@ -342,9 +342,9 @@ html {
 
 
 @media (max-width: 576px) {
-  .pub-stats { gap: 1.5rem; }
+  .pub-stats { gap: 1.4rem; }
   .pub-count { font-size: 2.2rem; }
-  .pub-label { font-size: 0.7rem; }
+  .pub-label { font-size: 0.7rem; max-width: 6.5rem; line-height: 1.35; }
 }
 
 /* ===== Publication Cards ===== */
