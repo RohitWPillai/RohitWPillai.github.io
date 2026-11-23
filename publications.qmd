@@ -319,6 +319,21 @@ Davidson MR, Berry JD, <u>Pillai R</u>, Harvie DJE
 
 ---
 
+## Workshop Papers
+
+<div class="pub-card">
+<img class="pub-thumb" src="images/papers/workshop-scoring-each-decision.jpg" alt="The loop that builds a machine-learned interatomic potential, with the decision beneath each step">
+<div class="pub-text">
+
+**Scoring each decision, not just the loop: testing agents' scientific judgement in simulation discovery loops**
+<u>Pillai R</u>, Hermann A, Kirsz M, Hulikal Chakrapani T, He F
+<a href="https://nextgendiscloop.github.io/"><em>ELLIS UnConference 2026, Next Generation of Discovery Loops workshop</em></a> Paris, non-archival (2026) | [DOI](https://doi.org/10.5281/zenodo.24458686)
+
+</div>
+</div>
+
+---
+
 ## Book Chapters
 
 <div class="pub-card">
