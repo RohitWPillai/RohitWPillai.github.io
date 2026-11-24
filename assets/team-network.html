@@ -444,7 +444,8 @@
         // Classify state
         if (year < m.startYear) {
           m.state = 'unborn';
-        } else if (m.endYear === null || year <= m.endYear) {
+        // In the latest year, someone who left that year already shows as alumni
+        } else if (m.endYear === null || year < m.endYear || (year === m.endYear && year < YEAR_MAX)) {
           m.state = 'active';
           innerList.push(m);
         } else {
