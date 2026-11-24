@@ -47,7 +47,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-447e42e69aaa9833c0ba1b986f430b20.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-0551b2f8dc6c3919b4d49e35c639026d.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-ad8a398cbaed5ad6d432d89a4bc7234a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -1140,7 +1140,8 @@ main .level2.revealed {
         // Classify state
         if (year < m.startYear) {
           m.state = 'unborn';
-        } else if (m.endYear === null || year <= m.endYear) {
+        // In the latest year, someone who left that year already shows as alumni
+        } else if (m.endYear === null || year < m.endYear || (year === m.endYear && year < YEAR_MAX)) {
           m.state = 'active';
           innerList.push(m);
         } else {
