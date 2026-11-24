@@ -30,9 +30,6 @@ Spectral heat flows at solid-liquid interfaces
 **Zhaolun Li** (2025-)
 Machine learning potentials for solid-liquid interfaces
 
-**Pengxu Chen** (2022-)
-Using nanoscale vibrations to reduce surface icing
-
 ---
 
 ## Past Supervision
@@ -48,6 +45,9 @@ Multiscale fluid dynamics
 *Leverhulme Trust Early Career Fellow → [Assistant Professor, IIT Madras](https://mech.iitm.ac.in/profile.php?fname=sreehari)*
 
 ### PhD Students
+
+**Pengxu Chen** (2022-2026)
+Using nanoscale vibrations to reduce surface icing
 
 **Abdullah El-Rifai** (2020-2024)
 Thermal resistance at liquid-solid interfaces
